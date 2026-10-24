@@ -130,7 +130,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 .arch{position:absolute;left:13%;right:13%;top:10%;bottom:0;border-radius:999px 999px 0 0;overflow:hidden;
   background:radial-gradient(60% 45% at 50% 48%,#FFFFFF 0%,var(--paper) 45%,var(--cream-2) 100%);
   box-shadow:0 0 0 3px rgba(255,244,236,.95),0 0 24px 4px rgba(255,214,228,.5)}
-.arch img{position:absolute;left:14%;right:14%;top:16%;bottom:5%;width:72%;height:79%;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 18px 18px rgba(92,21,32,.18));animation:float 7s ease-in-out infinite}
+.arch .hero-glass{position:absolute;left:14%;right:14%;top:16%;bottom:5%;width:72%;height:79%;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 18px 18px rgba(92,21,32,.18));animation:float 7s ease-in-out infinite}
 @keyframes float{50%{transform:translateY(-8px)}}
 @media (max-width:860px){
   .hero{grid-template-columns:1fr;min-height:0}
@@ -193,7 +193,7 @@ section{padding-block:clamp(72px,9vw,112px)}
 .thumb:hover{border-color:var(--wine)}
 .thumb[aria-pressed="true"]{background:var(--paper);border-color:var(--wine);box-shadow:inset 0 0 0 1px var(--wine)}
 
-.glaces{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:clamp(48px,6vw,72px)}
+.glaces{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:clamp(96px,9vw,112px)}
 @media (max-width:860px){.glaces{grid-template-columns:1fr}}
 .glace{border:1px solid var(--line);border-radius:18px;padding:22px 24px;display:grid;gap:6px;background:var(--paper);min-width:0}
 .glace .top{display:flex;justify-content:space-between;gap:12px;align-items:baseline}
@@ -259,7 +259,7 @@ section{padding-block:clamp(72px,9vw,112px)}
 .extras div{display:flex;gap:12px;align-items:baseline;font-size:.9375rem}
 .extras div::after{content:"";order:1;flex:1;border-bottom:1px dotted var(--line)}
 .extras div span:last-child{order:2;font-variant-numeric:tabular-nums lining-nums}
-.teas{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:28px}
+.teas{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:84px}
 @media (max-width:960px){.teas{grid-template-columns:1fr;max-width:620px;margin-inline:auto}}
 .tea{border:1px solid var(--line);border-radius:20px;padding:26px;background:var(--paper);display:grid;gap:14px;align-content:start;min-width:0}
 .tea-top{display:grid;gap:4px;text-align:center;padding-bottom:14px;border-bottom:1px dashed var(--line)}
@@ -393,6 +393,43 @@ dialog.mnav[open]{display:flex;flex-direction:column;animation:slide .28s cubic-
 .mnav-foot .btn{width:100%}
 .mnav-foot .btn-ring::after{inset:-3px -1px;transform:rotate(-1deg)}
 .mnav-foot p{font-size:var(--t-sm);opacity:.8;font-weight:300}
+/* mascots */
+.m{display:block;height:auto;width:auto;max-width:none;user-select:none;-webkit-user-drag:none;transition:transform .25s ease}
+.m:hover{transform:rotate(-5deg) scale(1.05)}
+@keyframes bob{50%{transform:translateY(-6px) rotate(-2deg)}}
+.arch .m-hero{position:absolute;left:5%;bottom:3%;height:30%;z-index:2;animation:bob 4.5s ease-in-out infinite;filter:drop-shadow(0 8px 10px rgba(120,10,50,.15))}
+.title .m-under{height:96px;margin-top:6px}
+.title .m-top{height:112px;margin-bottom:4px}
+.detail-foot .m-foot{height:104px;margin-left:auto}
+.glace{position:relative}
+.glace .m-peek,.tea .m-peek{position:absolute;right:18px;top:-80px;height:92px}
+.tea{position:relative}
+.offer{position:relative}
+.offer .m-sit{position:absolute;left:50%;top:-84px;height:100px;transform:translateX(-50%)}
+.offer .m-sit:hover{transform:translateX(-50%) rotate(-5deg) scale(1.05)}
+.offers{padding-top:52px}
+.carte-hint{display:flex;justify-content:center;align-items:center;gap:12px}
+.carte-hint .m-hint{height:64px}
+.dine .m-dine{height:88px}
+.with-m{display:flex;align-items:flex-end;gap:12px}
+.with-m .m{height:76px}
+.submit-row{display:flex;align-items:flex-end;justify-content:space-between;gap:16px}
+.submit-row .m-ready{height:100px;margin-bottom:-10px}
+.m-done{height:112px}
+.m-checkout{height:88px;margin-top:18px}
+.empty-cart .m-idea{height:120px}
+.m-badge{width:136px;height:136px;border-radius:50%;background:var(--paper);display:grid;place-items:center;box-shadow:0 0 0 5px rgba(255,249,249,.25)}
+.m-badge .m{height:108px}
+.m-badge.sm{width:44px;height:44px;box-shadow:none}
+.m-badge.sm .m{height:36px}
+.mnav-brand{display:flex;align-items:center;gap:10px}
+@media (max-width:860px){
+  .glaces .glace:has(.m-peek){margin-top:64px}
+  .teas{margin-top:84px!important}
+  .title .m-top{height:92px}
+  .title .m-under{height:84px}
+  .detail-foot .m-foot{height:88px}
+}
 .toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,160%);visibility:hidden;background:var(--wine);color:var(--paper);padding:8px 8px 8px 20px;border-radius:999px;display:flex;align-items:center;gap:16px;z-index:70;box-shadow:0 14px 30px -12px rgba(50,10,18,.5);transition:transform .25s ease, visibility 0s linear .25s;max-width:calc(100% - 40px);font-size:.9375rem}
 .toast.show{transform:translate(-50%,0);visibility:visible;transition:transform .25s ease}
 .toast button{background:var(--gold-lt);color:var(--wine-dk);border:0;border-radius:999px;padding:7px 14px;font-weight:600;cursor:pointer;white-space:nowrap}
@@ -441,7 +478,7 @@ dialog.mnav[open]{display:flex;flex-direction:column;animation:slide .28s cubic-
       </div>
     </div>
     <div class="hero-art" aria-hidden="true">
-      <div class="arch"><img src="img/miss-coco-cherry.webp" alt="" width="387" height="960"></div>
+      <div class="arch"><img class="hero-glass" src="img/miss-coco-cherry.webp" alt="" width="387" height="960"><img class="m m-hero" src="img/mascots/spoon-presenting.webp" alt="" width="235" height="360"></div>
     </div>
   </div>
 
@@ -465,6 +502,7 @@ dialog.mnav[open]{display:flex;flex-direction:column;animation:slide .28s cubic-
         <h2 data-i18n="col.title">La Collection des Parfaits</h2>
         <span class="rule-heart"><svg class="heart"><use href="#heart"/></svg></span>
         <p data-i18n="col.sub">Choisissez une création pour voir chaque couche, du fond du verre jusqu'à la dernière touche.</p>
+        <img class="m m-under" src="img/mascots/pointing-up.webp" alt="" width="236" height="360" loading="lazy">
       </div>
       <div class="showcase">
         <div class="stage"><img id="stageImg" src="img/miss-coco-cherry.webp" alt="" width="387" height="960"></div>
@@ -477,6 +515,7 @@ dialog.mnav[open]{display:flex;flex-direction:column;animation:slide .28s cubic-
           <div class="detail-foot">
             <span class="big-price" id="pPrice"></span>
             <button class="btn btn-fill" type="button" id="pAdd" data-i18n="col.add">Ajouter à la commande</button>
+            <img class="m m-foot" src="img/mascots/holding-spoon-up.webp" alt="" width="238" height="360" loading="lazy">
           </div>
         </div>
       </div>
@@ -496,7 +535,7 @@ dialog.mnav[open]{display:flex;flex-direction:column;animation:slide .28s cubic-
           <div class="row-end"><span></span><button class="btn btn-ring" type="button" data-add="pal6" data-i18n="add">Ajouter</button></div>
         </div>
         <div class="glace">
-          <span class="tagline-sm" data-i18n="fondue.sub">À partager</span>
+          <img class="m m-peek" src="img/mascots/celebrating.webp" alt="" width="286" height="360" loading="lazy"><span class="tagline-sm" data-i18n="fondue.sub">À partager</span>
           <div class="top"><h3>La Fondue Glacée pour 2</h3><span class="price" data-price="70000"></span></div>
           <p data-i18n="fondue.d">Dix mini boules (5 saveurs) à plonger dans une sauce chocolat, avec fruits de saison, cookies, waffles et noix concassées.</p>
           <div class="row-end"><span class="fine" data-i18n="dinein">Sur place uniquement</span><a class="btn btn-ring" href="#reserve" data-i18n="nav.book">Réserver</a></div>
@@ -519,6 +558,7 @@ dialog.mnav[open]{display:flex;flex-direction:column;animation:slide .28s cubic-
   <section id="carte" class="carte">
     <div class="wrap">
       <div class="title">
+        <img class="m m-top" src="img/mascots/serving-coffee.webp" alt="" width="304" height="360" loading="lazy">
         <span class="eyebrow">AISU Café &amp; Parfaiterie</span>
         <h2 data-i18n="menu.title">La Carte</h2>
         <p data-i18n="menu.sub">Espressos, lattes, matcha, thés glacés et jus pressés à froid. Prix en ariary.</p>
@@ -528,7 +568,7 @@ dialog.mnav[open]{display:flex;flex-direction:column;animation:slide .28s cubic-
         <button role="tab" id="tab-matcha" aria-selected="false" aria-controls="carteCols" data-tab="matcha" tabindex="-1" data-i18n="tab.matcha">Matcha &amp; Thés</button>
         <button role="tab" id="tab-jus" aria-selected="false" aria-controls="carteCols" data-tab="jus" tabindex="-1" data-i18n="tab.jus">Jus &amp; Smoothies</button>
       </div>
-      <p class="carte-hint" data-i18n="menu.hint">Touchez un prix pour l'ajouter à votre commande.</p>
+      <p class="carte-hint"><span data-i18n="menu.hint">Touchez un prix pour l'ajouter à votre commande.</span><img class="m m-hint" src="img/mascots/pointing-left.webp" alt="" width="329" height="360" loading="lazy"></p>
       <div class="carte-cols" id="carteCols" role="tabpanel" aria-labelledby="tab-cafes"></div>
     </div>
   </section>
@@ -573,7 +613,7 @@ dialog.mnav[open]{display:flex;flex-direction:column;animation:slide .28s cubic-
       </div>
 
       <div class="teas" id="teaList"></div>
-      <div class="dine"><p data-i18n="tea.note">Brunch et afternoon tea sont servis sur place. Réservez votre table pour être sûr d'en profiter.</p><a class="btn btn-fill" href="#reserve" data-i18n="nav.book">Réserver</a></div>
+      <div class="dine"><img class="m m-dine" src="img/mascots/big-approval.webp" alt="" width="177" height="360" loading="lazy"><p data-i18n="tea.note">Brunch et afternoon tea sont servis sur place. Réservez votre table pour être sûr d'en profiter.</p><a class="btn btn-fill" href="#reserve" data-i18n="nav.book">Réserver</a></div>
     </div>
   </section>
 
@@ -628,13 +668,13 @@ dialog.mnav[open]{display:flex;flex-direction:column;animation:slide .28s cubic-
             </div>
             <div class="field" id="f-email"><label for="r-email"><span data-i18n="res.email">E-mail</span> <span class="hint" data-i18n="optional">facultatif</span></label><input type="email" id="r-email" autocomplete="email"><span class="err" hidden></span></div>
             <div class="field"><label for="r-notes"><span data-i18n="res.notes">Remarques</span> <span class="hint" data-i18n="res.notesHint">allergies, anniversaire, chaise haute</span></label><textarea id="r-notes"></textarea></div>
-            <button class="btn btn-fill" type="submit" style="justify-self:start" data-i18n="res.submit">Réserver la table</button>
+            <div class="submit-row"><button class="btn btn-fill" type="submit" data-i18n="res.submit">Réserver la table</button><img class="m m-ready" src="img/mascots/ready-to-go.webp" alt="" width="205" height="360" loading="lazy"></div>
           </form>
           <div class="confirm" id="reserveDone" hidden tabindex="-1"></div>
         </div>
         <div class="aside">
           <div>
-            <h3 data-i18n="aside.title">Avant votre visite</h3>
+            <h3 class="with-m"><img class="m " src="img/mascots/thinking.webp" alt="" width="193" height="360" loading="lazy"><span data-i18n="aside.title">Avant votre visite</span></h3>
             <ul>
               <li data-i18n="aside.1">Sans réservation, nous vous installons dès qu'une table se libère.</li>
               <li data-i18n="aside.2">Le brunch est servi les samedis et dimanches, de 11h30 à 16h00.</li>
@@ -642,7 +682,7 @@ dialog.mnav[open]{display:flex;flex-direction:column;animation:slide .28s cubic-
             </ul>
           </div>
           <div>
-            <h3 data-i18n="skip.title">Évitez l'attente</h3>
+            <h3 class="with-m"><img class="m " src="img/mascots/sprinting.webp" alt="" width="212" height="360" loading="lazy"><span data-i18n="skip.title">Évitez l'attente</span></h3>
             <p class="fine" style="font-size:.9375rem;margin-bottom:18px" data-i18n="skip.body">Commandez à l'avance et récupérez votre commande au comptoir à l'heure choisie.</p>
             <button class="btn btn-ring" type="button" data-open-cart data-i18n="skip.btn">Commander à emporter</button>
           </div>
@@ -665,7 +705,7 @@ dialog.mnav[open]{display:flex;flex-direction:column;animation:slide .28s cubic-
 
 <footer id="visit">
   <div class="wrap">
-    <svg width="34" height="34" aria-hidden="true" style="color:var(--gold-lt)"><use href="#heart-f"/></svg>
+    <span class="m-badge"><img class="m " src="img/mascots/hugging-heart.webp" alt="" width="185" height="360" loading="lazy"></span>
     <div class="foot-cols">
       <div>
         <h3 data-i18n="foot.contact">Contact</h3>
@@ -694,7 +734,7 @@ dialog.mnav[open]{display:flex;flex-direction:column;animation:slide .28s cubic-
 </footer>
 
 <dialog class="mnav" id="mnav" data-i18n-aria="nav.sections" aria-label="Sections">
-  <div class="mnav-head"><span class="mark">AISU</span><button class="x" type="button" id="closeNav" data-i18n-aria="nav.close" aria-label="Fermer le menu">×</button></div>
+  <div class="mnav-head"><span class="mnav-brand"><span class="m-badge sm"><img class="m " src="img/mascots/peace-sign.webp" alt="" width="203" height="360"></span><span class="mark">AISU</span></span><button class="x" type="button" id="closeNav" data-i18n-aria="nav.close" aria-label="Fermer le menu">×</button></div>
   <nav class="mnav-links">
     <a href="#top"><svg aria-hidden="true"><use href="#heart-f"/></svg><span data-i18n="nav.home">Accueil</span></a>
     <a href="#parfaits"><svg aria-hidden="true"><use href="#heart-f"/></svg><span data-i18n="nav.parfaits">Parfaits</span></a>
@@ -1024,7 +1064,7 @@ dialog.mnav[open]{display:flex;flex-direction:column;animation:slide .28s cubic-
       {fig:`<small>${t('of.from')}</small> ${arBig(70000)}`, t:'of.tea.t', w:'of.tea.w', b:'of.tea.b', state:['','of.daily']},
       {fig:arBig(10000), t:'of.soda.t', w:'of.soda.w', b:'of.soda.b', state: open ? ['on','of.on'] : ['','of.daily']}
     ];
-    $('#offerList').innerHTML = offers.map(o=>`<article class="offer"><span class="fig">${o.fig}</span><h3>${t(o.t)}</h3><span class="when">${t(o.w)}</span><p>${t(o.b)}</p><span class="state ${o.state[0]}">${t(o.state[1])}</span></article>`).join('');
+    $('#offerList').innerHTML = offers.map((o,i)=>`<article class="offer">${i===0?'<img class="m m-sit" src="img/mascots/sitting-happy.webp" alt="" width="197" height="360" loading="lazy">':''}<span class="fig">${o.fig}</span><h3>${t(o.t)}</h3><span class="when">${t(o.w)}</span><p>${t(o.b)}</p><span class="state ${o.state[0]}">${t(o.state[1])}</span></article>`).join('');
   }
 
   /* ================= parfait showcase ================= */
@@ -1067,7 +1107,7 @@ dialog.mnav[open]{display:flex;flex-direction:column;animation:slide .28s cubic-
 
   /* ================= afternoon teas ================= */
   function renderTeas(){
-    $('#teaList').innerHTML = TEAS.map(x=>`<article class="tea">
+    $('#teaList').innerHTML = TEAS.map((x,i)=>`<article class="tea">${i===0?'<img class="m m-peek" src="img/mascots/shy-and-loved.webp" alt="" width="180" height="360" loading="lazy">':''}
       <div class="tea-top"><h3>${x.name}</h3><span class="big-price">${arBig(x.price)}</span><span class="for">${t('tea.for2')}</span><span class="inc">${t(x.inc)}</span></div>
       <div><p class="sub-h">${t('tea.sal')}</p><ul lang="fr">${x.sal.map(s=>`<li>${esc(s)}</li>`).join('')}</ul></div>
       <div><p class="sub-h">${t('tea.suc')}</p><ul lang="fr">${x.suc.map(s=>`<li>${esc(s)}</li>`).join('')}</ul></div>
@@ -1096,14 +1136,14 @@ dialog.mnav[open]{display:flex;flex-direction:column;animation:slide .28s cubic-
     if(view==='done'){
       $('#cartTitle').textContent=t('cart.placed');
       const n = lastOrder.count===1 ? t('cart.items1') : t('cart.itemsN',{n:lastOrder.count});
-      body.innerHTML=`<div class="confirm" style="padding-top:22px"><p class="fine">${t('cart.no')}</p><div class="ref">${lastOrder.ref}</div>
+      body.innerHTML=`<div class="confirm" style="padding-top:22px"><img class="m m-done" src="img/mascots/happy-jump.webp" alt="" width="315" height="360"><p class="fine">${t('cart.no')}</p><div class="ref">${lastOrder.ref}</div>
         <p>${esc(t('cart.ready',{n, name:lastOrder.name, when:lastOrder.when}))}</p>
         <dl class="summary"><dt>${t('cart.total')}</dt><dd class="tnum">${ar(lastOrder.total)}</dd><dt>${t('cart.phone')}</dt><dd>${esc(lastOrder.phone)}</dd></dl>
         <p class="fine">${t('cart.preview')}</p></div>`;
       foot.hidden=false; foot.innerHTML=`<button class="btn btn-fill" type="button" id="newOrder">${t('cart.new')}</button>`; return;
     }
     $('#cartTitle').textContent = view==='checkout' ? t('cart.checkout') : t('cart.title');
-    if(!cart.length){ body.innerHTML=`<div class="empty-cart"><p>${t('cart.empty')}</p><a class="btn btn-fill" href="#parfaits" data-close>${t('cart.browse')}</a></div>`; foot.innerHTML=''; foot.hidden=true; return; }
+    if(!cart.length){ body.innerHTML=`<div class="empty-cart"><img class="m m-idea" src="img/mascots/an-idea.webp" alt="" width="291" height="360"><p>${t('cart.empty')}</p><a class="btn btn-fill" href="#parfaits" data-close>${t('cart.browse')}</a></div>`; foot.innerHTML=''; foot.hidden=true; return; }
     foot.hidden=false;
     const tot=`<div class="totals"><div class="grand"><span>${t('cart.total')}</span><span>${ar(total())}</span></div></div>`;
     if(view==='cart'){
@@ -1114,7 +1154,7 @@ dialog.mnav[open]{display:flex;flex-direction:column;animation:slide .28s cubic-
       foot.innerHTML=tot+`<button class="btn btn-fill" type="button" id="toCheckout">${t('cart.continue')}</button>`;
     } else {
       const slots=pickupSlots(), saved=store.get('aisu-contact',{});
-      body.innerHTML=`<form id="checkoutForm" novalidate>
+      body.innerHTML=`<img class="m m-checkout" src="img/mascots/racing-with-flag.webp" alt="" width="360" height="346"><form id="checkoutForm" novalidate>
         <div class="field"><label for="c-time">${t('cart.pickup')}</label><select id="c-time">${slots.map((s,i)=>`<option value="${i}" data-label="${esc(s.label)}" data-time="${esc(s.time)}">${esc(s.label)}, ${esc(s.time)}</option>`).join('')}</select><span class="hint">${t('cart.pickupHint')}</span></div>
         <div class="field" id="c-name-f"><label for="c-name">${t('cart.name')}</label><input type="text" id="c-name" autocomplete="name" value="${esc(saved.name||'')}"><span class="err" hidden></span></div>
         <div class="field" id="c-phone-f"><label for="c-phone">${t('cart.phone')} <span class="hint">${t('cart.phoneHint')}</span></label><input type="tel" id="c-phone" autocomplete="tel" inputmode="tel" value="${esc(saved.phone||'')}" placeholder="034 00 000 00"><span class="err" hidden></span></div>
@@ -1191,7 +1231,7 @@ dialog.mnav[open]{display:flex;flex-direction:column;animation:slide .28s cubic-
     if(errs.length){ errs[0].focus(); return; }
     const seatVal=document.querySelector('input[name="seat"]:checked').value, done=$('#reserveDone');
     const occasion = forIn.selectedOptions[0].textContent;
-    done.innerHTML=`<p class="fine">${t('done.ref')}</p><div class="ref">${ref()}</div>
+    done.innerHTML=`<img class="m m-done" src="img/mascots/celebrating.webp" alt="" width="286" height="360"><p class="fine">${t('done.ref')}</p><div class="ref">${ref()}</div>
       <dl class="summary"><dt>${t('done.date')}</dt><dd>${esc(niceDate(dv))}</dd><dt>${t('done.time')}</dt><dd>${fmt(chosen)}</dd><dt>${t('done.guests')}</dt><dd>${party}</dd>
       <dt>${t('done.for')}</dt><dd>${esc(occasion)}</dd><dt>${t('done.seat')}</dt><dd>${t('seat.'+seatVal)}</dd><dt>${t('done.name')}</dt><dd>${esc(name)}</dd></dl>
       <p class="fine">${t('done.note')}</p>
