@@ -373,6 +373,26 @@ dialog.drawer[open]{display:grid;grid-template-rows:auto 1fr auto;animation:slid
 .empty-cart{display:grid;gap:18px;justify-items:start;padding:28px 0;color:var(--muted)}
 .pay{padding:14px 16px;border-radius:12px;background:var(--cream-2);font-size:.9375rem}
 
+/* mobile navigation drawer */
+.burger{display:none;width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,250,247,.5);background:none;color:var(--paper);cursor:pointer;place-items:center;flex-shrink:0}
+.burger svg{width:18px;height:18px}
+@media (max-width:1040px){.burger{display:grid}}
+@media (max-width:560px){.nav .nav-actions > .lang{display:none}}
+dialog.mnav{margin:0 0 0 auto;padding:0;border:0;height:100%;max-height:100%;width:min(360px,88vw);max-width:100%;background:var(--wine);color:var(--paper)}
+dialog.mnav::backdrop{background:rgba(50,10,18,.45)}
+dialog.mnav[open]{display:flex;flex-direction:column;animation:slide .28s cubic-bezier(.2,.8,.2,1)}
+.mnav-head{display:flex;align-items:center;justify-content:space-between;padding:calc(14px + env(safe-area-inset-top,0px)) max(20px, env(safe-area-inset-right,0px)) 14px 24px;border-bottom:1px solid rgba(255,250,247,.18)}
+.mnav-head .mark{font-size:1.3rem}
+.mnav-links{display:grid;padding:12px max(24px, env(safe-area-inset-right,0px)) 12px 24px;overflow-y:auto}
+.mnav-links a{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid rgba(255,250,247,.14);text-decoration:none;font-family:var(--f-display);font-weight:500;font-size:1.75rem;line-height:1.15}
+.mnav-links a svg{width:14px;height:14px;color:var(--gold);flex-shrink:0}
+.mnav-links a:hover,.mnav-links a:focus-visible{color:var(--gold-lt)}
+.mnav-foot{margin-top:auto;display:grid;gap:12px;padding:20px max(24px, env(safe-area-inset-right,0px)) calc(24px + env(safe-area-inset-bottom,0px)) 24px;border-top:1px solid rgba(255,250,247,.18)}
+.mnav-foot .lang{justify-self:start;border-color:rgba(255,250,247,.4)}
+.mnav-foot .lang button{font-size:.75rem;padding:7px 12px}
+.mnav-foot .btn{width:100%}
+.mnav-foot .btn-ring::after{inset:-3px -1px;transform:rotate(-1deg)}
+.mnav-foot p{font-size:var(--t-sm);opacity:.8;font-weight:300}
 .toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,160%);visibility:hidden;background:var(--wine);color:var(--paper);padding:8px 8px 8px 20px;border-radius:999px;display:flex;align-items:center;gap:16px;z-index:70;box-shadow:0 14px 30px -12px rgba(50,10,18,.5);transition:transform .25s ease, visibility 0s linear .25s;max-width:calc(100% - 40px);font-size:.9375rem}
 .toast.show{transform:translate(-50%,0);visibility:visible;transition:transform .25s ease}
 .toast button{background:var(--gold-lt);color:var(--wine-dk);border:0;border-radius:999px;padding:7px 14px;font-weight:600;cursor:pointer;white-space:nowrap}
@@ -402,7 +422,8 @@ dialog.drawer[open]{display:grid;grid-template-rows:auto 1fr auto;animation:slid
         <button type="button" data-lang="mg" aria-pressed="false" lang="mg">MG</button>
       </div>
       <a class="btn btn-ring" href="#reserve" data-i18n="nav.book">Réserver</a>
-      <button class="btn order-btn" type="button" data-open-cart><span data-i18n="nav.order">Commander</span> <b id="cartCount">0</b></button>
+      <button class="btn order-btn" type="button" data-open-cart><span data-i18n="nav.order">Commander</span> <b class="cart-count">0</b></button>
+      <button class="burger" type="button" id="openNav" aria-controls="mnav" aria-expanded="false" data-i18n-aria="nav.open" aria-label="Ouvrir le menu"><svg viewBox="0 0 18 18" aria-hidden="true"><path d="M2 4.5h14M2 9h14M2 13.5h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
     </div>
   </div>
 </header>
@@ -672,6 +693,29 @@ dialog.drawer[open]{display:grid;grid-template-rows:auto 1fr auto;animation:slid
   </div>
 </footer>
 
+<dialog class="mnav" id="mnav" data-i18n-aria="nav.sections" aria-label="Sections">
+  <div class="mnav-head"><span class="mark">AISU</span><button class="x" type="button" id="closeNav" data-i18n-aria="nav.close" aria-label="Fermer le menu">×</button></div>
+  <nav class="mnav-links">
+    <a href="#top"><svg aria-hidden="true"><use href="#heart-f"/></svg><span data-i18n="nav.home">Accueil</span></a>
+    <a href="#parfaits"><svg aria-hidden="true"><use href="#heart-f"/></svg><span data-i18n="nav.parfaits">Parfaits</span></a>
+    <a href="#offers"><svg aria-hidden="true"><use href="#heart-f"/></svg><span data-i18n="offers.title">À ne pas manquer</span></a>
+    <a href="#carte"><svg aria-hidden="true"><use href="#heart-f"/></svg><span data-i18n="nav.menu">La carte</span></a>
+    <a href="#brunch"><svg aria-hidden="true"><use href="#heart-f"/></svg><span data-i18n="nav.brunch">Brunch &amp; tea</span></a>
+    <a href="#reserve"><svg aria-hidden="true"><use href="#heart-f"/></svg><span data-i18n="nav.reserve">Réservations</span></a>
+    <a href="#visit"><svg aria-hidden="true"><use href="#heart-f"/></svg><span data-i18n="nav.visit">Nous trouver</span></a>
+  </nav>
+  <div class="mnav-foot on-wine">
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" data-lang="fr" aria-pressed="true" lang="fr">Français</button>
+      <button type="button" data-lang="en" aria-pressed="false" lang="en">English</button>
+      <button type="button" data-lang="mg" aria-pressed="false" lang="mg">Malagasy</button>
+    </div>
+    <a class="btn btn-ring" href="#reserve" data-i18n="nav.book">Réserver</a>
+    <button class="btn order-btn" type="button" data-open-cart><span data-i18n="nav.order">Commander</span> <b class="cart-count">0</b></button>
+    <p class="tnum">+261 34 00 000 00</p>
+  </div>
+</dialog>
+
 <dialog class="drawer" id="cart" aria-labelledby="cartTitle">
   <div class="d-head"><h2 id="cartTitle"></h2><button class="x" type="button" id="closeCart" aria-label="×">×</button></div>
   <div class="d-body" id="cartBody"></div>
@@ -685,6 +729,7 @@ dialog.drawer[open]{display:grid;grid-template-rows:auto 1fr auto;animation:slid
   /* ================= translations ================= */
   const I18N = {
     fr:{
+      "nav.home":"Accueil","nav.open":"Ouvrir le menu","nav.close":"Fermer le menu","nav.sections":"Sections",
       preview:"Aperçu : les horaires, l'adresse et le numéro de téléphone sont provisoires, et les réservations et commandes ne sont pas encore envoyées.",
       dismiss:"Fermer",
       "nav.parfaits":"Parfaits","nav.menu":"La carte","nav.brunch":"Brunch & tea","nav.reserve":"Réservations","nav.visit":"Nous trouver","nav.book":"Réserver","nav.order":"Commander",
@@ -731,6 +776,7 @@ dialog.drawer[open]{display:grid;grid-template-rows:auto 1fr auto;animation:slid
       guests1:"1 personne",guestsN:"{n} personnes"
     },
     en:{
+      "nav.home":"Home","nav.open":"Open menu","nav.close":"Close menu","nav.sections":"Sections",
       preview:"Design preview: hours, address and phone number are placeholders, and bookings and orders aren't sent yet.",
       dismiss:"Dismiss",
       "nav.parfaits":"Parfaits","nav.menu":"Menu","nav.brunch":"Brunch & tea","nav.reserve":"Reservations","nav.visit":"Visit","nav.book":"Book a table","nav.order":"Order",
@@ -777,6 +823,7 @@ dialog.drawer[open]{display:grid;grid-template-rows:auto 1fr auto;animation:slid
       guests1:"1 guest",guestsN:"{n} guests"
     },
     mg:{
+      "nav.home":"Fandraisana","nav.open":"Sokafy ny menio","nav.close":"Akatony ny menio","nav.sections":"Fizarana",
       preview:"Santionany: mbola vonjimaika ny ora fisokafana, ny adiresy ary ny laharana finday, ary tsy mbola alefa ny fandrihana sy ny kaomandy.",
       dismiss:"Akatona",
       "nav.parfaits":"Parfaits","nav.menu":"Menio","nav.brunch":"Brunch sy tea","nav.reserve":"Fandrihana","nav.visit":"Toerana","nav.book":"Hamandrika","nav.order":"Kaomandy",
@@ -949,6 +996,7 @@ dialog.drawer[open]{display:grid;grid-template-rows:auto 1fr auto;animation:slid
   function applyStatic(){
     document.documentElement.lang = lang;
     document.querySelectorAll('[data-i18n]').forEach(el=>{ el.textContent = t(el.dataset.i18n); });
+    document.querySelectorAll('[data-i18n-aria]').forEach(el=>el.setAttribute('aria-label', t(el.dataset.i18nAria)));
     document.querySelectorAll('[data-lang]').forEach(b=>b.setAttribute('aria-pressed', b.dataset.lang===lang));
     document.querySelectorAll('[data-price]').forEach(el=>el.textContent = ar(Number(el.dataset.price)));
     document.querySelectorAll('[data-bigprice]').forEach(el=>el.innerHTML = arBig(Number(el.dataset.bigprice)));
@@ -1032,7 +1080,7 @@ dialog.drawer[open]{display:grid;grid-template-rows:auto 1fr auto;animation:slid
   let cart=store.get('aisu-cart',[]), view='cart', lastOrder=null;
   const dlg=$('#cart');
   const lineName = l => l.colKey ? `${l.name} (${t(l.colKey).toLowerCase()})` : l.name;
-  function saveCart(){ store.set('aisu-cart',cart); $('#cartCount').textContent=cart.reduce((a,l)=>a+l.qty,0); }
+  function saveCart(){ store.set('aisu-cart',cart); const c=cart.reduce((a,l)=>a+l.qty,0); document.querySelectorAll('.cart-count').forEach(el=>el.textContent=c); }
   function addToCart(item){ const f=cart.find(l=>l.key===item.key); if(f) f.qty++; else cart.push({...item,qty:1}); saveCart(); showToast(t('cart.added',{x:lineName(item)})); if(dlg.open) renderCart(); }
   const total = () => cart.reduce((a,l)=>a+l.price*l.qty,0);
   function pickupSlots(){
@@ -1076,7 +1124,7 @@ dialog.drawer[open]{display:grid;grid-template-rows:auto 1fr auto;animation:slid
     }
   }
   function openCart(){ if(view==='done') view='cart'; renderCart(); if(!dlg.open) dlg.showModal(); }
-  document.addEventListener('click', e=>{ if(e.target.closest('[data-open-cart]')){ hideToast(); openCart(); } });
+  document.addEventListener('click', e=>{ if(e.target.closest('[data-open-cart]')){ hideToast(); if(mnav.open) mnav.close(); openCart(); } });
   $('#closeCart').addEventListener('click',()=>dlg.close());
   dlg.addEventListener('click', e=>{
     if(e.target===dlg){ dlg.close(); return; }
@@ -1160,6 +1208,14 @@ dialog.drawer[open]{display:grid;grid-template-rows:auto 1fr auto;animation:slid
     const fallback=()=>{ const s=getSelection(), r=document.createRange(); r.selectNodeContents(src); s.removeAllRanges(); s.addRange(r); b.textContent=t('selected'); setTimeout(()=>b.textContent=t('copy'),1600); };
     try{ navigator.clipboard.writeText(text).then(ok,fallback); }catch(err){ fallback(); }
   });
+
+
+  /* ================= mobile navigation drawer ================= */
+  const mnav=$('#mnav'), openNav=$('#openNav');
+  openNav.addEventListener('click',()=>{ mnav.showModal(); openNav.setAttribute('aria-expanded','true'); });
+  $('#closeNav').addEventListener('click',()=>mnav.close());
+  mnav.addEventListener('close',()=>openNav.setAttribute('aria-expanded','false'));
+  mnav.addEventListener('click',e=>{ if(e.target===mnav || e.target.closest('a[href^="#"]')) mnav.close(); });
 
   function renderAll(){
     applyStatic(); renderStatus(); renderParfait(false); renderCarte(); renderTeas(); renderParty(); renderSlots(); saveCart();
