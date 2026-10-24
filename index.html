@@ -169,7 +169,7 @@ section{padding-block:clamp(72px,9vw,112px)}
 /* parfait showcase */
 .showcase{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(28px,5vw,72px);align-items:center}
 @media (max-width:860px){.showcase{grid-template-columns:1fr}}
-.stage{position:relative;aspect-ratio:4/5;max-width:440px;width:100%;justify-self:center;border-radius:999px 999px 24px 24px;background:radial-gradient(60% 45% at 50% 50%,#fff,var(--paper) 50%,var(--cream-2));box-shadow:inset 0 0 0 1.5px var(--line);overflow:hidden}
+.stage{position:relative;aspect-ratio:4/5;width:100%;border-radius:999px 999px 24px 24px;background:radial-gradient(60% 45% at 50% 50%,#fff,var(--paper) 50%,var(--cream-2));box-shadow:inset 0 0 0 1.5px var(--line);overflow:hidden}
 .stage::before{content:"";position:absolute;inset:12px;border-radius:999px 999px 16px 16px;border:1px solid var(--gold);opacity:.55;pointer-events:none}
 .stage img{position:absolute;left:12%;right:12%;top:15%;bottom:6%;width:76%;height:79%;object-fit:contain;object-position:center bottom;transition:opacity .25s ease, transform .35s ease}
 .stage img.swap{opacity:0;transform:translateY(10px)}
@@ -393,43 +393,54 @@ dialog.mnav[open]{display:flex;flex-direction:column;animation:slide .28s cubic-
 .mnav-foot .btn{width:100%}
 .mnav-foot .btn-ring::after{inset:-3px -1px;transform:rotate(-1deg)}
 .mnav-foot p{font-size:var(--t-sm);opacity:.8;font-weight:300}
-/* mascots */
-.m{display:block;height:auto;width:auto;max-width:none;user-select:none;-webkit-user-drag:none;transition:transform .25s ease}
-.m:hover{transform:rotate(-5deg) scale(1.05)}
-@keyframes bob{50%{transform:translateY(-6px) rotate(-2deg)}}
-.arch .m-hero{position:absolute;left:5%;bottom:3%;height:30%;z-index:2;animation:bob 4.5s ease-in-out infinite;filter:drop-shadow(0 8px 10px rgba(120,10,50,.15))}
-.title .m-under{height:96px;margin-top:6px}
-.title .m-top{height:112px;margin-bottom:4px}
-.detail-foot .m-foot{height:104px;margin-left:auto}
+/* mascots: white-outlined stickers that sit on, lean on and peek over the content */
+.m{display:block;height:auto;width:auto;max-width:none;user-select:none;-webkit-user-drag:none;pointer-events:none;
+  filter:drop-shadow(2px 0 0 #fff) drop-shadow(-2px 0 0 #fff) drop-shadow(0 2px 0 #fff) drop-shadow(0 -2px 0 #fff) drop-shadow(0 8px 10px rgba(120,10,50,.18))}
+.m-abs{position:absolute;z-index:4}
+@keyframes bob{50%{transform:translateY(-7px)}}
+.hero-copy{position:relative}
+.m-hero{right:-210px;bottom:100px;height:236px;animation:bob 5s ease-in-out infinite}
+.stage-wrap{position:relative;justify-self:center;width:100%;max-width:440px}
+.m-spoon{right:-70px;bottom:-30px;height:206px}
 .glace{position:relative}
-.glace .m-peek,.tea .m-peek{position:absolute;right:18px;top:-80px;height:92px}
-.tea{position:relative}
+.m-cheer{right:-26px;top:-78px;height:124px}
 .offer{position:relative}
-.offer .m-sit{position:absolute;left:50%;top:-84px;height:100px;transform:translateX(-50%)}
-.offer .m-sit:hover{transform:translateX(-50%) rotate(-5deg) scale(1.05)}
-.offers{padding-top:52px}
-.carte-hint{display:flex;justify-content:center;align-items:center;gap:12px}
-.carte-hint .m-hint{height:64px}
-.dine .m-dine{height:88px}
-.with-m{display:flex;align-items:flex-end;gap:12px}
-.with-m .m{height:76px}
-.submit-row{display:flex;align-items:flex-end;justify-content:space-between;gap:16px}
-.submit-row .m-ready{height:100px;margin-bottom:-10px}
-.m-done{height:112px}
-.m-checkout{height:88px;margin-top:18px}
-.empty-cart .m-idea{height:120px}
-.m-badge{width:136px;height:136px;border-radius:50%;background:var(--paper);display:grid;place-items:center;box-shadow:0 0 0 5px rgba(255,249,249,.25)}
-.m-badge .m{height:108px}
-.m-badge.sm{width:44px;height:44px;box-shadow:none}
-.m-badge.sm .m{height:36px}
-.mnav-brand{display:flex;align-items:center;gap:10px}
-@media (max-width:860px){
-  .glaces .glace:has(.m-peek){margin-top:64px}
-  .teas{margin-top:84px!important}
-  .title .m-top{height:92px}
-  .title .m-under{height:84px}
-  .detail-foot .m-foot{height:88px}
+.offer .m-sit{position:absolute;z-index:4;left:50%;top:-108px;height:128px;transform:translateX(-50%)}
+.offers{padding-top:76px}
+.carte-stage{position:relative;max-width:980px;margin:0 auto}
+.m-coffee{left:-228px;top:-30px;height:218px}
+.brunch-wrap{position:relative}
+.m-thumbs{right:-78px;bottom:-84px;height:168px}
+.tea{position:relative}
+.tea .m-peek{position:absolute;z-index:-1;right:26px;top:-74px;height:118px}
+.card{position:relative}
+.m-think{right:-46px;top:-112px;height:150px}
+.reserve-grid{margin-top:128px}
+.skip{position:relative}
+.m-run{right:-8px;bottom:-26px;height:128px}
+.m-state{height:124px}
+.m-checkout{height:96px;margin-top:18px}
+footer{position:relative}
+.m-badge{position:absolute;z-index:4;top:-82px;left:50%;transform:translateX(-50%);width:164px;height:164px;border-radius:50%;background:var(--paper);display:grid;place-items:center;box-shadow:0 0 0 6px rgba(255,249,249,.35)}
+.m-badge .m{height:128px}
+footer .wrap{padding-top:120px!important}
+.mnav-foot{position:relative}
+.m-wave{right:18px;top:-130px;height:128px}
+@media (max-width:1300px){
+  .m-coffee{left:auto;right:-6px;top:-116px;height:110px}
+  .carte-hint{margin-bottom:118px}
 }
+@media (max-width:860px){
+  .m-hero{right:10px;bottom:-70px;height:156px}
+  .m-spoon{right:-6px;bottom:-22px;height:138px}
+  .m-cheer{right:-6px;top:-64px;height:104px}
+  .glaces .glace:has(.m-cheer){margin-top:56px}
+  .m-thumbs{right:-4px;bottom:-70px;height:122px}
+  .m-think{right:-4px;top:-84px;height:112px}
+  .reserve-grid{margin-top:96px}
+  .m-run{height:108px}
+}
+@media (max-width:760px){ .m-coffee{display:none} .carte-hint{margin-bottom:32px} }
 .toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,160%);visibility:hidden;background:var(--wine);color:var(--paper);padding:8px 8px 8px 20px;border-radius:999px;display:flex;align-items:center;gap:16px;z-index:70;box-shadow:0 14px 30px -12px rgba(50,10,18,.5);transition:transform .25s ease, visibility 0s linear .25s;max-width:calc(100% - 40px);font-size:.9375rem}
 .toast.show{transform:translate(-50%,0);visibility:visible;transition:transform .25s ease}
 .toast button{background:var(--gold-lt);color:var(--wine-dk);border:0;border-radius:999px;padding:7px 14px;font-weight:600;cursor:pointer;white-space:nowrap}
@@ -476,9 +487,10 @@ dialog.mnav[open]{display:flex;flex-direction:column;animation:slide .28s cubic-
         <button class="btn btn-fill" type="button" data-open-cart data-i18n="hero.order">Commander à emporter</button>
         <a class="btn btn-ring" href="#parfaits" data-i18n="hero.menu">Voir les parfaits</a>
       </div>
+      <img class="m m-abs m-hero" src="img/mascots/pointing-left.webp" alt="" width="329" height="360">
     </div>
     <div class="hero-art" aria-hidden="true">
-      <div class="arch"><img class="hero-glass" src="img/miss-coco-cherry.webp" alt="" width="387" height="960"><img class="m m-hero" src="img/mascots/spoon-presenting.webp" alt="" width="235" height="360"></div>
+      <div class="arch"><img class="hero-glass" src="img/miss-coco-cherry.webp" alt="" width="387" height="960"></div>
     </div>
   </div>
 
@@ -502,10 +514,9 @@ dialog.mnav[open]{display:flex;flex-direction:column;animation:slide .28s cubic-
         <h2 data-i18n="col.title">La Collection des Parfaits</h2>
         <span class="rule-heart"><svg class="heart"><use href="#heart"/></svg></span>
         <p data-i18n="col.sub">Choisissez une création pour voir chaque couche, du fond du verre jusqu'à la dernière touche.</p>
-        <img class="m m-under" src="img/mascots/pointing-up.webp" alt="" width="236" height="360" loading="lazy">
       </div>
       <div class="showcase">
-        <div class="stage"><img id="stageImg" src="img/miss-coco-cherry.webp" alt="" width="387" height="960"></div>
+        <div class="stage-wrap"><div class="stage"><img id="stageImg" src="img/miss-coco-cherry.webp" alt="" width="387" height="960"></div><img class="m m-abs m-spoon" src="img/mascots/holding-spoon-up.webp" alt="" width="238" height="360" loading="lazy"></div>
         <div class="detail" aria-live="polite">
           <span class="no" id="pNo">No. 01</span>
           <h3 id="pName">Miss Coco Cherry</h3>
@@ -515,7 +526,6 @@ dialog.mnav[open]{display:flex;flex-direction:column;animation:slide .28s cubic-
           <div class="detail-foot">
             <span class="big-price" id="pPrice"></span>
             <button class="btn btn-fill" type="button" id="pAdd" data-i18n="col.add">Ajouter à la commande</button>
-            <img class="m m-foot" src="img/mascots/holding-spoon-up.webp" alt="" width="238" height="360" loading="lazy">
           </div>
         </div>
       </div>
@@ -535,7 +545,7 @@ dialog.mnav[open]{display:flex;flex-direction:column;animation:slide .28s cubic-
           <div class="row-end"><span></span><button class="btn btn-ring" type="button" data-add="pal6" data-i18n="add">Ajouter</button></div>
         </div>
         <div class="glace">
-          <img class="m m-peek" src="img/mascots/celebrating.webp" alt="" width="286" height="360" loading="lazy"><span class="tagline-sm" data-i18n="fondue.sub">À partager</span>
+          <img class="m m-abs m-cheer" src="img/mascots/celebrating.webp" alt="" width="286" height="360" loading="lazy"><span class="tagline-sm" data-i18n="fondue.sub">À partager</span>
           <div class="top"><h3>La Fondue Glacée pour 2</h3><span class="price" data-price="70000"></span></div>
           <p data-i18n="fondue.d">Dix mini boules (5 saveurs) à plonger dans une sauce chocolat, avec fruits de saison, cookies, waffles et noix concassées.</p>
           <div class="row-end"><span class="fine" data-i18n="dinein">Sur place uniquement</span><a class="btn btn-ring" href="#reserve" data-i18n="nav.book">Réserver</a></div>
@@ -558,7 +568,6 @@ dialog.mnav[open]{display:flex;flex-direction:column;animation:slide .28s cubic-
   <section id="carte" class="carte">
     <div class="wrap">
       <div class="title">
-        <img class="m m-top" src="img/mascots/serving-coffee.webp" alt="" width="304" height="360" loading="lazy">
         <span class="eyebrow">AISU Café &amp; Parfaiterie</span>
         <h2 data-i18n="menu.title">La Carte</h2>
         <p data-i18n="menu.sub">Espressos, lattes, matcha, thés glacés et jus pressés à froid. Prix en ariary.</p>
@@ -568,8 +577,8 @@ dialog.mnav[open]{display:flex;flex-direction:column;animation:slide .28s cubic-
         <button role="tab" id="tab-matcha" aria-selected="false" aria-controls="carteCols" data-tab="matcha" tabindex="-1" data-i18n="tab.matcha">Matcha &amp; Thés</button>
         <button role="tab" id="tab-jus" aria-selected="false" aria-controls="carteCols" data-tab="jus" tabindex="-1" data-i18n="tab.jus">Jus &amp; Smoothies</button>
       </div>
-      <p class="carte-hint"><span data-i18n="menu.hint">Touchez un prix pour l'ajouter à votre commande.</span><img class="m m-hint" src="img/mascots/pointing-left.webp" alt="" width="329" height="360" loading="lazy"></p>
-      <div class="carte-cols" id="carteCols" role="tabpanel" aria-labelledby="tab-cafes"></div>
+      <p class="carte-hint"><span data-i18n="menu.hint">Touchez un prix pour l'ajouter à votre commande.</span></p>
+      <div class="carte-stage"><div class="carte-cols" id="carteCols" role="tabpanel" aria-labelledby="tab-cafes"></div><img class="m m-abs m-coffee" src="img/mascots/serving-coffee.webp" alt="" width="304" height="360" loading="lazy"></div>
     </div>
   </section>
 
@@ -582,7 +591,7 @@ dialog.mnav[open]{display:flex;flex-direction:column;animation:slide .28s cubic-
         <h2 data-i18n="brunch.title">Brunch &amp; Afternoon Tea</h2>
         <span class="rule-heart"><svg class="heart"><use href="#heart"/></svg></span>
       </div>
-      <div class="brunch">
+      <div class="brunch-wrap"><div class="brunch">
         <div class="brunch-side on-wine">
           <h3>Le Brunch</h3>
           <span class="when" data-i18n="brunch.when">Samedis &amp; dimanches, 11h30 – 16h00</span>
@@ -610,10 +619,10 @@ dialog.mnav[open]{display:flex;flex-direction:column;animation:slide .28s cubic-
             </div>
           </div>
         </div>
-      </div>
+      </div><img class="m m-abs m-thumbs" src="img/mascots/double-thumbs-up.webp" alt="" width="220" height="360" loading="lazy"></div>
 
       <div class="teas" id="teaList"></div>
-      <div class="dine"><img class="m m-dine" src="img/mascots/big-approval.webp" alt="" width="177" height="360" loading="lazy"><p data-i18n="tea.note">Brunch et afternoon tea sont servis sur place. Réservez votre table pour être sûr d'en profiter.</p><a class="btn btn-fill" href="#reserve" data-i18n="nav.book">Réserver</a></div>
+      <div class="dine"><p data-i18n="tea.note">Brunch et afternoon tea sont servis sur place. Réservez votre table pour être sûr d'en profiter.</p><a class="btn btn-fill" href="#reserve" data-i18n="nav.book">Réserver</a></div>
     </div>
   </section>
 
@@ -625,6 +634,7 @@ dialog.mnav[open]{display:flex;flex-direction:column;animation:slide .28s cubic-
       </div>
       <div class="reserve-grid">
         <div class="card">
+          <img class="m m-abs m-think" src="img/mascots/thinking.webp" alt="" width="193" height="360" loading="lazy">
           <form id="reserveForm" novalidate>
             <div class="row">
               <div class="field" id="f-date"><label for="r-date" data-i18n="res.date">Date</label><input type="date" id="r-date" required><span class="err" hidden></span></div>
@@ -668,23 +678,24 @@ dialog.mnav[open]{display:flex;flex-direction:column;animation:slide .28s cubic-
             </div>
             <div class="field" id="f-email"><label for="r-email"><span data-i18n="res.email">E-mail</span> <span class="hint" data-i18n="optional">facultatif</span></label><input type="email" id="r-email" autocomplete="email"><span class="err" hidden></span></div>
             <div class="field"><label for="r-notes"><span data-i18n="res.notes">Remarques</span> <span class="hint" data-i18n="res.notesHint">allergies, anniversaire, chaise haute</span></label><textarea id="r-notes"></textarea></div>
-            <div class="submit-row"><button class="btn btn-fill" type="submit" data-i18n="res.submit">Réserver la table</button><img class="m m-ready" src="img/mascots/ready-to-go.webp" alt="" width="205" height="360" loading="lazy"></div>
+            <div class="submit-row"><button class="btn btn-fill" type="submit" data-i18n="res.submit">Réserver la table</button></div>
           </form>
           <div class="confirm" id="reserveDone" hidden tabindex="-1"></div>
         </div>
         <div class="aside">
           <div>
-            <h3 class="with-m"><img class="m " src="img/mascots/thinking.webp" alt="" width="193" height="360" loading="lazy"><span data-i18n="aside.title">Avant votre visite</span></h3>
+            <h3><span data-i18n="aside.title">Avant votre visite</span></h3>
             <ul>
               <li data-i18n="aside.1">Sans réservation, nous vous installons dès qu'une table se libère.</li>
               <li data-i18n="aside.2">Le brunch est servi les samedis et dimanches, de 11h30 à 16h00.</li>
               <li data-i18n="aside.3">Pour modifier une réservation, appelez-nous avec votre référence.</li>
             </ul>
           </div>
-          <div>
-            <h3 class="with-m"><img class="m " src="img/mascots/sprinting.webp" alt="" width="212" height="360" loading="lazy"><span data-i18n="skip.title">Évitez l'attente</span></h3>
+          <div class="skip">
+            <h3><span data-i18n="skip.title">Évitez l'attente</span></h3>
             <p class="fine" style="font-size:.9375rem;margin-bottom:18px" data-i18n="skip.body">Commandez à l'avance et récupérez votre commande au comptoir à l'heure choisie.</p>
             <button class="btn btn-ring" type="button" data-open-cart data-i18n="skip.btn">Commander à emporter</button>
+            <img class="m m-abs m-run" src="img/mascots/sprinting.webp" alt="" width="212" height="360" loading="lazy">
           </div>
         </div>
       </div>
@@ -734,7 +745,7 @@ dialog.mnav[open]{display:flex;flex-direction:column;animation:slide .28s cubic-
 </footer>
 
 <dialog class="mnav" id="mnav" data-i18n-aria="nav.sections" aria-label="Sections">
-  <div class="mnav-head"><span class="mnav-brand"><span class="m-badge sm"><img class="m " src="img/mascots/peace-sign.webp" alt="" width="203" height="360"></span><span class="mark">AISU</span></span><button class="x" type="button" id="closeNav" data-i18n-aria="nav.close" aria-label="Fermer le menu">×</button></div>
+  <div class="mnav-head"><span class="mark">AISU</span><button class="x" type="button" id="closeNav" data-i18n-aria="nav.close" aria-label="Fermer le menu">×</button></div>
   <nav class="mnav-links">
     <a href="#top"><svg aria-hidden="true"><use href="#heart-f"/></svg><span data-i18n="nav.home">Accueil</span></a>
     <a href="#parfaits"><svg aria-hidden="true"><use href="#heart-f"/></svg><span data-i18n="nav.parfaits">Parfaits</span></a>
@@ -745,6 +756,7 @@ dialog.mnav[open]{display:flex;flex-direction:column;animation:slide .28s cubic-
     <a href="#visit"><svg aria-hidden="true"><use href="#heart-f"/></svg><span data-i18n="nav.visit">Nous trouver</span></a>
   </nav>
   <div class="mnav-foot on-wine">
+    <img class="m m-abs m-wave" src="img/mascots/peace-sign.webp" alt="" width="203" height="360" loading="lazy">
     <div class="lang" role="group" aria-label="Language">
       <button type="button" data-lang="fr" aria-pressed="true" lang="fr">Français</button>
       <button type="button" data-lang="en" aria-pressed="false" lang="en">English</button>
@@ -1136,14 +1148,14 @@ dialog.mnav[open]{display:flex;flex-direction:column;animation:slide .28s cubic-
     if(view==='done'){
       $('#cartTitle').textContent=t('cart.placed');
       const n = lastOrder.count===1 ? t('cart.items1') : t('cart.itemsN',{n:lastOrder.count});
-      body.innerHTML=`<div class="confirm" style="padding-top:22px"><img class="m m-done" src="img/mascots/happy-jump.webp" alt="" width="315" height="360"><p class="fine">${t('cart.no')}</p><div class="ref">${lastOrder.ref}</div>
+      body.innerHTML=`<div class="confirm" style="padding-top:22px"><img class="m m-state" src="img/mascots/happy-jump.webp" alt="" width="315" height="360"><p class="fine">${t('cart.no')}</p><div class="ref">${lastOrder.ref}</div>
         <p>${esc(t('cart.ready',{n, name:lastOrder.name, when:lastOrder.when}))}</p>
         <dl class="summary"><dt>${t('cart.total')}</dt><dd class="tnum">${ar(lastOrder.total)}</dd><dt>${t('cart.phone')}</dt><dd>${esc(lastOrder.phone)}</dd></dl>
         <p class="fine">${t('cart.preview')}</p></div>`;
       foot.hidden=false; foot.innerHTML=`<button class="btn btn-fill" type="button" id="newOrder">${t('cart.new')}</button>`; return;
     }
     $('#cartTitle').textContent = view==='checkout' ? t('cart.checkout') : t('cart.title');
-    if(!cart.length){ body.innerHTML=`<div class="empty-cart"><img class="m m-idea" src="img/mascots/an-idea.webp" alt="" width="291" height="360"><p>${t('cart.empty')}</p><a class="btn btn-fill" href="#parfaits" data-close>${t('cart.browse')}</a></div>`; foot.innerHTML=''; foot.hidden=true; return; }
+    if(!cart.length){ body.innerHTML=`<div class="empty-cart"><img class="m m-state" src="img/mascots/an-idea.webp" alt="" width="291" height="360"><p>${t('cart.empty')}</p><a class="btn btn-fill" href="#parfaits" data-close>${t('cart.browse')}</a></div>`; foot.innerHTML=''; foot.hidden=true; return; }
     foot.hidden=false;
     const tot=`<div class="totals"><div class="grand"><span>${t('cart.total')}</span><span>${ar(total())}</span></div></div>`;
     if(view==='cart'){
@@ -1231,7 +1243,7 @@ dialog.mnav[open]{display:flex;flex-direction:column;animation:slide .28s cubic-
     if(errs.length){ errs[0].focus(); return; }
     const seatVal=document.querySelector('input[name="seat"]:checked').value, done=$('#reserveDone');
     const occasion = forIn.selectedOptions[0].textContent;
-    done.innerHTML=`<img class="m m-done" src="img/mascots/double-thumbs-up.webp" alt="" width="220" height="360"><p class="fine">${t('done.ref')}</p><div class="ref">${ref()}</div>
+    done.innerHTML=`<img class="m m-state" src="img/mascots/big-approval.webp" alt="" width="177" height="360"><p class="fine">${t('done.ref')}</p><div class="ref">${ref()}</div>
       <dl class="summary"><dt>${t('done.date')}</dt><dd>${esc(niceDate(dv))}</dd><dt>${t('done.time')}</dt><dd>${fmt(chosen)}</dd><dt>${t('done.guests')}</dt><dd>${party}</dd>
       <dt>${t('done.for')}</dt><dd>${esc(occasion)}</dd><dt>${t('done.seat')}</dt><dd>${t('seat.'+seatVal)}</dd><dt>${t('done.name')}</dt><dd>${esc(name)}</dd></dl>
       <p class="fine">${t('done.note')}</p>
