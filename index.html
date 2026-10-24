@@ -1231,7 +1231,7 @@ dialog.mnav[open]{display:flex;flex-direction:column;animation:slide .28s cubic-
     if(errs.length){ errs[0].focus(); return; }
     const seatVal=document.querySelector('input[name="seat"]:checked').value, done=$('#reserveDone');
     const occasion = forIn.selectedOptions[0].textContent;
-    done.innerHTML=`<img class="m m-done" src="img/mascots/celebrating.webp" alt="" width="286" height="360"><p class="fine">${t('done.ref')}</p><div class="ref">${ref()}</div>
+    done.innerHTML=`<img class="m m-done" src="img/mascots/double-thumbs-up.webp" alt="" width="220" height="360"><p class="fine">${t('done.ref')}</p><div class="ref">${ref()}</div>
       <dl class="summary"><dt>${t('done.date')}</dt><dd>${esc(niceDate(dv))}</dd><dt>${t('done.time')}</dt><dd>${fmt(chosen)}</dd><dt>${t('done.guests')}</dt><dd>${party}</dd>
       <dt>${t('done.for')}</dt><dd>${esc(occasion)}</dd><dt>${t('done.seat')}</dt><dd>${t('seat.'+seatVal)}</dd><dt>${t('done.name')}</dt><dd>${esc(name)}</dd></dl>
       <p class="fine">${t('done.note')}</p>
