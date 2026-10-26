@@ -107,7 +107,8 @@ const S = {
     'alarm.items':'{n} article(s)', 'alarm.pick':'Retrait {d} à {h}', 'alarm.for':'{d} à {h} · {g}',
     'wait.orders':'{n} commande(s) attendent depuis plus de 5 min', 'wait.late':'{n} commande(s) en retard', 'wait.res':'{n} réservation(s) à confirmer',
     'notif.order':'Nouvelle commande {r}', 'notif.res':'Nouvelle réservation {r}', 'test.title':'Test AISU', 'test.body':'Les alertes téléphone fonctionnent.',
-    'lang.label':'Langue', close:'Fermer', role:'Rôle'
+    'lang.label':'Langue', close:'Fermer', role:'Rôle',
+    'hand.title':"Remettre la commande", 'hand.ask':"Demandez au client son code de retrait à 4 chiffres (sur son téléphone ou une capture d'écran) et tapez-le ici.", 'hand.code':"Code de retrait", 'hand.ok':"Code correct : remettez la commande et encaissez {t}.", 'hand.bad':"Ce code ne correspond pas à cette commande. Vérifiez-le avec le client.", 'hand.done':"Remise faite", 'hand.nocode':"Le client n'a pas son code ?", 'hand.check':"Demandez son nom et son numéro et comparez avec {n} · {p}. En cas de doute, appelez ce numéro devant lui : son téléphone doit sonner.", 'hand.anyway':"Remettre sans code", 'hand.sure':"Confirmer la remise sans code", 'hand.notReady':"Attention : cette commande est encore « {s} ».", 'hand.find':"Code du client", 'hand.findL':"Un client vient chercher sa commande ?", 'hand.findBtn':"Trouver", 'hand.none':"Aucune commande en cours avec ce code. Vérifiez le code, ou cherchez le nom avec Rechercher.", 'hand.nocodeChip':"remise sans code", 'cold.note':"Articles glacés : gardez-les au froid et sortez-les à l'arrivée du client.", cold:"glacé", 'hold.until':"Gardée jusqu'à {t}", 'hold.over':"Délai de retrait passé ({t}) : appelez le client", 'seen.ready':"Le client a vu que c'est prêt", 'seen.not':"Le client n'a pas encore vu que c'est prêt : appelez-le si besoin"
   },
   en: {
     'login.team':'Team', 'login.manager':'Manager', 'login.teamHint':'Type the team password.', 'login.mgrHint':'Your manager email and password.',
@@ -183,7 +184,8 @@ const S = {
     'alarm.items':'{n} item(s)', 'alarm.pick':'Pickup {d} at {h}', 'alarm.for':'{d} at {h} · {g}',
     'wait.orders':'{n} order(s) waiting more than 5 min', 'wait.late':'{n} order(s) late', 'wait.res':'{n} booking(s) to confirm',
     'notif.order':'New order {r}', 'notif.res':'New booking {r}', 'test.title':'AISU test', 'test.body':'Phone alerts are working.',
-    'lang.label':'Language', close:'Close', role:'Role'
+    'lang.label':'Language', close:'Close', role:'Role',
+    'hand.title':"Hand over the order", 'hand.ask':"Ask the customer for their 4-digit pickup code (on their phone or a screenshot) and type it here.", 'hand.code':"Pickup code", 'hand.ok':"Code matches: hand the order over and take {t}.", 'hand.bad':"This code doesn't match this order. Check it with the customer.", 'hand.done':"Handed over", 'hand.nocode':"Customer doesn't have their code?", 'hand.check':"Ask for their name and number and compare with {n} · {p}. If in doubt, call that number in front of them: their phone should ring.", 'hand.anyway':"Hand over without the code", 'hand.sure':"Confirm handover without code", 'hand.notReady':"Note: this order is still \"{s}\".", 'hand.find':"Customer's code", 'hand.findL':"Customer here to collect?", 'hand.findBtn':"Find", 'hand.none':"No current order has this code. Check the code, or search for the name with Search.", 'hand.nocodeChip':"handed over without code", 'cold.note':"Iced items: keep them cold and bring them out when the customer arrives.", cold:"iced", 'hold.until':"Held until {t}", 'hold.over':"Pickup deadline passed ({t}): call the customer", 'seen.ready':"Customer has seen it's ready", 'seen.not':"Customer hasn't seen it's ready yet: call them if needed"
   },
   mg: {
     'login.team':'Ekipa', 'login.manager':"Tompon'andraikitra", 'login.teamHint':"Soraty ny tenimiafin'ny ekipa.", 'login.mgrHint':"Ny mailakao sy ny tenimiafinao amin'ny maha tompon'andraikitra anao.",
@@ -259,7 +261,8 @@ const S = {
     'alarm.items':'zavatra {n}', 'alarm.pick':"Fakana {d} amin'ny {h}", 'alarm.for':"{d} amin'ny {h} · {g}",
     'wait.orders':'Kaomandy {n} miandry mihoatra ny 5 minitra', 'wait.late':'Kaomandy {n} tara', 'wait.res':'Fandrihana {n} hamafisina',
     'notif.order':'Kaomandy vaovao {r}', 'notif.res':'Fandrihana vaovao {r}', 'test.title':'Fitsapana AISU', 'test.body':"Mandeha ny fanairana amin'ny finday.",
-    'lang.label':'Fiteny', close:'Akatony', role:'Andraikitra'
+    'lang.label':'Fiteny', close:'Akatony', role:'Andraikitra',
+    'hand.title':"Hanolotra ny kaomandy", 'hand.ask':"Angataho amin'ny mpanjifa ny kaody fakana misy isa 4 (ao amin'ny findainy na sary nalainy) ary soraty eto.", 'hand.code':"Kaody fakana", 'hand.ok':"Marina ny kaody: atolory ny kaomandy ary andraiso ny {t}.", 'hand.bad':"Tsy mifanaraka amin'ity kaomandy ity io kaody io. Hamarino miaraka amin'ny mpanjifa.", 'hand.done':"Voatolotra", 'hand.nocode':"Tsy manana ny kaodiny ve ny mpanjifa?", 'hand.check':"Anontanio ny anarany sy ny laharany ary ampitahao amin'ny {n} · {p}. Raha misalasala, antsoy eo anatrehany io laharana io: tokony haneno ny findainy.", 'hand.anyway':"Atolory na tsy misy kaody", 'hand.sure':"Hamafiso ny fanolorana tsy misy kaody", 'hand.notReady':"Tandremo: mbola « {s} » ity kaomandy ity.", 'hand.find':"Kaodin'ny mpanjifa", 'hand.findL':"Misy mpanjifa tonga haka ny kaomandiny?", 'hand.findBtn':"Tadiavo", 'hand.none':"Tsy misy kaomandy mbola miandry manana io kaody io. Hamarino ny kaody, na tadiavo amin'ny Hikaroka ny anarana.", 'hand.nocodeChip':"natolotra tsy nisy kaody", 'cold.note':"Zavatra mangatsiaka: tehirizo mangatsiaka ary avoahy rehefa tonga ny mpanjifa.", cold:"mangatsiaka", 'hold.until':"Tehirizina hatramin'ny {t}", 'hold.over':"Lasa ny fotoana fakana ({t}): antsoy ny mpanjifa", 'seen.ready':"Hitan'ny mpanjifa fa vonona", 'seen.not':"Mbola tsy hitan'ny mpanjifa fa vonona: antsoy raha ilaina"
   }
 };
 let lang = store.get('aisu-staff-lang', 'fr');
@@ -306,6 +309,7 @@ function applyText(){
   document.documentElement.lang = lang;
   $$('[data-t]').forEach(el => { el.textContent = t(el.dataset.t); });
   $$('[data-t-aria]').forEach(el => { el.setAttribute('aria-label', t(el.dataset.tAria)); });
+  $$('[data-t-ph]').forEach(el => { el.placeholder = t(el.dataset.tPh); });
   $$('[data-set-lang]').forEach(el => { el.setAttribute('aria-pressed', String(el.dataset.setLang === lang)); });
   $('#langCode').textContent = lang.toUpperCase();
   $('#searchIn').placeholder = t('search.ph');
@@ -539,6 +543,7 @@ document.querySelector('.tabs').addEventListener('click', e => { const b = e.tar
 let orders = [], resFuture = [], resPast = null, settings = {...DEFAULTS}, settingsExists = false, settingsLoaded = false, staffList = [];
 let tablesDay = nowParts().ymd, liveDay = null, pastUnsub = null;
 let firstOrders = true, firstRes = true;
+let pickByOrder = {};   // order id → its public tracking record (status the customer has seen)
 
 function startLive(){
   firstOrders = true; firstRes = true;
@@ -552,6 +557,11 @@ function startLive(){
     added.forEach(id => { const o = orders.find(x => x.id === id); if(o && o.status === 'new') raise('order', o); });
     firstOrders = false;
     syncAlarm(); renderOrders(added); renderToday(); renderWait();
+  }, () => {}));
+  // the customers' tracking records, to show whether they've seen that their order is ready
+  unsubs.push(onSnapshot(query(collection(db, 'pickups'), where('pickupDay', '>=', today)), snap => {
+    pickByOrder = {}; snap.docs.forEach(d => { const p = d.data(); if(p.order) pickByOrder[p.order] = p; });
+    renderOrders([]);
   }, () => {}));
   // every booking from today on: today's tables, the 2-week strip, bookings to confirm, alerts
   unsubs.push(onSnapshot(query(collection(db, 'reservations'), where('date', '>=', today)), snap => {
@@ -736,7 +746,7 @@ function itemLine(it){
   return {name, price};
 }
 function orderTotal(o){
-  const lines = (o.items || []).map(it => ({...itemLine(it), q: it.q}));
+  const lines = (o.items || []).map(it => ({...itemLine(it), q: it.q, k: it.k}));
   return {lines, unknown: lines.some(l => l.price == null), total: lines.reduce((a, l) => a + (l.price || 0), 0)};
 }
 const byPickup = (a, b) => (a.pickupDay + String(a.pickupTime).padStart(4, '0')).localeCompare(b.pickupDay + String(b.pickupTime).padStart(4, '0'));
@@ -756,6 +766,15 @@ function dueText(o){
   return {cls: d <= 15 ? 'soon' : '', txt: t('due.in', {n: d})};
 }
 const PREV_O = {preparing: 'new', ready: 'preparing', collected: 'ready'};
+const snowIcon = () => `<svg class="snow" role="img" aria-label="${esc(t('cold'))}"><use href="#i-snow"/></svg>`;
+// on a ready order: how long we hold it, and whether the customer has seen on their phone that it's ready
+function readyInfo(o){
+  const n = nowParts(), dl = MENU.pickupDeadline(o.pickupDay, o.pickupTime);
+  const over = o.pickupDay < n.ymd || (o.pickupDay === n.ymd && n.mins > dl);
+  const p = pickByOrder[o.id];
+  const seen = o.track ? (p && p.seen === 'ready' ? `<div class="seen ok">✓ ${esc(t('seen.ready'))}</div>` : `<div class="seen no">${esc(t('seen.not'))}</div>`) : '';
+  return `<div class="holdline${over ? ' over' : ''}">${esc(t(over ? 'hold.over' : 'hold.until', {t: hm(dl)}))}</div>${seen}`;
+}
 function orderCard(o, flash){
   const {lines, unknown, total} = orderTotal(o);
   const next = {new: ['preparing', 'act.start'], preparing: ['ready', 'act.ready'], ready: ['collected', 'act.collected']}[o.status];
@@ -765,15 +784,20 @@ function orderCard(o, flash){
   return `<article class="card is-${esc(o.status)}${flash ? ' flash' : ''}${late ? ' late' : ''}" data-id="${esc(o.id)}">
     <div class="card-top"><span class="when">${hm(o.pickupTime)}</span><span class="due ${due.cls}">${esc(due.txt)}</span><span class="ref">${esc(o.ref)}</span></div>
     <div class="who"><b>${esc(o.name)}</b>${contactLinks(o.phone)}</div>
-    <ul class="items">${lines.map(l => `<li><span><span class="q">${l.q}×</span>${esc(l.name)}</span><span class="pr">${l.price == null ? t('priceCheck') : ar(l.price)}</span></li>`).join('')}</ul>
+    <ul class="items">${lines.map(l => `<li><span><span class="q">${l.q}×</span>${esc(l.name)}${MENU.isCold(l.k) ? snowIcon() : ''}</span><span class="pr">${l.price == null ? t('priceCheck') : ar(l.price)}</span></li>`).join('')}</ul>
     <div class="total"><span>${t('total')}</span><span>${ar(total)}${unknown ? ' + ?' : ''}</span></div>
     ${o.notes ? `<div class="note">${esc(o.notes)}</div>` : ''}
-    <div class="meta"><span class="chip st-${esc(o.status)}">${t('o.' + o.status)}</span><span>${esc(t('ago', {n: minsSince(o.createdAt)}))}</span>${o.statusBy ? `<span>${esc(t('by', {n: firstName(o.statusBy)}))}</span>` : ''}</div>
+    ${live && lines.some(l => MENU.isCold(l.k)) ? `<div class="note cold">${snowIcon()}<span>${esc(t('cold.note'))}</span></div>` : ''}
+    ${o.status === 'ready' ? readyInfo(o) : ''}
+    <div class="meta"><span class="chip st-${esc(o.status)}">${t('o.' + o.status)}</span><span>${esc(t('ago', {n: minsSince(o.createdAt)}))}</span>${o.statusBy ? `<span>${esc(t('by', {n: firstName(o.statusBy)}))}</span>` : ''}${o.status === 'collected' && o.handoff === 'nocode' ? `<span class="chip st-new">${esc(t('hand.nocodeChip'))}</span>` : ''}</div>
     <div class="actions">${PREV_O[o.status] && o.status !== 'collected' ? `<button class="btn btn-ghost btn-back" type="button" data-order="${esc(o.id)}" data-to="${PREV_O[o.status]}" aria-label="${t('back')}">‹ ${t('back')}</button>` : ''}${next ? `<button class="btn btn-fill" type="button" data-order="${esc(o.id)}" data-to="${next[0]}">${t(next[1])}</button>` : ''}${live ? `<button class="btn btn-danger" type="button" data-order="${esc(o.id)}" data-to="cancelled">${t('act.cancel')}</button>` : ''}${o.status === 'collected' || o.status === 'cancelled' ? `<button class="btn btn-ghost btn-sm" type="button" data-order="${esc(o.id)}" data-to="${o.status === 'collected' ? 'ready' : 'new'}">‹ ${t('back')}</button>` : ''}</div>
   </article>`;
 }
+const flashIds = new Set();   // new orders keep their flash for a few seconds, even if the list redraws
 function renderOrders(fresh){
   if($('#shell').hidden) return;
+  (fresh || []).forEach(id => { if(!flashIds.has(id)){ flashIds.add(id); setTimeout(() => flashIds.delete(id), 8000); } });
+  fresh = [...flashIds];
   const by = s => orders.filter(o => o.status === s).sort(byPickup);
   const col = (id, cnt, list) => { $(id).innerHTML = list.length ? list.map(o => orderCard(o, fresh.includes(o.id))).join('') : `<div class="empty">${t('empty.col')}</div>`; $(cnt).textContent = list.length; };
   col('#colNew', '#nNew', by('new')); col('#colPrep', '#nPrep', by('preparing')); col('#colReady', '#nReady', by('ready'));
@@ -782,18 +806,88 @@ function renderOrders(fresh){
   const n = by('new').length; $('#badgeOrders').textContent = n; $('#badgeOrders').dataset.n = n;
   if(!titleTimer) document.title = baseTitle();
 }
-async function setOrderStatus(id, to){
+// The customer's tracking page (pickups/{key}) follows every status change; if that write fails
+// (for example before the new database rules are published) the order itself still moves.
+function syncPickup(o, to){
+  if(o && o.track) updateDoc(doc(db, 'pickups', o.track), {status: to, statusAt: serverTimestamp()}).catch(() => {});
+}
+async function setOrderStatus(id, to, extra){
   const o = orders.find(x => x.id === id); const from = o ? o.status : null;
-  await updateDoc(doc(db, 'orders', id), {status: to, statusAt: serverTimestamp(), statusBy: me});
+  await updateDoc(doc(db, 'orders', id), {status: to, statusAt: serverTimestamp(), statusBy: me, ...(extra || {})});
+  syncPickup(o, to);
   markSeen('o:' + id);
-  if(from && from !== to) toast(t('moved.o', {r: o.ref, s: t('o.' + to)}), () => updateDoc(doc(db, 'orders', id), {status: from, statusAt: serverTimestamp(), statusBy: me}));
+  if(from && from !== to) toast(t('moved.o', {r: o.ref, s: t('o.' + to)}), () => updateDoc(doc(db, 'orders', id), {status: from, statusAt: serverTimestamp(), statusBy: me}).then(() => syncPickup(o, from)));
 }
 document.addEventListener('click', async e => {
   const b = e.target.closest('[data-order]'); if(!b) return;
   if(b.dataset.to === 'cancelled' && !armed(b)) return;
+  // handing over an order that has a pickup code: check the code first
+  if(b.dataset.to === 'collected'){ const o = orders.find(x => x.id === b.dataset.order); if(o && o.code && o.status !== 'collected'){ openHand(o.id); return; } }
   b.disabled = true;
   try{ await setOrderStatus(b.dataset.order, b.dataset.to); }
   catch(err){ b.disabled = false; toast(t('saveFail')); }
+});
+
+/* ---------- handing over: pickup code check ---------- */
+let handId = null;
+function openHand(id, typed){
+  const o = orders.find(x => x.id === id); if(!o) return;
+  handId = id;
+  const {lines, unknown, total} = orderTotal(o);
+  const cold = lines.some(l => MENU.isCold(l.k));
+  $('#handBody').innerHTML = `
+    <p class="hint" style="margin:0">${esc(t('hand.ask'))}</p>
+    <input type="text" id="handCode" class="code-in" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off" aria-label="${esc(t('hand.code'))}" placeholder="····">
+    <p class="msg" id="handMsg" role="status" hidden></p>
+    ${o.status !== 'ready' ? `<p class="msg warn">${esc(t('hand.notReady', {s: t('o.' + o.status)}))}</p>` : ''}
+    <div class="hand-sum">
+      <div class="hs-top"><b>${esc(o.name)}</b><span class="ref">${esc(o.ref)}</span><span>${esc(relDay(o.pickupDay))} · ${hm(o.pickupTime)}</span></div>
+      <ul class="items">${lines.map(l => `<li><span><span class="q">${l.q}×</span>${esc(l.name)}${MENU.isCold(l.k) ? snowIcon() : ''}</span></li>`).join('')}</ul>
+      <div class="total"><span>${t('total')}</span><span>${ar(total)}${unknown ? ' + ?' : ''}</span></div>
+    </div>
+    ${cold ? `<div class="note cold">${snowIcon()}<span>${esc(t('cold.note'))}</span></div>` : ''}
+    <details class="hand-no"><summary>${esc(t('hand.nocode'))}</summary>
+      <p class="msg warn">${esc(t('hand.check', {n: o.name, p: o.phone}))}</p>
+      <div class="row">${contactLinks(o.phone)}</div>
+      <button class="btn btn-ghost" type="button" id="handAnyway" style="justify-self:start">${esc(t('hand.anyway'))}</button>
+    </details>`;
+  $('#handOk').disabled = true;
+  const dlg = $('#handDlg'); if(!dlg.open) dlg.showModal();
+  const inp = $('#handCode');
+  if(typed){ inp.value = typed; checkHand(); } else setTimeout(() => inp.focus(), 50);
+}
+function checkHand(){
+  const o = orders.find(x => x.id === handId); if(!o) return;
+  const inp = $('#handCode'), msg = $('#handMsg');
+  inp.value = inp.value.replace(/\D/g, '').slice(0, 4);
+  const v = inp.value, ok = v === o.code;
+  inp.classList.toggle('ok', ok); inp.classList.toggle('bad', v.length === 4 && !ok);
+  $('#handOk').disabled = !ok;
+  if(v.length < 4){ msg.hidden = true; return; }
+  msg.hidden = false; msg.className = 'msg ' + (ok ? 'ok' : 'err');
+  msg.textContent = ok ? t('hand.ok', {t: ar(orderTotal(o).total)}) : t('hand.bad');
+}
+document.addEventListener('input', e => { if(e.target.id === 'handCode') checkHand(); if(e.target.classList && e.target.classList.contains('hand-in')) e.target.value = e.target.value.replace(/\D/g, '').slice(0, 4); });
+async function finishHand(how, btn){
+  const id = handId; if(!id) return;
+  btn.disabled = true;
+  try{ await setOrderStatus(id, 'collected', {handoff: how}); $('#handDlg').close(); handId = null; }
+  catch(err){ btn.disabled = false; toast(t('saveFail')); }
+}
+$('#handOk').addEventListener('click', e => finishHand('code', e.currentTarget));
+$('#handDlg').addEventListener('click', e => { const b = e.target.closest('#handAnyway'); if(b && armed(b, 'hand.sure')) finishHand('nocode', b); });
+// the customer shows their code: find the order from the code alone
+document.addEventListener('submit', e => {
+  const f = e.target.closest('[data-hand-find]'); if(!f) return;
+  e.preventDefault();
+  const inp = f.querySelector('.hand-in'), code = inp.value.replace(/\D/g, '');
+  if(code.length !== 4){ inp.focus(); return; }
+  const td = nowParts().ymd;
+  const hits = orders.filter(o => o.code === code && ['new', 'preparing', 'ready'].includes(o.status))
+    .sort((a, b) => (b.status === 'ready') - (a.status === 'ready') || (b.pickupDay === td) - (a.pickupDay === td) || byPickup(a, b));
+  if(!hits.length){ toast(t('hand.none')); inp.select(); return; }
+  inp.value = '';
+  openHand(hits[0].id, code);
 });
 
 /* ================= bookings ================= */
@@ -1165,7 +1259,7 @@ $('#cleanupBtn').addEventListener('click', async e => {
   b.disabled = true;
   const cutoff = addDays(nowParts().ymd, -365); let n = 0;
   try{
-    for(const [col, field] of [['reservations', 'date'], ['orders', 'pickupDay']]){
+    for(const [col, field] of [['reservations', 'date'], ['orders', 'pickupDay'], ['pickups', 'pickupDay']]){
       const snap = await getDocs(query(collection(db, col), where(field, '<', cutoff), limit(450)));
       const batch = writeBatch(db); snap.docs.forEach(d => batch.delete(d.ref)); if(snap.size) await batch.commit(); n += snap.size;
     }

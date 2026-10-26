@@ -26,6 +26,14 @@ Cloudflare Pages publishes this repository automatically on every push to `main`
 
 New orders and bookings take over the dashboard screen and ring until someone answers, on whichever tab is open. Browsers keep a freshly opened page silent until it is touched, so the dashboard opens with a "Start service" screen that takes that one tap.
 
+## Pickup orders
+
+Each online order gets a 4-digit **pickup code** and its own live page on the website, which the customer keeps open or reopens later (the order also shows in a chip at the bottom of the site on that phone, and the page link can be sent to whoever collects). The page shows the code, the pickup time, the latest time we hold the order (`PICKUP_HOLD`, 30 minutes after the pickup time but never past closing, in `assets/menu-data.js`), what to know about iced items and paying at the counter, and the status as staff move it: received, preparing, ready, collected. It needs no e-mail, SMS or WhatsApp.
+
+The page reads a small record, `pickups/{key}`, named by a long random key and holding only the reference, code, status, pickup time and item names: never a name or phone number. Staff see on each ready order whether the customer has seen that it's ready, so they know when to call.
+
+At the counter, **Récupérée** (Collected) first asks for the customer's code; typing a code in "Un client vient chercher sa commande ?" finds the order directly. A customer without the code can still be served after staff check their name and phone, and the order then records that it was handed over without the code. Iced items (parfaits, palettes, iced drinks, juices, smoothies, affogatos; see `isCold` in `assets/menu-data.js`) carry a snowflake on both sides.
+
 ## Who sees what
 
 - **Owner** (`aisuparfaiteria@gmail.com`): everything, including the Team tab.

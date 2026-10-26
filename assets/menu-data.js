@@ -103,5 +103,23 @@
     }
     return null;
   }
-  window.AISU_MENU = Object.freeze({TZ, HOURS, BRUNCH, brunchFor, PARFAITS, CARTE, TEAS, EXTRA_ITEMS, itemFor});
+  // Pickup orders: we hold an order this many minutes after the pickup time the customer chose,
+  // but never past closing time. The website and the staff dashboard both show this deadline.
+  const PICKUP_HOLD = 30;
+  const pickupDeadline = (day, mins) => {
+    const [y, m, d] = String(day).split('-').map(Number), h = HOURS[new Date(y, m - 1, d).getDay()];
+    return h ? Math.min(mins + PICKUP_HOLD, h[1]) : mins + PICKUP_HOLD;
+  };
+  // Items that must stay cold until the customer arrives (they melt or go warm): every parfait and
+  // ice-cream palette, every iced drink, the iced teas, juices, smoothies and milkshakes, and the affogatos
+  // (espresso poured over ice cream).
+  function isCold(key){
+    if(PARFAITS.some(x => x.id === key) || EXTRA_ITEMS[key]) return true;
+    const m = /^(cafes|matcha|jus)-(\d+)-(\d+)-([01])$/.exec(key || '');
+    if(!m) return false;
+    const grp = (CARTE[m[1]] || [])[Number(m[2])], it = grp && grp.items[Number(m[3])];
+    if(!it) return false;
+    return grp.cols[Number(m[4])] !== 'hot' || /affogato/i.test(it[0]);
+  }
+  window.AISU_MENU = Object.freeze({TZ, HOURS, BRUNCH, brunchFor, PICKUP_HOLD, pickupDeadline, isCold, PARFAITS, CARTE, TEAS, EXTRA_ITEMS, itemFor});
 })();

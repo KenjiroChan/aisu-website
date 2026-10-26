@@ -6,6 +6,10 @@ rules_version = '2';
 // - Customers (no sign-in) can only ADD a booking or a pickup order, in the right shape, and only
 //   while the café accepts them (not paused, not a closed date, half hour not full).
 //   They can see which half hours are full and the café settings, never anyone's name or phone.
+// - Each new pickup order comes with a small tracking record (pickups/{key}) holding its reference,
+//   4-digit pickup code, status, pickup time and item names, but no name or phone. Only someone who
+//   knows its long random key can open it (the customer's phone, or whoever they send the link to);
+//   nobody can list them except staff. The customer's page may only note which status they have seen.
 // - Signed-in staff (listed in /staff, or the owner) read bookings and orders, change their status,
 //   add bookings taken by phone or walk-ins, edit a booking (time, guests, table, note, contact) and mark items sold out.
 // - Managers (role 'manager' in /staff, or the owner) also change the café settings.
@@ -158,9 +162,28 @@ service cloud.firestore {
     }
 
     // ---------- pickup orders ----------
-    function validOrder(o) {
+    function isKey(v) {
+      return v is string && v.matches('^[A-Za-z0-9]{20,40}$');
+    }
+    function isCode(v) {
+      return v is string && v.matches('^[0-9]{4}$');
+    }
+    function pickupPath(key) {
+      return /databases/$(database)/documents/pickups/$(key);
+    }
+    // An order either has no tracking (older pages) or is saved in the same batch as its tracking record,
+    // which must point back at this order with the same code.
+    function trackedOrNot(id, o) {
+      return !('track' in o) && !('code' in o)
+        || (isKey(o.track) && isCode(o.code)
+          && !exists(pickupPath(o.track))
+          && getAfter(pickupPath(o.track)).data.order == id
+          && getAfter(pickupPath(o.track)).data.code == o.code);
+    }
+    function validOrder(id, o) {
       return o.keys().hasAll(['ref', 'items', 'pickupDay', 'pickupTime', 'name', 'phone', 'notes', 'lang', 'status', 'createdAt'])
-        && o.keys().hasOnly(['ref', 'items', 'pickupDay', 'pickupTime', 'name', 'phone', 'notes', 'lang', 'status', 'createdAt'])
+        && o.keys().hasOnly(['ref', 'items', 'pickupDay', 'pickupTime', 'name', 'phone', 'notes', 'lang', 'status', 'createdAt', 'track', 'code'])
+        && trackedOrNot(id, o)
         && text(o.ref, 9, 9)
         && o.items is list && o.items.size() >= 1 && o.items.size() <= 30
         && isDay(o.pickupDay)
@@ -174,11 +197,45 @@ service cloud.firestore {
     }
 
     match /orders/{id} {
-      allow create: if validOrder(request.resource.data) && ordersOpen(request.resource.data.pickupDay);
+      allow create: if validOrder(id, request.resource.data) && ordersOpen(request.resource.data.pickupDay);
       allow read: if isStaff();
+      // 'handoff' records how a collected order was checked: 'code' (pickup code matched) or 'nocode'
       allow update: if isStaff()
-        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'statusAt', 'statusBy'])
-        && request.resource.data.status in ['new', 'preparing', 'ready', 'collected', 'cancelled'];
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'statusAt', 'statusBy', 'handoff'])
+        && request.resource.data.status in ['new', 'preparing', 'ready', 'collected', 'cancelled']
+        && request.resource.data.get('handoff', 'code') in ['code', 'nocode'];
+      allow delete: if isOwner();
+    }
+
+    // ---------- pickup tracking (no names or phone numbers) ----------
+    function orderPath(id) {
+      return /databases/$(database)/documents/orders/$(id);
+    }
+    function validPickup(key, p) {
+      let o = getAfter(orderPath(p.order)).data;
+      return p.keys().hasAll(['order', 'ref', 'code', 'status', 'pickupDay', 'pickupTime', 'items', 'lang', 'createdAt'])
+        && p.keys().hasOnly(['order', 'ref', 'code', 'status', 'pickupDay', 'pickupTime', 'items', 'lang', 'createdAt'])
+        && isKey(key)
+        && p.order is string
+        && !exists(orderPath(p.order))
+        && o.get('track', '') == key
+        && o.code == p.code && o.ref == p.ref
+        && o.pickupDay == p.pickupDay && o.pickupTime == p.pickupTime
+        && p.items is list && p.items.size() >= 1 && p.items.size() <= 30
+        && p.lang in ['fr', 'en', 'mg']
+        && p.status == 'new'
+        && p.createdAt == request.time;
+    }
+    match /pickups/{key} {
+      allow get: if true;
+      allow list: if isStaff();
+      allow create: if validPickup(key, request.resource.data);
+      allow update: if (isStaff()
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'statusAt'])
+          && request.resource.data.status in ['new', 'preparing', 'ready', 'collected', 'cancelled'])
+        || (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['seen', 'seenAt'])
+          && request.resource.data.seen in ['new', 'preparing', 'ready', 'collected', 'cancelled']
+          && request.resource.data.seenAt == request.time);
       allow delete: if isOwner();
     }
 

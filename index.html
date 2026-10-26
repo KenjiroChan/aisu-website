@@ -557,8 +557,8 @@ summary.grp-head{list-style:none}
 /* ===== phone landing: picture first, buttons kept, words moved out of the first screen ===== */
 @media (max-width:760px){
   .hero{position:relative;display:block;min-height:520px;max-height:880px;
-    height:calc(100vh - 60px - 68px - var(--notice-h,0px) - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));
-    height:calc(100svh - 60px - 68px - var(--notice-h,0px) - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))}
+    height:calc(100vh - 60px - 68px - var(--notice-h,0px) - var(--chip-h,0px) - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));
+    height:calc(100svh - 60px - 68px - var(--notice-h,0px) - var(--chip-h,0px) - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))}
   .hero .hero-art{position:absolute;inset:0;height:auto;max-height:none;aspect-ratio:auto}
   .hero .arch{left:11%;right:11%;top:66px;bottom:150px}
   .hero .hero-copy{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:space-between;gap:0;
@@ -584,12 +584,74 @@ summary.grp-head{list-style:none}
 .toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,160%);visibility:hidden;background:var(--wine);color:var(--paper);padding:8px 8px 8px 20px;border-radius:999px;display:flex;align-items:center;gap:16px;z-index:70;box-shadow:0 14px 30px -12px rgba(50,10,18,.5);transition:transform .25s ease, visibility 0s linear .25s;max-width:calc(100% - 40px);font-size:.9375rem}
 .toast.show{transform:translate(-50%,0);visibility:visible;transition:transform .25s ease}
 .toast button{background:var(--gold-lt);color:var(--wine-dk);border:0;border-radius:999px;padding:7px 14px;font-weight:600;cursor:pointer;white-space:nowrap}
+
+/* ---------- pickup tracker ---------- */
+.snow{width:15px;height:15px;color:#3E7FB8;vertical-align:-2px;margin-left:6px;flex:none}
+.cold-note{font-size:var(--t-sm);padding:10px 14px;border-radius:12px;background:#E9F2FA;color:#1F4E77}
+.trk{display:grid;gap:18px;padding-top:18px}
+.trk-status{display:grid;gap:14px;padding:18px;border-radius:18px;background:var(--cream-2)}
+.steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;counter-reset:s}
+.steps li{position:relative;display:grid;justify-items:center;gap:6px;text-align:center;font-size:.6875rem;font-weight:500;color:var(--muted);line-height:1.2}
+.steps li::before{content:"";position:absolute;top:7px;right:50%;width:100%;height:2px;background:var(--line);z-index:0}
+.steps li:first-child::before{display:none}
+.steps .dot{position:relative;z-index:1;width:16px;height:16px;border-radius:50%;background:var(--paper);box-shadow:inset 0 0 0 2px var(--line)}
+.steps li.done::before,.steps li.now::before{background:var(--wine)}
+.steps li.done .dot{background:var(--wine);box-shadow:none}
+.steps li.now{color:var(--wine);font-weight:700}
+.steps li.now .dot{background:var(--gold);box-shadow:0 0 0 4px rgba(242,179,61,.35)}
+.trk-msg{font-family:var(--f-display);font-size:1.35rem;font-weight:600;line-height:1.25;color:var(--wine-dk)}
+.trk.st-ready .trk-status{background:var(--wine);color:var(--paper)}
+.trk.st-ready .trk-msg{color:var(--paper)}
+.trk.st-ready .steps li{color:rgba(255,249,249,.75)}
+.trk.st-ready .steps li.now{color:var(--gold-lt)}
+.trk.st-ready .steps li::before{background:rgba(255,249,249,.35)}
+.trk.st-ready .steps li.done::before,.trk.st-ready .steps li.now::before{background:var(--gold-lt)}
+.trk.st-ready .steps li.done .dot{background:var(--gold-lt)}
+.trk.st-late .trk-status,.trk.st-cancelled .trk-status,.trk.st-lost .trk-status{background:#FBEAEA}
+.trk.st-late .trk-msg,.trk.st-cancelled .trk-msg,.trk.st-lost .trk-msg{color:var(--err)}
+.trk.st-collected .trk-status{background:#E6F1EA}
+.trk.st-collected .trk-msg{color:var(--ok)}
+.trk-msg a,.trk-know a{color:inherit;font-weight:600}
+.trk-code{display:grid;justify-items:center;gap:4px;padding:18px;border-radius:18px;border:2px dashed var(--wine);text-align:center}
+.trk-code .lbl{font-size:var(--t-xs);font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.trk-code .code{font-family:var(--f-mark);font-weight:800;font-size:3rem;letter-spacing:.18em;line-height:1.05;color:var(--wine);padding-left:.18em}
+.trk-code .code.ref-code{font-size:2rem;letter-spacing:.06em;padding-left:0}
+.trk .summary{padding:14px 0}
+.trk-items{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.trk-items li{display:flex;align-items:center;gap:8px;font-size:.9375rem}
+.trk-items .q{font-weight:600;color:var(--wine);min-width:26px}
+.trk-know{padding:16px 18px;border-radius:16px;background:var(--paper);box-shadow:inset 0 0 0 1px var(--line)}
+.trk-know h3{font-family:var(--f-display);font-size:1.25rem;font-weight:600;margin-bottom:8px}
+.trk-know ul{margin:0;padding:0 0 0 18px;display:grid;gap:8px;font-size:var(--t-sm);line-height:1.45}
+.trk-know li::marker{color:var(--gold)}
+.btn-sm{padding:9px 18px;justify-self:start}
+.trk-foot{display:flex;flex-wrap:wrap;gap:10px}
+.trk-foot .btn{flex:1 1 150px;padding-inline:16px}
+.mine{display:grid;gap:8px;padding:18px 0 14px;border-bottom:1px solid var(--line)}
+.mine .sub-h{margin:0}
+.mine-row,.track-chip{display:flex;align-items:center;gap:12px;width:100%;border:0;cursor:pointer;text-align:left;font:inherit;color:inherit}
+.mine-row{padding:12px 14px;border-radius:14px;background:var(--cream-2)}
+.mine-row .tx,.track-chip .tx{display:grid;min-width:0;flex:1;line-height:1.3}
+.mine-row .tx span{font-size:var(--t-sm);color:var(--muted)}
+.mine-row .go,.track-chip .go{font-weight:600;font-size:var(--t-sm);color:var(--wine);white-space:nowrap}
+.mine-row .dot,.track-chip .dot{width:10px;height:10px;border-radius:50%;background:var(--muted);flex:none}
+[data-st="preparing"] .dot{background:var(--gold)}
+[data-st="ready"] .dot{background:var(--ok);box-shadow:0 0 0 4px rgba(46,107,71,.25)}
+[data-st="late"] .dot{background:var(--err)}
+.track-chip{position:fixed;z-index:60;right:max(20px, env(safe-area-inset-right,0px));bottom:calc(24px + env(safe-area-inset-bottom,0px));width:auto;max-width:min(360px, calc(100% - 40px));padding:10px 16px;border-radius:999px;background:var(--paper);box-shadow:0 0 0 1.5px var(--wine),0 14px 30px -12px rgba(50,10,18,.45);font-size:var(--t-sm)}
+.track-chip[hidden]{display:none}
+.track-chip .tx{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+.track-chip[data-st="ready"]{background:var(--wine);color:var(--paper)}
+.track-chip[data-st="ready"] .go{color:var(--gold-lt)}
+@media (prefers-reduced-motion:no-preference){ .track-chip[data-st="ready"]{animation:chipPulse 1.6s ease-in-out infinite} @keyframes chipPulse{50%{box-shadow:0 0 0 6px rgba(201,25,92,.25),0 14px 30px -12px rgba(50,10,18,.45)}} }
+@media (max-width:760px){ .track-chip{left:max(12px, env(safe-area-inset-left,0px));right:max(12px, env(safe-area-inset-right,0px));max-width:none;bottom:calc(80px + env(safe-area-inset-bottom,0px))} }
 </style>
 </head>
 <body>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="heart" viewBox="0 0 24 24"><path d="M12 20.5s-7.5-4.6-9.3-9.4C1.4 7.6 3.6 4.5 6.8 4.5c2.1 0 3.6 1.2 5.2 3.1 1.6-1.9 3.1-3.1 5.2-3.1 3.2 0 5.4 3.1 4.1 6.6-1.8 4.8-9.3 9.4-9.3 9.4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+  <symbol id="snow" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 2.5v19M3.8 7.25l16.4 9.5M3.8 16.75l16.4-9.5"/><path d="M9.5 4.5 12 7l2.5-2.5M9.5 19.5 12 17l2.5 2.5M4.3 10.4l3.4.9-.9 3.4M19.7 13.6l-3.4-.9.9-3.4M4.3 13.6l3.4-.9-.9-3.4M19.7 10.4l-3.4.9.9 3.4"/></g></symbol>
   <symbol id="heart-f" viewBox="0 0 24 24"><path d="M12 20.5s-7.5-4.6-9.3-9.4C1.4 7.6 3.6 4.5 6.8 4.5c2.1 0 3.6 1.2 5.2 3.1 1.6-1.9 3.1-3.1 5.2-3.1 3.2 0 5.4 3.1 4.1 6.6-1.8 4.8-9.3 9.4-9.3 9.4z" fill="currentColor"/></symbol>
 </svg>
 
@@ -926,6 +988,7 @@ summary.grp-head{list-style:none}
   <button type="button" class="tb-order" data-open-cart><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8.5h14l-1.1 11.2a1.5 1.5 0 0 1-1.5 1.3H7.6a1.5 1.5 0 0 1-1.5-1.3z"/><path d="M9 8.5V7a3 3 0 0 1 6 0v1.5"/></svg><span data-i18n="tb.order">Panier</span><b class="cart-count tb-badge" data-n="0">0</b></button>
 </nav>
 
+<button class="track-chip" type="button" id="trackChip" hidden></button>
 <div class="toast" id="toast" role="status" aria-live="polite"><span id="toastText"></span><button type="button" data-open-cart data-i18n="cart.view">Voir la commande</button></div>
 
 <script src="assets/menu-data.js"></script>
@@ -979,8 +1042,9 @@ summary.grp-head{list-style:none}
       "closing.title":"Un parfait, un café, et tout le temps qu'il faut.","closing.body":"Le week-end, les tables partent vite. Réservez si vous venez entre amis ou pour le brunch.",
       "foot.contact":"Contact","foot.hours":"Horaires","foot.find":"Nous trouver","foot.addr":"Adresse à venir","foot.brunch":"Brunch : samedi 11h30 – 16h00, dimanche 11h30 – 15h00","foot.tea":"Afternoon tea : tous les jours","tea.when":"Servi tous les jours, pour 2 personnes","foot.legal":"Prix en ariary (Ar)",
       copy:"Copier",copied:"Copié",selected:"Sélectionné",
+      "trk.title":"Votre commande","trk.code":"Code de retrait","trk.order":"Commande {r}","trk.s.new":"Reçue","trk.s.preparing":"En préparation","trk.s.ready":"Prête","trk.s.collected":"Récupérée","trk.s.late":"Délai dépassé, appelez-nous","trk.s.cancelled":"Annulée","trk.m.new":"C'est noté ! Nous avons bien reçu votre commande, elle sera prête pour {t}.","trk.m.preparing":"Nous préparons votre commande en ce moment.","trk.m.ready":"Votre commande est prête ! Venez la chercher avant {t}.","trk.m.collected":"Commande récupérée. Bonne dégustation !","trk.m.cancelled":"Cette commande a été annulée. Si c'est une erreur, appelez-nous au {p}.","trk.m.late":"L'heure limite de retrait ({t}) est passée. Appelez-nous au {p} avant de venir.","trk.m.lost":"Nous ne trouvons pas cette commande. Vérifiez le lien, ou appelez-nous au {p}.","trk.when":"Retrait","trk.until":"À récupérer avant","trk.pay":"À payer au comptoir","trk.know":"Bon à savoir","trk.k.code":"Au comptoir, montrez ce code (ou une capture d'écran de cette page). Sans le code, nous vérifierons votre nom et votre numéro de téléphone avant de vous remettre la commande.","trk.k.someone":"Quelqu'un vient à votre place ? Envoyez-lui le lien de cette page, ou simplement le code.","trk.k.cold":"Les articles glacés (❄) sont gardés au froid jusqu'à votre arrivée. Venez à l'heure et dégustez-les vite : ils fondent avec la chaleur.","trk.k.hold":"Nous gardons votre commande jusqu'à {t}. Après, elle n'est plus garantie, surtout les articles glacés : en cas de retard, appelez-nous au {p}.","trk.k.pay":"Vous payez au comptoir, au moment du retrait.","trk.k.where":"Où : {a}","trk.live":"Cette page se met à jour toute seule. Vous pouvez la fermer : rouvrez ce site sur ce téléphone et votre commande s'affichera en bas de l'écran.","trk.share":"Envoyer le lien","trk.copied":"Lien copié","trk.shareText":"Commande AISU {r} · code de retrait {c}","trk.notify":"Me prévenir sur ce téléphone quand c'est prêt","trk.notifyOn":"Vous serez prévenu sur ce téléphone tant que cette page reste ouverte.","trk.readyTitle":"Votre commande AISU est prête","trk.readyBody":"Code de retrait {c} · à récupérer avant {t}","trk.mine":"Vos commandes en cours","trk.see":"Voir","trk.noLive":"Le suivi en direct n'est pas disponible pour cette commande. Gardez votre numéro de commande : il vous sera demandé au comptoir.","co.hold":"Nous gardons votre commande {n} minutes après cette heure, jusqu'à la fermeture.","co.cold":"❄ Les articles glacés sont gardés au froid jusqu'à votre arrivée : venez à l'heure.","cold":"servi glacé",
       "cart.title":"Votre commande","cart.checkout":"Retrait","cart.placed":"Commande passée","cart.empty":"Votre commande est vide. Ajoutez un parfait ou une boisson depuis la carte.","cart.browse":"Voir la carte",
-      "cart.continue":"Choisir l'heure de retrait","cart.pickup":"Heure de retrait","cart.pickupHint":"Comptez environ 20 minutes de préparation.","cart.name":"Nom","cart.phone":"Téléphone mobile","cart.phoneHint":"nous vous prévenons quand c'est prêt",
+      "cart.continue":"Choisir l'heure de retrait","cart.pickup":"Heure de retrait","cart.pickupHint":"Comptez environ 20 minutes de préparation.","cart.name":"Nom","cart.phone":"Téléphone mobile","cart.phoneHint":"pour vous joindre si besoin",
       "cart.notes":"Remarques","cart.notesPh":"Allergies, une cuillère en plus, une bougie","cart.pay":"Réglez au comptoir au moment du retrait.","cart.back":"Retour","cart.place":"Passer la commande","cart.total":"Total",
       "cart.no":"Numéro de commande","cart.ready":"Nous préparons {n} pour {name}, {when}. Réglez au comptoir au retrait.","cart.items1":"1 article","cart.itemsN":"{n} articles","cart.preview":"Aperçu uniquement : cette commande n'a pas été envoyée au café.","cart.new":"Nouvelle commande",
       "cart.added":"{x} ajouté","cart.view":"Voir la commande","cart.errName":"Indiquez le nom pour la commande.","cart.errPhone":"Indiquez un numéro de mobile valide.",
@@ -1030,8 +1094,9 @@ summary.grp-head{list-style:none}
       "closing.title":"A parfait, a coffee, and all the time you need.","closing.body":"Tables go quickly on weekends, so book ahead if you're coming with friends or for brunch.",
       "foot.contact":"Contact","foot.hours":"Opening hours","foot.find":"Find us","foot.addr":"Address to come","foot.brunch":"Brunch: Saturday 11:30 am – 4 pm, Sunday 11:30 am – 3 pm","foot.tea":"Afternoon tea: every day","tea.when":"Served every day, for two","foot.legal":"Prices in ariary (Ar)",
       copy:"Copy",copied:"Copied",selected:"Selected",
+      "trk.title":"Your order","trk.code":"Pickup code","trk.order":"Order {r}","trk.s.new":"Received","trk.s.preparing":"Preparing","trk.s.ready":"Ready","trk.s.collected":"Collected","trk.s.late":"Deadline passed, call us","trk.s.cancelled":"Cancelled","trk.m.new":"Got it! We've received your order and will have it ready for {t}.","trk.m.preparing":"We're preparing your order now.","trk.m.ready":"Your order is ready! Come and collect it before {t}.","trk.m.collected":"Order collected. Enjoy!","trk.m.cancelled":"This order was cancelled. If that's a mistake, call us on {p}.","trk.m.late":"The pickup deadline ({t}) has passed. Please call us on {p} before you come.","trk.m.lost":"We can't find this order. Check the link, or call us on {p}.","trk.when":"Pickup","trk.until":"Collect before","trk.pay":"To pay at the counter","trk.know":"Good to know","trk.k.code":"At the counter, show this code (or a screenshot of this page). Without it, we'll check your name and phone number before handing the order over.","trk.k.someone":"Someone collecting for you? Send them the link to this page, or just the code.","trk.k.cold":"Iced items (❄) are kept cold until you arrive. Come on time and enjoy them quickly, as they melt in the heat.","trk.k.hold":"We hold your order until {t}. After that it isn't guaranteed, especially the iced items, so if you're running late, call us on {p}.","trk.k.pay":"You pay at the counter when you collect.","trk.k.where":"Where: {a}","trk.live":"This page updates by itself. You can close it: open this site again on this phone and your order will show at the bottom of the screen.","trk.share":"Send the link","trk.copied":"Link copied","trk.shareText":"AISU order {r} · pickup code {c}","trk.notify":"Alert me on this phone when it's ready","trk.notifyOn":"You'll get an alert on this phone while this page stays open.","trk.readyTitle":"Your AISU order is ready","trk.readyBody":"Pickup code {c} · collect before {t}","trk.mine":"Your current orders","trk.see":"View","trk.noLive":"Live tracking isn't available for this order. Keep your order number: we'll ask for it at the counter.","co.hold":"We hold your order for {n} minutes after this time, until closing.","co.cold":"❄ Iced items are kept cold until you arrive, so please come on time.","cold":"served cold",
       "cart.title":"Your order","cart.checkout":"Pickup details","cart.placed":"Order placed","cart.empty":"Your order is empty. Add a parfait or a drink from the menu.","cart.browse":"Browse the menu",
-      "cart.continue":"Choose a pickup time","cart.pickup":"Pickup time","cart.pickupHint":"Orders take about 20 minutes.","cart.name":"Name","cart.phone":"Mobile number","cart.phoneHint":"we'll let you know when it's ready",
+      "cart.continue":"Choose a pickup time","cart.pickup":"Pickup time","cart.pickupHint":"Orders take about 20 minutes.","cart.name":"Name","cart.phone":"Mobile number","cart.phoneHint":"so we can reach you if needed",
       "cart.notes":"Notes","cart.notesPh":"Allergies, an extra spoon, a candle","cart.pay":"Pay at the counter when you collect.","cart.back":"Back","cart.place":"Place order","cart.total":"Total",
       "cart.no":"Order number","cart.ready":"We're preparing {n} for {name}, {when}. Pay at the counter when you collect.","cart.items1":"1 item","cart.itemsN":"{n} items","cart.preview":"Preview only: this order wasn't sent to the café.","cart.new":"Start a new order",
       "cart.added":"{x} added","cart.view":"View order","cart.errName":"Enter the name for the order.","cart.errPhone":"Enter a valid mobile number.",
@@ -1081,8 +1146,9 @@ summary.grp-head{list-style:none}
       "closing.title":"Parfait iray, kafe iray, ary fotoana ampy ho anao.","closing.body":"Lany haingana ny latabatra amin'ny faran'ny herinandro, ka mamandrika mialoha raha hiaraka amin'ny namana na ho amin'ny brunch ianao.",
       "foot.contact":"Fifandraisana","foot.hours":"Ora fisokafana","foot.find":"Toerana misy anay","foot.addr":"Ho fantatra tsy ho ela ny adiresy","foot.brunch":"Brunch: Asabotsy 11h30 – 16h00, Alahady 11h30 – 15h00","foot.tea":"Afternoon tea: isan'andro","tea.when":"Aroso isan'andro, ho an'olona 2","foot.legal":"Vidiny amin'ny ariary (Ar)",
       copy:"Adikao",copied:"Voadika",selected:"Voafidy",
+      "trk.title":"Ny kaomandinao","trk.code":"Kaody fakana","trk.order":"Kaomandy {r}","trk.s.new":"Voaray","trk.s.preparing":"Eo am-panomanana","trk.s.ready":"Vonona","trk.s.collected":"Nalaina","trk.s.late":"Lasa ny fotoana, antsoy izahay","trk.s.cancelled":"Nofoanana","trk.m.new":"Voarainay ny kaomandinao, ary ho vonona amin'ny {t} izy.","trk.m.preparing":"Eo am-panomanana ny kaomandinao izahay izao.","trk.m.ready":"Vonona ny kaomandinao! Avia haka azy alohan'ny {t}.","trk.m.collected":"Nalaina ny kaomandy. Mazotoa homana!","trk.m.cancelled":"Nofoanana ity kaomandy ity. Raha diso izany, antsoy amin'ny {p} izahay.","trk.m.late":"Lasa ny ora farany hakana ({t}). Antsoy amin'ny {p} izahay alohan'ny hahatongavanao.","trk.m.lost":"Tsy hitanay ity kaomandy ity. Hamarino ny rohy, na antsoy amin'ny {p} izahay.","trk.when":"Fakana","trk.until":"Alaina alohan'ny","trk.pay":"Aloa eo amin'ny kesy","trk.know":"Tokony ho fantatrao","trk.k.code":"Eo amin'ny kesy, asehoy ity kaody ity (na sary nalaina tamin'ity pejy ity). Raha tsy misy ny kaody, hamarininay ny anaranao sy ny laharan'ny findainao vao omenay anao ny kaomandy.","trk.k.someone":"Olon-kafa no haka azy? Alefaso aminy ny rohin'ity pejy ity, na ny kaody fotsiny.","trk.k.cold":"Tehirizina mangatsiaka mandra-pahatonganao ireo zavatra mangatsiaka (❄). Avia ara-potoana ary hano haingana fa tsy zakany ny hafanana.","trk.k.hold":"Tehirizinay hatramin'ny {t} ny kaomandinao. Aorian'izay dia tsy azo antoka intsony izy, indrindra ireo zavatra mangatsiaka, ka raha ho tara ianao dia antsoy amin'ny {p} izahay.","trk.k.pay":"Aloa eo amin'ny kesy ny vola rehefa maka ny kaomandy ianao.","trk.k.where":"Toerana: {a}","trk.live":"Miova ho azy ity pejy ity. Azonao akatona izy: sokafy indray amin'ity finday ity ity tranonkala ity dia hiseho eo ambanin'ny efijery ny kaomandinao.","trk.share":"Alefaso ny rohy","trk.copied":"Voadika ny rohy","trk.shareText":"Kaomandy AISU {r} · kaody fakana {c}","trk.notify":"Ampandreneso aho amin'ity finday ity rehefa vonona","trk.notifyOn":"Hampandrenesina ianao amin'ity finday ity raha mbola misokatra ity pejy ity.","trk.readyTitle":"Vonona ny kaomandy AISU-nao","trk.readyBody":"Kaody fakana {c} · alaina alohan'ny {t}","trk.mine":"Ny kaomandinao mbola miandry","trk.see":"Jereo","trk.noLive":"Tsy misy fanarahana mivantana ho an'ity kaomandy ity. Tehirizo ny laharan'ny kaomandy: hangatahina aminao eo amin'ny kesy izy.","co.hold":"Tehirizinay {n} minitra aorian'io ora io ny kaomandinao, hatramin'ny fotoana hanidiana.","co.cold":"❄ Tehirizina mangatsiaka mandra-pahatonganao ireo zavatra mangatsiaka, ka avia ara-potoana.","cold":"aroso mangatsiaka",
       "cart.title":"Ny kaomandinao","cart.checkout":"Fakana","cart.placed":"Voaray ny kaomandy","cart.empty":"Mbola foana ny kaomandinao. Misafidiana parfait na zava-pisotro ao amin'ny menio.","cart.browse":"Jereo ny menio",
-      "cart.continue":"Misafidiana ora hakana","cart.pickup":"Ora hakana","cart.pickupHint":"Eo amin'ny 20 minitra eo ho eo ny fanomanana.","cart.name":"Anarana","cart.phone":"Laharana finday","cart.phoneHint":"hampahafantarinay anao rehefa vonona",
+      "cart.continue":"Misafidiana ora hakana","cart.pickup":"Ora hakana","cart.pickupHint":"Eo amin'ny 20 minitra eo ho eo ny fanomanana.","cart.name":"Anarana","cart.phone":"Laharana finday","cart.phoneHint":"raha mila miantso anao izahay",
       "cart.notes":"Fanamarihana","cart.notesPh":"Tsy fahazakana sakafo, sotro fanampiny, labozia","cart.pay":"Aloa eo amin'ny kesy rehefa maka ianao.","cart.back":"Hiverina","cart.place":"Alefaso ny kaomandy","cart.total":"Totaliny",
       "cart.no":"Laharan'ny kaomandy","cart.ready":"Manomana {n} ho an'i {name} izahay, {when}. Aloa eo amin'ny kesy rehefa maka ianao.","cart.items1":"entana 1","cart.itemsN":"entana {n}","cart.preview":"Santionany ihany: tsy nalefa tany amin'ny kafe ity kaomandy ity.","cart.new":"Kaomandy vaovao",
       "cart.added":"Tafiditra: {x}","cart.view":"Jereo ny kaomandy","cart.errName":"Ampidiro ny anarana ho an'ny kaomandy.","cart.errPhone":"Ampidiro laharana finday marina.",
@@ -1097,7 +1163,7 @@ summary.grp-head{list-style:none}
   const MONTHS_MG = ['Janoary','Febroary','Martsa','Aprily','Mey','Jona','Jolay','Aogositra','Septambra','Oktobra','Novambra','Desambra'];
 
   /* ================= data from the AISU menus (assets/menu-data.js) ================= */
-  const {TZ, HOURS, BRUNCH, brunchFor, PARFAITS, CARTE, TEAS, EXTRA_ITEMS} = window.AISU_MENU;
+  const {TZ, HOURS, BRUNCH, brunchFor, PICKUP_HOLD, isCold, PARFAITS, CARTE, TEAS, EXTRA_ITEMS} = window.AISU_MENU;
 
   /* ================= helpers ================= */
   const $ = s => document.querySelector(s);
@@ -1253,30 +1319,33 @@ summary.grp-head{list-style:none}
   }
   function renderCart(){
     const body=$('#cartBody'), foot=$('#cartFoot');
-    if(view==='done'){
-      $('#cartTitle').textContent=t('cart.placed');
-      const n = lastOrder.count===1 ? t('cart.items1') : t('cart.itemsN',{n:lastOrder.count});
-      body.innerHTML=`<div class="confirm" style="padding-top:22px"><p class="fine">${t('cart.no')}</p><div class="ref">${lastOrder.ref}</div>
-        <p>${esc(t('cart.ready',{n, name:lastOrder.name, when:lastOrder.when}))}</p>
-        <dl class="summary"><dt>${t('cart.total')}</dt><dd class="tnum">${ar(lastOrder.total)}</dd><dt>${t('cart.phone')}</dt><dd>${esc(lastOrder.phone)}</dd></dl>
-        <p class="fine">${t(lastOrder.live?'cart.live':'cart.preview')}</p></div>`;
-      foot.hidden=false; foot.innerHTML=`<button class="btn btn-fill" type="button" id="newOrder">${t('cart.new')}</button>`; return;
+    if(view==='track'){
+      const o=orderFor(trackId);
+      if(!o){ view='cart'; return renderCart(); }
+      $('#cartTitle').textContent=t('trk.title');
+      if(!backend() && !o.track){
+        body.innerHTML=`<div class="confirm" style="padding-top:22px"><p class="fine">${t('cart.no')}</p><div class="ref">${esc(o.ref)}</div><p class="fine">${t('cart.preview')}</p></div>`;
+      } else body.innerHTML=trackView(o);
+      foot.hidden=false; foot.innerHTML=`<div class="trk-foot">${o.track && !finished(statusOf(o))?`<button class="btn btn-ring" type="button" id="shareTrack">${t('trk.share')}</button>`:''}<button class="btn btn-fill" type="button" id="newOrder">${t('cart.new')}</button></div>`; return;
     }
     $('#cartTitle').textContent = view==='checkout' ? t('cart.checkout') : t('cart.title');
-    if(!cart.length){ body.innerHTML=`<div class="empty-cart"><p>${t('cart.empty')}</p><a class="btn btn-fill" href="#parfaits" data-close>${t('cart.browse')}</a></div>`; foot.innerHTML=''; foot.hidden=true; return; }
+    const act=view==='cart'?activeOrders():[];
+    const mine = act.length ? `<div class="mine"><p class="sub-h">${t('trk.mine')}</p>${act.map(o=>`<button type="button" class="mine-row" data-track="${esc(o.id)}" data-st="${esc(isLate(o)?'late':statusOf(o))}"><span class="dot"></span><span class="tx"><b>${esc(o.ref)}</b><span>${esc(whenText(o.day,o.mins))} · ${esc(t('trk.s.'+(isLate(o)?'late':statusOf(o))))}</span></span><span class="go">${t('trk.see')}</span></button>`).join('')}</div>` : '';
+    if(!cart.length){ body.innerHTML=mine+`<div class="empty-cart"><p>${t('cart.empty')}</p><a class="btn btn-fill" href="#parfaits" data-close>${t('cart.browse')}</a></div>`; foot.innerHTML=''; foot.hidden=true; return; }
     foot.hidden=false;
     const tot=`<div class="totals"><div class="grand"><span>${t('cart.total')}</span><span>${ar(total())}</span></div></div>`;
     if(view==='cart'){
       const anySold = cart.some(l=>isSold(l.key));
-      body.innerHTML=cart.map((l,i)=>`<div class="line${isSold(l.key)?' sold':''}"><div class="art">${l.img?`<img src="img/${l.img}.webp" alt="">`:'<svg><use href="#heart-f"/></svg>'}</div>
-        <div style="min-width:0"><div class="line-name">${esc(lineName(l))}${isSold(l.key)?`<span class="so-tag">${t('so.tag')}</span>`:''}</div>
+      body.innerHTML=mine+cart.map((l,i)=>`<div class="line${isSold(l.key)?' sold':''}"><div class="art">${l.img?`<img src="img/${l.img}.webp" alt="">`:'<svg><use href="#heart-f"/></svg>'}</div>
+        <div style="min-width:0"><div class="line-name">${esc(lineName(l))}${isCold(l.key)?snowIcon():''}${isSold(l.key)?`<span class="so-tag">${t('so.tag')}</span>`:''}</div>
         <div class="qty"><button type="button" data-q="${i}" data-d="-1" aria-label="−1 ${esc(l.name)}">−</button><span>${l.qty}</span><button type="button" data-q="${i}" data-d="1" aria-label="+1 ${esc(l.name)}">+</button></div></div>
         <span class="price">${ar(l.price*l.qty)}</span></div>`).join('');
       foot.innerHTML=tot+(anySold?`<p class="form-err" role="alert" style="margin-bottom:10px">${t('so.cart')}</p>`:'')+`<button class="btn btn-fill" type="button" id="toCheckout" ${anySold?'disabled':''}>${t('cart.continue')}</button>`;
     } else {
       const slots=pickupSlots(), saved=store.get('aisu-contact',{});
       body.innerHTML=`<form id="checkoutForm" novalidate>
-        <div class="field"><label for="c-time">${t('cart.pickup')}</label><select id="c-time">${slots.map((s,i)=>`<option value="${i}" data-label="${esc(s.label)}" data-time="${esc(s.time)}" data-day="${s.day}" data-mins="${s.mins}">${esc(s.label)}, ${esc(s.time)}</option>`).join('')}</select><span class="hint">${t('cart.pickupHint')}</span></div>
+        <div class="field"><label for="c-time">${t('cart.pickup')}</label><select id="c-time">${slots.map((s,i)=>`<option value="${i}" data-label="${esc(s.label)}" data-time="${esc(s.time)}" data-day="${s.day}" data-mins="${s.mins}">${esc(s.label)}, ${esc(s.time)}</option>`).join('')}</select><span class="hint">${t('cart.pickupHint')} ${t('co.hold',{n:PICKUP_HOLD})}</span></div>
+        ${cart.some(l=>isCold(l.key))?`<p class="cold-note">${esc(t('co.cold'))}</p>`:''}
         <div class="field" id="c-name-f"><label for="c-name">${t('cart.name')}</label><input type="text" id="c-name" autocomplete="name" maxlength="80" value="${esc(saved.name||'')}"><span class="err" hidden></span></div>
         <div class="field" id="c-phone-f"><label for="c-phone">${t('cart.phone')} <span class="hint">${t('cart.phoneHint')}</span></label><input type="tel" id="c-phone" autocomplete="tel" inputmode="tel" value="${esc(saved.phone||'')}" placeholder="034 00 000 00" maxlength="30"><span class="err" hidden></span></div>
         <div class="field"><label for="c-notes">${t('cart.notes')} <span class="hint">${t('optional')}</span></label><textarea id="c-notes" maxlength="500" placeholder="${esc(t('cart.notesPh'))}"></textarea></div>
@@ -1285,7 +1354,7 @@ summary.grp-head{list-style:none}
       foot.innerHTML=tot+`<div style="display:flex;gap:12px"><button class="btn btn-ring" type="button" id="backCart">${t('cart.back')}</button><button class="btn btn-fill" type="button" id="placeOrder" style="flex:1" ${backend() && backend().settings().ordersPaused ? 'disabled' : ''}>${t('cart.place')}</button></div>`;
     }
   }
-  function openCart(){ if(view==='done') view='cart'; renderCart(); if(!dlg.open) dlg.showModal(); }
+  function openCart(){ if(view==='track') view='cart'; renderCart(); if(!dlg.open) dlg.showModal(); }
   document.addEventListener('click', e=>{ if(e.target.closest('[data-open-cart]')){ hideToast(); if(mnav.open) mnav.close(); openCart(); } });
   $('#closeCart').addEventListener('click',()=>dlg.close());
   dlg.addEventListener('click', e=>{
@@ -1296,7 +1365,12 @@ summary.grp-head{list-style:none}
     else if(b.id==='toCheckout'){ view='checkout'; renderCart(); }
     else if(b.id==='backCart'||b.id==='newOrder'){ view='cart'; renderCart(); }
     else if(b.id==='placeOrder') placeOrder();
+    else if(b.dataset.track){ openTrack(b.dataset.track); }
+    else if(b.id==='shareTrack') shareTrack(b);
+    else if(b.id==='trkNotify'){ try{ Notification.requestPermission().then(()=>renderCart()); }catch(e){} }
   });
+  dlg.addEventListener('close',()=>{ if(view==='track'){ view='cart'; } renderTrackChip(); });
+  document.addEventListener('click', e=>{ const c=e.target.closest('#trackChip'); if(c){ hideToast(); if(mnav.open) mnav.close(); openTrack(c.dataset.track); } });
   function setErr(id,msg){ const f=document.getElementById(id); if(!f) return; const e=f.querySelector('.err'); f.dataset.invalid=msg?'true':'false'; if(e){ e.textContent=msg||''; e.hidden=!msg; } }
   const phoneOk = v => v.replace(/\D/g,'').length >= 9;
   let placing=false;
@@ -1310,11 +1384,13 @@ summary.grp-head{list-style:none}
     const o=$('#c-time').selectedOptions[0];
     const when = `${o.dataset.label.toLowerCase()} ${lang==='en'?'at':lang==='mg'?"amin'ny":'à'} ${o.dataset.time}`;
     const order={ref:ref(),name,phone,when,total:total(),count:cart.reduce((a,l)=>a+l.qty,0),live:false};
+    const items=cart.map(l=>({k:l.key, n:lineName(l).slice(0,80), q:l.qty}));
+    let saved=null;
     const be=backend(), errEl=$('#orderErr'), btn=$('#placeOrder');
     if(be){
       placing=true; errEl.hidden=true; btn.disabled=true; btn.setAttribute('aria-busy','true'); btn.textContent=t('send.sending');
       try{
-        await be.createOrder({ref:order.ref, items:cart.map(l=>({k:l.key, n:lineName(l).slice(0,80), q:l.qty})),
+        saved=await be.createOrder({ref:order.ref, items,
           pickupDay:o.dataset.day, pickupTime:Number(o.dataset.mins), name:name.slice(0,80), phone:phone.slice(0,30), notes:notes.slice(0,500), lang});
         order.live=true;
       }catch(err){
@@ -1327,8 +1403,156 @@ summary.grp-head{list-style:none}
       placing=false;
     }
     lastOrder=order;
-    cart=[]; saveCart(); view='done'; renderCart();
+    const mine={id:(saved&&saved.track)||order.ref, track:saved?saved.track:null, code:saved?saved.code:null, ref:order.ref,
+      day:o.dataset.day, mins:Number(o.dataset.mins), items, total:order.total, status:'new'};
+    myOrders.push(mine); saveMyOrders();
+    cart=[]; saveCart(); openTrack(mine.id);
   }
+  /* ================= pickup tracker =================
+     After ordering, the customer gets a live page with a 4-digit pickup code, the pickup time and the
+     latest time we hold the order, what to know about iced items and payment, and the status as staff
+     move it (received, preparing, ready, collected). It works without e-mail, SMS or WhatsApp: the page
+     updates by itself, the order is remembered on this phone (a chip at the bottom brings it back), and
+     the link can be sent to whoever collects. Staff ask for the code at the counter. */
+  const CAFE_PHONE='+261 36 08 266 88', CAFE_TEL='tel:+261360826688';
+  const STEPS=['new','preparing','ready','collected'];
+  const snowIcon = () => `<svg class="snow" role="img" aria-label="${esc(t('cold'))}"><use href="#snow"/></svg>`;
+  let myOrders=store.get('aisu-orders',[]);          // [{id, track, ref, code, day, mins, items:[{k,n,q}], total, status, seen}]
+  let trackId=null, trackData=undefined, trackUnsub=null, watchedId=null, flashTimer=null;
+  const marked={};
+  function saveMyOrders(){
+    const today=cafeNow().ymd, keep=addDays(today,-1);
+    myOrders=myOrders.filter(o=>o.day>=keep).slice(-8);
+    store.set('aisu-orders',myOrders);
+  }
+  const orderFor = id => myOrders.find(o=>o.id===id);
+  const atWord = () => lang==='en'?'at':lang==='mg'?"amin'ny":'à';
+  function dayWord(day){ const now=cafeNow(); return day===now.ymd?t('Today').toLowerCase():day===addDays(now.ymd,1)?t('Tomorrow').toLowerCase():niceDate(day); }
+  const whenText = (day,mins) => `${dayWord(day)} ${atWord()} ${fmt(mins)}`;
+  const deadline = o => window.AISU_MENU.pickupDeadline(o.day,o.mins);
+  function isLate(o){ const n=cafeNow(); return n.ymd>o.day || (n.ymd===o.day && n.mins>deadline(o)); }
+  const finished = s => s==='collected'||s==='cancelled';
+  function activeOrders(){ return myOrders.filter(o=>!finished(o.status) && !(isLate(o) && cafeNow().ymd>o.day)); }
+  const totalOf = items => items.reduce((a,l)=>{ const it=window.AISU_MENU.itemFor(l.k); return a+(it?it.price*l.q:0); },0);
+  const withPhone = (key, vars={}) => esc(t(key,{...vars,p:'\u0001'})).replace('\u0001',`<a href="${CAFE_TEL}" class="tel-in">${CAFE_PHONE}</a>`);
+  const statusOf = o => (trackId===o.id && trackData) ? trackData.status : (o.status||'new');
+
+  function shareUrl(o){ return location.origin+location.pathname+'#commande='+o.track; }
+
+  // keep one live connection to the order on screen (or the latest active one, for the chip)
+  function watchOrder(id){
+    if(watchedId===id) return;
+    if(trackUnsub){ trackUnsub(); trackUnsub=null; }
+    watchedId=id; trackId=id; trackData=undefined;
+    const o=orderFor(id), be=backend();
+    if(!o || !o.track || !be) return;
+    trackUnsub=be.watchPickup(o.track, d=>{
+      const prev=trackData ? trackData.status : (o.status||null);
+      trackData=d;
+      if(d){
+        o.status=d.status; o.seen=d.seen; saveMyOrders();
+        if(d.status==='ready' && prev && prev!=='ready') readyAlert(o);
+        markSeen(o);
+      }
+      if(dlg.open && view==='track') renderCart();
+      renderTrackChip();
+    }, ()=>{ if(dlg.open && view==='track') renderCart(); });
+  }
+  function markSeen(o){
+    const be=backend();
+    if(!be || !o.track || !trackData || document.visibilityState!=='visible') return;
+    if(trackData.seen===trackData.status || marked[o.track]===trackData.status) return;
+    marked[o.track]=trackData.status; be.markSeen(o.track, trackData.status);
+  }
+  document.addEventListener('visibilitychange',()=>{ const o=watchedId&&orderFor(watchedId); if(o) markSeen(o); if(document.visibilityState==='visible') stopFlash(); });
+
+  // when the order turns ready: a chime (if the browser allows sound), a buzz, the tab title, a notification
+  function readyAlert(o){
+    try{ navigator.vibrate && navigator.vibrate([250,120,250,120,400]); }catch(e){}
+    try{
+      const C=window.AudioContext||window.webkitAudioContext; if(C){ const ac=readyAlert.ac||(readyAlert.ac=new C());
+        if(ac.state==='suspended') ac.resume();
+        [784,988,1319].forEach((f,i)=>{ const os=ac.createOscillator(), g=ac.createGain(), t0=ac.currentTime+i*.18;
+          os.type='sine'; os.frequency.value=f; g.gain.setValueAtTime(.0001,t0); g.gain.exponentialRampToValueAtTime(.3,t0+.02); g.gain.exponentialRampToValueAtTime(.0001,t0+.5);
+          os.connect(g).connect(ac.destination); os.start(t0); os.stop(t0+.55); }); }
+    }catch(e){}
+    const title=t('trk.readyTitle'), body=t('trk.readyBody',{c:o.code||o.ref, t:fmt(deadline(o))});
+    if(document.visibilityState!=='visible'){
+      try{ if('Notification' in window && Notification.permission==='granted') new Notification(title,{body, tag:'aisu-'+o.id, icon:'img/miss-coco-cherry.webp'}); }catch(e){}
+      const base=document.title; let on=false; stopFlash();
+      flashTimer=setInterval(()=>{ on=!on; document.title=on?('● '+title):base; },1200); flashTimer.base=base;
+    }
+  }
+  function stopFlash(){ if(flashTimer){ clearInterval(flashTimer); document.title=flashTimer.base; flashTimer=null; } }
+
+  function trackView(o){
+    const live=!!(o.track && backend());
+    const d=trackData, s=d ? d.status : (o.status||'new'), late=isLate(o) && !finished(s);
+    const lost = live && d===null;
+    const until=fmt(deadline(o));
+    let msg;
+    if(lost) msg=withPhone('trk.m.lost');
+    else if(s==='cancelled') msg=withPhone('trk.m.cancelled');
+    else if(late) msg=withPhone('trk.m.late',{t:until});
+    else msg=withPhone('trk.m.'+s,{t: s==='new'?fmt(o.mins):until});
+    const cur=STEPS.indexOf(s);
+    const steps = live && !lost && s!=='cancelled' ? `<ol class="steps" aria-label="${esc(t('trk.title'))}">${STEPS.map((x,i)=>`<li class="${i<cur?'done':i===cur?'now':''}"${i===cur?' aria-current="step"':''}><span class="dot"></span>${esc(t('trk.s.'+x))}</li>`).join('')}</ol>` : '';
+    const cold=o.items.some(l=>window.AISU_MENU.isCold(l.k));
+    const codeBox = o.code
+      ? `<div class="trk-code"><span class="lbl">${t('trk.code')}</span><b class="code tnum" aria-label="${esc(o.code.split('').join(' '))}">${o.code}</b><span class="fine">${esc(t('trk.order',{r:o.ref}))}</span></div>`
+      : `<div class="trk-code"><span class="lbl">${t('cart.no')}</span><b class="code ref-code">${esc(o.ref)}</b></div>`;
+    const know=[ o.code?esc(t('trk.k.code')):esc(t('trk.noLive')), o.track?esc(t('trk.k.someone')):null, cold?esc(t('trk.k.cold')):null,
+      withPhone('trk.k.hold',{t:until}), esc(t('trk.k.pay')), esc(t('trk.k.where',{a:t('foot.addr')})) ].filter(Boolean);
+    const canNotify = live && 'Notification' in window && !finished(s) && s!=='ready';
+    return `<div class="trk st-${esc(lost?'lost':late?'late':s)}">
+      <div class="trk-status" role="status" aria-live="polite">${steps}<p class="trk-msg">${msg}</p></div>
+      ${codeBox}
+      <dl class="summary"><dt>${t('trk.when')}</dt><dd>${esc(whenText(o.day,o.mins))}</dd><dt>${t('trk.until')}</dt><dd>${esc(until)}</dd><dt>${t('trk.pay')}</dt><dd class="tnum">${ar(o.total)}</dd></dl>
+      <ul class="trk-items">${o.items.map(l=>`<li><span class="q">${l.q}×</span><span>${esc(l.n)}</span>${window.AISU_MENU.isCold(l.k)?snowIcon():''}</li>`).join('')}</ul>
+      ${finished(s) ? '' : `<div class="trk-know"><h3>${t('trk.know')}</h3><ul>${know.map(k=>`<li>${k}</li>`).join('')}</ul></div>`}
+      ${canNotify ? (Notification.permission==='granted' ? `<p class="fine">${t('trk.notifyOn')}</p>` : Notification.permission==='default' ? `<button class="btn btn-ring btn-sm" type="button" id="trkNotify">${t('trk.notify')}</button>` : '') : ''}
+      ${live && !finished(s) ? `<p class="fine">${t('trk.live')}</p>` : ''}
+    </div>`;
+  }
+
+  function renderTrackChip(){
+    const chip=$('#trackChip'); if(!chip) return;
+    const act=activeOrders(), o=act[act.length-1];
+    const room = v => { if(matchMedia('(max-width:760px)').matches) document.documentElement.style.setProperty('--chip-h', v ? (chip.offsetHeight+12)+'px' : '0px'); };
+    if(!o){ chip.hidden=true; room(false); return; }
+    if(dlg.open && view==='track'){ chip.hidden=true; return; }
+    if(o.track && watchedId!==o.id && !(dlg.open && view==='track')) watchOrder(o.id);
+    const s=statusOf(o);
+    chip.hidden=false; chip.dataset.track=o.id; chip.dataset.st=isLate(o)?'late':s;
+    chip.innerHTML=`<span class="dot"></span><span class="tx"><b>${esc(o.ref)}</b> · ${esc(t('trk.s.'+(isLate(o)?'late':s)))}</span><span class="go">${t('trk.see')}</span>`;
+    room(true);
+  }
+  function openTrack(id){
+    const o=orderFor(id); if(!o) return;
+    watchOrder(id); view='track'; renderCart(); if(!dlg.open) dlg.showModal();
+    renderTrackChip(); markSeen(o);
+  }
+  async function shareTrack(btn){
+    const o=orderFor(trackId); if(!o) return;
+    const url=o.track?shareUrl(o):location.origin+location.pathname, text=t('trk.shareText',{r:o.ref,c:o.code||'—'});
+    try{ if(navigator.share){ await navigator.share({title:'AISU', text, url}); return; } }catch(e){ if(e && e.name==='AbortError') return; }
+    try{ await navigator.clipboard.writeText(text+'\n'+url); btn.textContent=t('trk.copied'); setTimeout(()=>{ btn.textContent=t('trk.share'); },1800); }catch(e){}
+  }
+  // an order link someone sent: #commande=<key>
+  async function openFromLink(){
+    const m=/#commande=([A-Za-z0-9]{20,40})/.exec(location.hash); if(!m) return;
+    const key=m[1]; let o=myOrders.find(x=>x.track===key);
+    if(!o){
+      const be=backend(); if(!be) return;
+      await new Promise(res=>{ const un=be.watchPickup(key, d=>{ un();
+        if(d){ o={id:key, track:key, ref:d.ref, code:d.code, day:d.pickupDay, mins:d.pickupTime, items:d.items||[], total:totalOf(d.items||[]), status:d.status, seen:d.seen};
+          myOrders.push(o); saveMyOrders(); }
+        res(); }, ()=>res()); });
+    }
+    if(o) openTrack(o.id); else showToast(t('trk.m.lost',{p:CAFE_PHONE}), true);
+  }
+  window.addEventListener('hashchange', openFromLink);
+
   let toastTimer;
   function showToast(m, plain){ $('#toastText').textContent=m; $('#toast [data-open-cart]').hidden=!!plain; $('#toast').classList.add('show'); clearTimeout(toastTimer); toastTimer=setTimeout(hideToast,3600); }
   function hideToast(){ $('#toast').classList.remove('show'); }
@@ -1365,7 +1589,7 @@ summary.grp-head{list-style:none}
     $('#slotHint').textContent = `(${DAYS[lang][dow]}, ${fmt(w[0])} – ${fmt(w[1])})`;
   }
   function watchDay(){ const be=backend(); slotCounts={}; if(be && dateIn.value) be.watchSlots(dateIn.value, g=>{ slotCounts=g; renderSlots(); }); }
-  window.addEventListener('aisu:backend', ()=>{ watchDay(); backend().onSettings(()=>{ renderNotice(); renderSlots(); renderParfait(false); renderPCards(); renderCarte(); markExtras(); if(dlg.open) renderCart(); }); });
+  window.addEventListener('aisu:backend', ()=>{ watchDay(); renderTrackChip(); openFromLink(); backend().onSettings(()=>{ renderNotice(); renderSlots(); renderParfait(false); renderPCards(); renderCarte(); markExtras(); if(dlg.open) renderCart(); }); });
   dateIn.addEventListener('change',()=>{ setErr('f-date',''); $('#brunchNote').hidden=true; watchDay(); renderSlots(); });
 
   // Brunch is weekend-only: picking it moves a weekday date to the next Saturday or Sunday.
@@ -1485,12 +1709,12 @@ summary.grp-head{list-style:none}
 
   function markExtras(){ document.querySelectorAll('[data-add]').forEach(b=>markSold(b, b.dataset.add)); }
   function renderAll(){
-    applyStatic(); renderNotice(); markExtras(); renderStatus(); renderParfait(false); renderPCards(); renderCarte(); renderTeas(); renderParty(); renderSlots(); saveCart();
+    applyStatic(); renderNotice(); markExtras(); renderStatus(); renderTrackChip(); renderParfait(false); renderPCards(); renderCarte(); renderTeas(); renderParty(); renderSlots(); saveCart();
     syncFolds();
     if(dlg.open) renderCart();
     if(!$('#reserveDone').hidden){ /* keep confirmation as written */ }
   }
-  renderAll(); setInterval(renderStatus,60000);
+  renderAll(); setInterval(()=>{ renderStatus(); renderTrackChip(); if(dlg.open && view==='track') renderCart(); },60000);
 })();
 </script>
 

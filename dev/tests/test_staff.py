@@ -108,7 +108,19 @@ async def main():
         await dash.click('#colNew .card [data-to="preparing"]'); await dash.wait_for_timeout(300)
         check('Start shows an Undo', await dash.is_visible('#toastUndo'))
         await dash.click('#toastUndo'); await dash.wait_for_timeout(400)
-        check('Undo puts the order back to New', list((await db())['orders'].values())[0]['status']=='new')
+        dd=await db(); o0=list(dd['orders'].values())[0]
+        check('Undo puts the order back to New', o0['status']=='new' and dd['pickups'][o0['track']]['status']=='new')
+
+        # ---- before the new database rules are published, orders still go through (without live tracking) ----
+        await site.evaluate("window.__mockRefuse=['pickups']")
+        await site.evaluate('document.querySelector(\'[data-padd="1"]\').click(); document.querySelector(".tabbar .tb-order").click()'); await site.wait_for_timeout(200)
+        await site.click('#toCheckout'); await site.click('#placeOrder'); await site.wait_for_timeout(700)
+        dd=await db(); plain=[v for v in dd['orders'].values() if 'track' not in v]
+        check('if tracking is refused, the order is still saved', len(plain)==1 and len(dd['orders'])==2)
+        check('…and the customer still gets an order number to show', plain and plain[0]['ref'] in await site.inner_text('#cartBody') and 'Live tracking isn' in await site.inner_text('#cartBody'))
+        await site.evaluate("window.__mockRefuse=null"); await site.click('#closeCart')
+        if await dash.is_visible('#alarm'): await dash.click('#alarmSeen'); await dash.wait_for_timeout(200)
+        await site.evaluate("(()=>{const db=JSON.parse(localStorage.getItem('mockDB'));for(const k in db.orders){ if(!db.orders[k].track) delete db.orders[k]; }localStorage.setItem('mockDB',JSON.stringify(db))})()"); await dash.wait_for_timeout(300)
 
         # ---- reminder for a waiting order ----
         osc4=await dash.evaluate('window.__osc')
@@ -183,6 +195,16 @@ async def main():
         await dash.click('[data-view="orders"]')
         for st in ['preparing','ready','collected']:
             await dash.click(f'#colNew .card [data-to="{st}"], #colPrep .card [data-to="{st}"], #colReady .card [data-to="{st}"]'); await dash.wait_for_timeout(300)
+        # a customer without their code: staff check name and phone, then hand over with two taps
+        check('handover asks for the code', await dash.is_visible('#handDlg'))
+        await dash.click('#handDlg .hand-no summary'); await dash.wait_for_timeout(100)
+        check('no-code path shows the name and phone to check', 'compare with' in await dash.inner_text('#handBody'))
+        await dash.click('#handAnyway'); await dash.wait_for_timeout(100)
+        check('first tap on "without the code" only arms it', await dash.is_visible('#handDlg'))
+        await dash.click('#handAnyway'); await dash.wait_for_timeout(400)
+        dbs=json.loads(await dash.evaluate("localStorage.getItem('mockDB')"))
+        got=[v for v in dbs['orders'].values() if v['status']=='collected']
+        check('handed over without code is recorded on the order', not await dash.is_visible('#handDlg') and got and got[0].get('handoff')=='nocode')
         today=await site.evaluate("document.getElementById('r-date').min")
         await book('Today Guest', today); await dash.bring_to_front(); await dash.wait_for_timeout(500)
         if await dash.is_visible('#alarm'): await dash.click('#alarmAct'); await dash.wait_for_timeout(300)

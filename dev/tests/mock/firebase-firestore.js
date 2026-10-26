@@ -80,4 +80,19 @@ export async function runTransaction(_db, fn){
   for(const [op, ref, d] of ops){ const c = db[ref.col] = db[ref.col] || {}; c[ref.id] = op === 'set' ? prep(d) : { ...(c[ref.id] || {}), ...prep(d) }; }
   save(db); return out;
 }
-export function writeBatch(){ const ops = []; return { delete(ref){ ops.push(ref); }, async commit(){ const db = load(); ops.forEach(r => { if(db[r.col]) delete db[r.col][r.id]; }); save(db); } }; }
+export function writeBatch(){
+  const ops = [];
+  const b = { delete(ref){ ops.push(['delete', ref]); return b; }, set(ref, d){ ops.push(['set', ref, d]); return b; }, update(ref, d){ ops.push(['update', ref, d]); return b; },
+    async commit(){
+      if(window.__mockRefuse && ops.some(([, r]) => window.__mockRefuse.includes(r.col))) throw Object.assign(new Error('denied'), { code: 'permission-denied' });
+      const db = load();
+      for(const [op, r, d] of ops){
+        if(op === 'delete'){ if(db[r.col]) delete db[r.col][r.id]; continue; }
+        const c = db[r.col] = db[r.col] || {};
+        if(op === 'update' && !c[r.id]) throw Object.assign(new Error('nf'), { code: 'not-found' });
+        c[r.id] = op === 'set' ? prep(d) : { ...c[r.id], ...prep(d) };
+      }
+      save(db);
+    } };
+  return b;
+}
