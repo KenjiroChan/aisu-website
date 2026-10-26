@@ -544,6 +544,9 @@ summary.grp-head{list-style:none}
   .foot-sub{margin-top:-26px}
 }
 @media (max-width:340px){ .nav .nav-actions > .lang{display:none} .tabbar a,.tabbar button{font-size:.625rem} }
+.opt.full{text-decoration:line-through;opacity:.45}
+.form-err{margin:0;padding:12px 14px;border-radius:12px;background:rgba(179,38,30,.08);color:var(--err);font-size:var(--t-sm)}
+.btn[aria-busy="true"]{opacity:.7;cursor:progress}
 .toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,160%);visibility:hidden;background:var(--wine);color:var(--paper);padding:8px 8px 8px 20px;border-radius:999px;display:flex;align-items:center;gap:16px;z-index:70;box-shadow:0 14px 30px -12px rgba(50,10,18,.5);transition:transform .25s ease, visibility 0s linear .25s;max-width:calc(100% - 40px);font-size:.9375rem}
 .toast.show{transform:translate(-50%,0);visibility:visible;transition:transform .25s ease}
 .toast button{background:var(--gold-lt);color:var(--wine-dk);border:0;border-radius:999px;padding:7px 14px;font-weight:600;cursor:pointer;white-space:nowrap}
@@ -777,11 +780,12 @@ summary.grp-head{list-style:none}
               </div>
             </fieldset>
             <div class="row">
-              <div class="field" id="f-name"><label for="r-name" data-i18n="res.name">Nom</label><input type="text" id="r-name" autocomplete="name" required><span class="err" hidden></span></div>
-              <div class="field" id="f-phone"><label for="r-phone" data-i18n="res.phone">Téléphone mobile</label><input type="tel" id="r-phone" autocomplete="tel" inputmode="tel" placeholder="034 00 000 00" required><span class="err" hidden></span></div>
+              <div class="field" id="f-name"><label for="r-name" data-i18n="res.name">Nom</label><input type="text" id="r-name" autocomplete="name" maxlength="80" required><span class="err" hidden></span></div>
+              <div class="field" id="f-phone"><label for="r-phone" data-i18n="res.phone">Téléphone mobile</label><input type="tel" id="r-phone" autocomplete="tel" inputmode="tel" placeholder="034 00 000 00" maxlength="30" required><span class="err" hidden></span></div>
             </div>
-            <div class="field" id="f-email"><label for="r-email"><span data-i18n="res.email">E-mail</span> <span class="hint" data-i18n="optional">facultatif</span></label><input type="email" id="r-email" autocomplete="email"><span class="err" hidden></span></div>
-            <div class="field"><label for="r-notes"><span data-i18n="res.notes">Remarques</span> <span class="hint" data-i18n="res.notesHint">allergies, anniversaire, chaise haute</span></label><textarea id="r-notes"></textarea></div>
+            <div class="field" id="f-email"><label for="r-email"><span data-i18n="res.email">E-mail</span> <span class="hint" data-i18n="optional">facultatif</span></label><input type="email" id="r-email" autocomplete="email" maxlength="120"><span class="err" hidden></span></div>
+            <div class="field"><label for="r-notes"><span data-i18n="res.notes">Remarques</span> <span class="hint" data-i18n="res.notesHint">allergies, anniversaire, chaise haute</span></label><textarea id="r-notes" maxlength="500"></textarea></div>
+            <p class="form-err" id="resErr" role="alert" hidden></p>
             <button class="btn btn-fill" type="submit" style="justify-self:start" data-i18n="res.submit">Réserver la table</button>
           </form>
           <div class="confirm" id="reserveDone" hidden tabindex="-1"></div>
@@ -887,11 +891,15 @@ summary.grp-head{list-style:none}
 
 <div class="toast" id="toast" role="status" aria-live="polite"><span id="toastText"></span><button type="button" data-open-cart data-i18n="cart.view">Voir la commande</button></div>
 
+<script src="assets/menu-data.js"></script>
+<script src="assets/firebase-config.js"></script>
+<script type="module" src="assets/backend.js"></script>
 <script>
 (function(){
   /* ================= translations ================= */
   const I18N = {
     fr:{
+      "send.sending":"Envoi…","err.full":"Ce créneau vient d'être complet. Choisissez une autre heure.","err.resOffline":"Nous n'avons pas pu envoyer votre réservation. Vérifiez votre connexion et réessayez, ou appelez-nous.","err.resRefused":"Votre réservation n'a pas pu être enregistrée. Réessayez, ou appelez-nous.","err.orderOffline":"Nous n'avons pas pu envoyer votre commande. Vérifiez votre connexion et réessayez, ou appelez-nous.","err.orderRefused":"Votre commande n'a pas pu être enregistrée. Réessayez, ou appelez-nous.","err.paused":"Les commandes en ligne sont en pause pour le moment. Commandez au comptoir ou réessayez plus tard.","slot.full":"Complet","done.noteLive":"Nous gardons votre table 15 minutes. Pour modifier ou annuler, appelez-nous avec votre référence.","cart.live":"Gardez ce numéro : il vous sera demandé au comptoir.",
       "tb.label":"Raccourcis","tb.parfaits":"Parfaits","tb.menu":"Carte","tb.brunch":"Brunch","tb.book":"Réserver","tb.order":"Panier","col.layersShow":"Voir les couches","brunch.show":"Voir le menu du brunch","tea.show":"Ce qui est servi","g.avo":"Avocat & milkshake",
       "nav.home":"Accueil","nav.open":"Ouvrir le menu","nav.close":"Fermer le menu","nav.sections":"Sections",
       preview:"Aperçu : les horaires, l'adresse et le numéro de téléphone sont provisoires, et les réservations et commandes ne sont pas encore envoyées.",
@@ -940,6 +948,7 @@ summary.grp-head{list-style:none}
       guests1:"1 personne",guestsN:"{n} personnes"
     },
     en:{
+      "send.sending":"Sending…","err.full":"That time just filled up. Choose another time.","err.resOffline":"We couldn't send your booking. Check your connection and try again, or call us.","err.resRefused":"Your booking couldn't be saved. Try again, or call us.","err.orderOffline":"We couldn't send your order. Check your connection and try again, or call us.","err.orderRefused":"Your order couldn't be saved. Try again, or call us.","err.paused":"Online orders are paused right now. Order at the counter or try again later.","slot.full":"Full","done.noteLive":"We'll hold your table for 15 minutes. To change or cancel, call us with your reference.","cart.live":"Keep this number; we'll ask for it at the counter.",
       "tb.label":"Shortcuts","tb.parfaits":"Parfaits","tb.menu":"Menu","tb.brunch":"Brunch","tb.book":"Book","tb.order":"Order","col.layersShow":"See the layers","brunch.show":"See the brunch menu","tea.show":"What's on the tray","g.avo":"Avocado & milkshake",
       "nav.home":"Home","nav.open":"Open menu","nav.close":"Close menu","nav.sections":"Sections",
       preview:"Design preview: hours, address and phone number are placeholders, and bookings and orders aren't sent yet.",
@@ -988,6 +997,7 @@ summary.grp-head{list-style:none}
       guests1:"1 guest",guestsN:"{n} guests"
     },
     mg:{
+      "send.sending":"Mandefa…","err.full":"Feno ity ora ity. Misafidiana ora hafa.","err.resOffline":"Tsy lasa ny fandrihanao. Hamarino ny fifandraisana ary andramo indray, na antsoy izahay.","err.resRefused":"Tsy voatahiry ny fandrihanao. Andramo indray, na antsoy izahay.","err.orderOffline":"Tsy lasa ny kaomandinao. Hamarino ny fifandraisana ary andramo indray, na antsoy izahay.","err.orderRefused":"Tsy voatahiry ny kaomandinao. Andramo indray, na antsoy izahay.","err.paused":"Mijanona vonjimaika ny kaomandy an-tserasera. Manaova kaomandy eo amin'ny kesy na andramo indray afaka kelikely.","slot.full":"Feno","done.noteLive":"Tahirizinay mandritra ny 15 minitra ny latabatrao. Raha hanova na hanafoana dia antsoy izahay ary omeo ny laharana fandrihana.","cart.live":"Tehirizo ity laharana ity; hangatahina aminao eo amin'ny kesy izy.",
       "tb.label":"Hitsin-dalana","tb.parfaits":"Parfaits","tb.menu":"Menio","tb.brunch":"Brunch","tb.book":"Hamandrika","tb.order":"Kaomandy","col.layersShow":"Jereo ny sosona","brunch.show":"Jereo ny menio brunch","tea.show":"Izay aroso","g.avo":"Zavoka sy milkshake",
       "nav.home":"Fandraisana","nav.open":"Sokafy ny menio","nav.close":"Akatony ny menio","nav.sections":"Fizarana",
       preview:"Santionany: mbola vonjimaika ny ora fisokafana, ny adiresy ary ny laharana finday, ary tsy mbola alefa ny fandrihana sy ny kaomandy.",
@@ -1043,89 +1053,8 @@ summary.grp-head{list-style:none}
   };
   const MONTHS_MG = ['Janoary','Febroary','Martsa','Aprily','Mey','Jona','Jolay','Aogositra','Septambra','Oktobra','Novambra','Desambra'];
 
-  /* ================= data from the AISU menus ================= */
-  const TZ = 'Indian/Antananarivo';
-  // placeholder opening hours, minutes from midnight; brunch runs Sat & Sun 11:30–16:00 per the menu
-  const HOURS = { 0:[540,1260], 1:[540,1200], 2:[540,1200], 3:[540,1200], 4:[540,1200], 5:[540,1260], 6:[540,1260] };
-  const BRUNCH = [690, 960];
-
-  const PARFAITS = [
-    {id:'p1',no:'01',name:'Miss Coco Cherry',img:'miss-coco-cherry',price:38000,
-      flav:{fr:'Cerise · Chocolat · Coco',en:'Cherry · Chocolate · Coconut',mg:'Serizy · Sôkôla · Voanio'},
-      layers:['Cookies sablé','Sorbet cerise','Crème fouettée','Glace chocolat','Ganache choco-coco','Brownie chocolat','Cerises','Gelée de cerises','Confit de cerises']},
-    {id:'p2',no:'02',name:'Bouquet Fraise',img:'bouquet-fraise',price:38000,
-      flav:{fr:'Fraise · Pistache · Chocolat blanc',en:'Strawberry · Pistachio · White chocolate',mg:'Frezy · Pistasy · Sôkôla fotsy'},
-      layers:['Sablé pistache','Sorbet fraise','Fraises','Glace pistache','Pistaches concassées','Mousse choco blanc-pistache','Crumble','Gelée de fraises','Coulis de fraise']},
-    {id:'p3',no:'03',name:'Tangerine',img:'tangerine',price:38000,
-      flav:{fr:'Orange · Matcha · Agrumes',en:'Orange · Matcha · Citrus',mg:'Laoranjy · Matcha · Voasary'},
-      layers:['Cookie','Entremet mandarine','Mousse à l\'orange','Glace matcha','Crumble','Orange fraîche','Pudding au matcha','Ganache orange-matcha']},
-    {id:'p4',no:'04',name:'Pomme Tatin',img:'pomme-tatin',price:38000,
-      flav:{fr:'Caramel beurre salé · Pomme · Vanille',en:'Salted butter caramel · Apple · Vanilla',mg:'Karamely dibera masira · Paoma · Vanily'},
-      layers:['Gaufre caramélisée','Pommes','Glace caramel beurre salé','Crème mascarpone vanille','Feuilleté caramélisé','Crème caramel','Pommes caramélisées']},
-    {id:'p5',no:'05',name:'Crème Soda',img:'creme-soda',price:10000,
-      flav:{fr:'Pomme pétillante · Vanille · Cerise',en:'Sparkling apple · Vanilla · Cherry',mg:'Paoma mitsiranoka · Vanily · Serizy'},
-      layers:['Glace vanille','Cerise','Soda pomme pétillant']}
-  ];
-  // [name, hot/glass price, cold/pitcher price, {fr,en} note]
-  const CARTE = {
-    cafes:[
-      {g:'g.esp', cols:['hot','cold'], items:[
-        ['Espresso',5000,null],['Double Espresso',9000,null],['Café Allongé / Noir',5000,5500],
-        ['Affogato',10000,null,{fr:'double espresso, une boule glace vanille',en:'double espresso, one scoop of vanilla ice cream'}],
-        ['Pistachio Affogato',15000,null,{fr:'glace pistache, crème de pistache, double espresso',en:'pistachio ice cream, pistachio cream, double espresso'}]]},
-      {g:'g.latte', cols:['hot','cold'], items:[
-        ['Cappuccino / Latte',6000,7000],['Café au Lait Concentré Sucré',6000,7000],
-        ['Café Dalgona',6000,null,{fr:'lait, nuage de café fouetté, sucré',en:'milk, a cloud of whipped coffee, sweetened'}],
-        ['Café Mocha',8000,9000],
-        ['Cococcino',8000,9000,{fr:'espresso, lait et crème de coco',en:'espresso, milk and coconut cream'}],
-        ['Café Pistache',10000,11000,{fr:'espresso, lait et crème de pistache',en:'espresso, milk and pistachio cream'}],
-        ['Café Tiramisu',10000,11000,{fr:'espresso, cacao, crème tiramisu',en:'espresso, cocoa, tiramisu cream'}]]},
-      {g:'g.sans', cols:['hot','cold'], items:[
-        ['Chai Latte',9000,9500],['Thé au Lait Thaï',9000,9500],['Chocolat Menthe',8000,8500],['Chocolat Viennois à la Banane',9000,9500],
-        ['Golden Latte',6000,8500,{fr:'gingembre, curcuma, orange, miel',en:'ginger, turmeric, orange, honey'}],
-        ['Lait Aromatisé',7000,7500,{fr:'banane ou fraise',en:'banana or strawberry'}],
-        ['Thé à la Pêche & Crème',9000,9500,{fr:'thé pêche au lait, nuage de crème à la pêche',en:'peach milk tea, a cloud of peach cream'}]]}
-    ],
-    matcha:[
-      {g:'g.matcha', cols:['hot','cold'], items:[
-        ['Matcha Latte',10000,11000,{fr:'matcha au lait',en:'matcha with milk'}],
-        ['Pistache Matcha Latte',11000,12000,{fr:'crème de pistache, matcha au lait',en:'pistachio cream, matcha with milk'}],
-        ['Yuzu Matcha Pétillant',null,12000,{fr:'eau pétillante, concentré de yuzu, thé matcha sucré',en:'sparkling water, yuzu concentrate, sweetened matcha'}],
-        ['Matcha aux Fruits',null,12000,{fr:'fraise, coco, banane ou mangue, crème maison',en:'strawberry, coconut, banana or mango, house cream'}],
-        ['Matcha Chocolat Blanc',11000,12000,{fr:'matcha au lait, crème au chocolat blanc',en:'matcha with milk, white chocolate cream'}],
-        ['Matcha Cloud',null,12000,{fr:'jus de coco, thé jasmin, mousse de lait matcha',en:'coconut water, jasmine tea, matcha milk foam'}]]},
-      {g:'g.thes', cols:['glass','pitcher'], items:[
-        ['Citron & Menthe',8000,16000],['Mandarine & Yuzu',8000,18000],
-        ['Oolong aux Fruits Frais',8000,18000,{fr:'fruits frais de saison',en:'fresh seasonal fruit'}],
-        ['Passion',8000,16000],['Lychee Hibiscus',8000,16000]]}
-    ],
-    jus:[
-      {g:'g.jus', sub:'g.jus.sub', cols:['glass','pitcher'], items:[
-        ['Green Moment',9000,18000,{fr:'pomme, lime, concombre, menthe',en:'apple, lime, cucumber, mint'}],
-        ['Good Look',10000,20000,{fr:'orange, ananas, pomme, carotte',en:'orange, pineapple, apple, carrot'}],
-        ['Red Punch',10000,20000,{fr:'betterave, ananas, pomme',en:'beetroot, pineapple, apple'}],
-        ['Jus de Saison',9000,18000,{fr:'fruit de saison pressé',en:'pressed seasonal fruit'}],
-        ['Tropical Twist',12000,24000,{fr:'ananas, orange, passion, mangue, coco',en:'pineapple, orange, passion fruit, mango, coconut'}]]},
-      {g:'g.avo', cols:['glass','pitcher'], items:[
-        ['Supermodel',12000,24000,{fr:'framboise, fraise, myrtille, carotte, ananas, pomme, poire, pitaya, betterave',en:'raspberry, strawberry, blueberry, carrot, pineapple, apple, pear, dragon fruit, beetroot'}],
-        ['Avo-Crush',10000,20000,{fr:'chocolat, orange, avoine, lait, avocat',en:'chocolate, orange, oats, milk, avocado'}],
-        ['Avo-Core',10000,16000,{fr:'fraise, amande, chia, coco, citron, avocat',en:'strawberry, almond, chia, coconut, lemon, avocado'}],
-        ['Avo-Glow',9000,18000,{fr:'mangue, ananas, avocat',en:'mango, pineapple, avocado'}],
-        ['Milkshake',10000,null,{fr:'parfum au choix, Oreo',en:'flavour of your choice, Oreo'}]]}
-    ]
-  };
-  const TEAS = [
-    {id:'peppa',name:'Peppa Pig Afternoon Tea',price:70000,inc:'tea.inc.peppa',
-      sal:['Sandwich œuf-mayo de Freddy Fox','Quiche jambon-fromage de Madame Gazelle','Mini pizza margherita de Daddy Pig'],
-      suc:['Sablé de Peppa Pig','Fondant au chocolat de Mummy Pig','Gaufre gourmande de George','Mini scones, confiture & mascarpone de Granny Pig']},
-    {id:'classique',name:'Afternoon Tea Classique',price:80000,inc:'tea.inc.classique',
-      sal:['Mini bœuf Wellington','Finger sandwich concombre, crème menthe-citron','Finger sandwich saumon fumé, crème aneth-câpre','Scones salés foie gras & chutney'],
-      suc:['Tarte passion','Mini cheesecake au raisin ou pomme crumble','Mini parfait du jour','Mini scones au raisin, confiture & mascarpone']},
-    {id:'gourmand',name:'Afternoon Tea Gourmand',price:120000,inc:'tea.inc.gourmand',
-      sal:['Mini roll à la langouste','Vol-au-vent aux champignons des bois','Samosa','Finger sandwich concombre, crème menthe-citron'],
-      suc:['Tarte aux fruits de saison','Mini cheesecake citron ou pomme crumble','Mini parfait du jour','Mini scones au raisin, confiture & mascarpone']}
-  ];
-  const EXTRA_ITEMS = { pal4:{name:'La Palette Glacée · 4',price:20000}, pal6:{name:'La Palette Glacée · 6',price:30000} };
+  /* ================= data from the AISU menus (assets/menu-data.js) ================= */
+  const {TZ, HOURS, BRUNCH, PARFAITS, CARTE, TEAS, EXTRA_ITEMS} = window.AISU_MENU;
 
   /* ================= helpers ================= */
   const $ = s => document.querySelector(s);
@@ -1260,7 +1189,8 @@ summary.grp-head{list-style:none}
     for(let i=0;i<7&&!out.length;i++){ const d=(now.dow+i)%7, h=HOURS[d]; if(!h) continue;
       let start=i===0?Math.max(h[0],now.mins+20):h[0]+15; start=Math.ceil(start/15)*15;
       const label=i===0?t('Today'):i===1?t('Tomorrow'):DAYS[lang][d];
-      for(let m=start;m<=h[1]-15;m+=15) out.push({label, time:fmt(m)}); }
+      const day=addDays(now.ymd,i);
+      for(let m=start;m<=h[1]-15;m+=15) out.push({label, time:fmt(m), day, mins:m}); }
     return out;
   }
   function renderCart(){
@@ -1271,7 +1201,7 @@ summary.grp-head{list-style:none}
       body.innerHTML=`<div class="confirm" style="padding-top:22px"><p class="fine">${t('cart.no')}</p><div class="ref">${lastOrder.ref}</div>
         <p>${esc(t('cart.ready',{n, name:lastOrder.name, when:lastOrder.when}))}</p>
         <dl class="summary"><dt>${t('cart.total')}</dt><dd class="tnum">${ar(lastOrder.total)}</dd><dt>${t('cart.phone')}</dt><dd>${esc(lastOrder.phone)}</dd></dl>
-        <p class="fine">${t('cart.preview')}</p></div>`;
+        <p class="fine">${t(lastOrder.live?'cart.live':'cart.preview')}</p></div>`;
       foot.hidden=false; foot.innerHTML=`<button class="btn btn-fill" type="button" id="newOrder">${t('cart.new')}</button>`; return;
     }
     $('#cartTitle').textContent = view==='checkout' ? t('cart.checkout') : t('cart.title');
@@ -1287,12 +1217,13 @@ summary.grp-head{list-style:none}
     } else {
       const slots=pickupSlots(), saved=store.get('aisu-contact',{});
       body.innerHTML=`<form id="checkoutForm" novalidate>
-        <div class="field"><label for="c-time">${t('cart.pickup')}</label><select id="c-time">${slots.map((s,i)=>`<option value="${i}" data-label="${esc(s.label)}" data-time="${esc(s.time)}">${esc(s.label)}, ${esc(s.time)}</option>`).join('')}</select><span class="hint">${t('cart.pickupHint')}</span></div>
-        <div class="field" id="c-name-f"><label for="c-name">${t('cart.name')}</label><input type="text" id="c-name" autocomplete="name" value="${esc(saved.name||'')}"><span class="err" hidden></span></div>
-        <div class="field" id="c-phone-f"><label for="c-phone">${t('cart.phone')} <span class="hint">${t('cart.phoneHint')}</span></label><input type="tel" id="c-phone" autocomplete="tel" inputmode="tel" value="${esc(saved.phone||'')}" placeholder="034 00 000 00"><span class="err" hidden></span></div>
-        <div class="field"><label for="c-notes">${t('cart.notes')} <span class="hint">${t('optional')}</span></label><textarea id="c-notes" placeholder="${esc(t('cart.notesPh'))}"></textarea></div>
-        <div class="pay">${t('cart.pay')}</div></form>`;
-      foot.innerHTML=tot+`<div style="display:flex;gap:12px"><button class="btn btn-ring" type="button" id="backCart">${t('cart.back')}</button><button class="btn btn-fill" type="button" id="placeOrder" style="flex:1">${t('cart.place')}</button></div>`;
+        <div class="field"><label for="c-time">${t('cart.pickup')}</label><select id="c-time">${slots.map((s,i)=>`<option value="${i}" data-label="${esc(s.label)}" data-time="${esc(s.time)}" data-day="${s.day}" data-mins="${s.mins}">${esc(s.label)}, ${esc(s.time)}</option>`).join('')}</select><span class="hint">${t('cart.pickupHint')}</span></div>
+        <div class="field" id="c-name-f"><label for="c-name">${t('cart.name')}</label><input type="text" id="c-name" autocomplete="name" maxlength="80" value="${esc(saved.name||'')}"><span class="err" hidden></span></div>
+        <div class="field" id="c-phone-f"><label for="c-phone">${t('cart.phone')} <span class="hint">${t('cart.phoneHint')}</span></label><input type="tel" id="c-phone" autocomplete="tel" inputmode="tel" value="${esc(saved.phone||'')}" placeholder="034 00 000 00" maxlength="30"><span class="err" hidden></span></div>
+        <div class="field"><label for="c-notes">${t('cart.notes')} <span class="hint">${t('optional')}</span></label><textarea id="c-notes" maxlength="500" placeholder="${esc(t('cart.notesPh'))}"></textarea></div>
+        <div class="pay">${t('cart.pay')}</div>
+        <p class="form-err" id="orderErr" role="alert" ${backend() && backend().settings().ordersPaused ? '' : 'hidden'}>${backend() && backend().settings().ordersPaused ? esc(t('err.paused')) : ''}</p></form>`;
+      foot.innerHTML=tot+`<div style="display:flex;gap:12px"><button class="btn btn-ring" type="button" id="backCart">${t('cart.back')}</button><button class="btn btn-fill" type="button" id="placeOrder" style="flex:1" ${backend() && backend().settings().ordersPaused ? 'disabled' : ''}>${t('cart.place')}</button></div>`;
     }
   }
   function openCart(){ if(view==='done') view='cart'; renderCart(); if(!dlg.open) dlg.showModal(); }
@@ -1309,14 +1240,33 @@ summary.grp-head{list-style:none}
   });
   function setErr(id,msg){ const f=document.getElementById(id); if(!f) return; const e=f.querySelector('.err'); f.dataset.invalid=msg?'true':'false'; if(e){ e.textContent=msg||''; e.hidden=!msg; } }
   const phoneOk = v => v.replace(/\D/g,'').length >= 9;
-  function placeOrder(){
-    const name=$('#c-name').value.trim(), phone=$('#c-phone').value.trim();
+  let placing=false;
+  async function placeOrder(){
+    if(placing) return;
+    const name=$('#c-name').value.trim(), phone=$('#c-phone').value.trim(), notes=($('#c-notes').value||'').trim();
     setErr('c-name-f',name?'':t('cart.errName')); setErr('c-phone-f',phoneOk(phone)?'':t('cart.errPhone'));
     if(!name) return $('#c-name').focus(); if(!phoneOk(phone)) return $('#c-phone').focus();
     store.set('aisu-contact',{name,phone});
     const o=$('#c-time').selectedOptions[0];
     const when = `${o.dataset.label.toLowerCase()} ${lang==='en'?'at':lang==='mg'?"amin'ny":'à'} ${o.dataset.time}`;
-    lastOrder={ref:ref(),name,phone,when,total:total(),count:cart.reduce((a,l)=>a+l.qty,0)};
+    const order={ref:ref(),name,phone,when,total:total(),count:cart.reduce((a,l)=>a+l.qty,0),live:false};
+    const be=backend(), errEl=$('#orderErr'), btn=$('#placeOrder');
+    if(be){
+      placing=true; errEl.hidden=true; btn.disabled=true; btn.setAttribute('aria-busy','true'); btn.textContent=t('send.sending');
+      try{
+        await be.createOrder({ref:order.ref, items:cart.map(l=>({k:l.key, n:lineName(l).slice(0,80), q:l.qty})),
+          pickupDay:o.dataset.day, pickupTime:Number(o.dataset.mins), name:name.slice(0,80), phone:phone.slice(0,30), notes:notes.slice(0,500), lang});
+        order.live=true;
+      }catch(err){
+        placing=false; btn.disabled=false; btn.removeAttribute('aria-busy'); btn.textContent=t('cart.place');
+        const code=err&&err.code;
+        errEl.textContent = t(code==='aisu/paused'?'err.paused':code==='aisu/refused'?'err.orderRefused':'err.orderOffline'); errEl.hidden=false;
+        if(code==='aisu/paused') btn.disabled=true;
+        return;
+      }
+      placing=false;
+    }
+    lastOrder=order;
     cart=[]; saveCart(); view='done'; renderCart();
   }
   let toastTimer;
@@ -1324,12 +1274,14 @@ summary.grp-head{list-style:none}
   function hideToast(){ $('#toast').classList.remove('show'); }
 
   /* ================= reservations ================= */
-  let party=2, chosen=null;
+  let party=2, chosen=null, slotCounts={};
+  const backend=()=>window.aisuBackend||null;
+  const capacity=()=>backend()?backend().settings().capacity:Infinity;
   const dateIn=$('#r-date'), forIn=$('#r-for');
   { const d=cafeNow().ymd; dateIn.min=d; dateIn.max=addDays(d,60); dateIn.value=d; }
   function renderParty(){ $('#partyOut').textContent = party===1?t('guests1'):t('guestsN',{n:party}); $('#partyMinus').disabled=party<=1; $('#partyPlus').disabled=party>=8; $('#bigParty').hidden=party<8; }
-  $('#partyMinus').addEventListener('click',()=>{party=Math.max(1,party-1);renderParty();});
-  $('#partyPlus').addEventListener('click',()=>{party=Math.min(8,party+1);renderParty();});
+  $('#partyMinus').addEventListener('click',()=>{party=Math.max(1,party-1);renderParty();renderSlots();});
+  $('#partyPlus').addEventListener('click',()=>{party=Math.min(8,party+1);renderParty();renderSlots();});
   function windowFor(dow){
     const h=HOURS[dow]; if(!h) return null;
     if(forIn.value==='brunch') return (dow===0||dow===6) ? [BRUNCH[0], BRUNCH[1]-60] : 'nobrunch';
@@ -1342,16 +1294,23 @@ summary.grp-head{list-style:none}
     if(w==='nobrunch'){ box.innerHTML=`<p class="fine">${t('res.brunchOnly')}</p>`; chosen=null; $('#slotHint').textContent=''; return; }
     const isToday=v===now.ymd; let html='', any=false;
     if(chosen!=null && (chosen<w[0]||chosen>w[1]||(isToday&&chosen<now.mins+30))) chosen=null;
-    for(let m=w[0];m<=w[1];m+=30){ const past=isToday&&m<now.mins+30; if(!past) any=true;
-      html+=`<button type="button" class="opt" data-slot="${m}" aria-pressed="${chosen===m}" ${past?'disabled':''}>${fmt(m)}</button>`; }
+    const cap=capacity();
+    if(chosen!=null && (slotCounts[String(chosen)]||0)+party>cap) chosen=null;
+    for(let m=w[0];m<=w[1];m+=30){ const past=isToday&&m<now.mins+30, full=!past&&(slotCounts[String(m)]||0)+party>cap; if(!past&&!full) any=true;
+      html+=`<button type="button" class="opt${full?' full':''}" data-slot="${m}" aria-pressed="${chosen===m}" ${past||full?'disabled':''}${full?` title="${esc(t('slot.full'))}" aria-label="${fmt(m)}, ${esc(t('slot.full'))}"`:''}>${fmt(m)}</button>`; }
     const sl=box.scrollLeft; box.innerHTML = any ? html : `<p class="fine">${t('res.nomore')}</p>`; box.scrollLeft=sl;
     $('#slotHint').textContent = `(${DAYS[lang][dow]}, ${fmt(w[0])} – ${fmt(w[1])})`;
   }
-  dateIn.addEventListener('change',()=>{ setErr('f-date',''); renderSlots(); });
+  function watchDay(){ const be=backend(); slotCounts={}; if(be && dateIn.value) be.watchSlots(dateIn.value, g=>{ slotCounts=g; renderSlots(); }); }
+  window.addEventListener('aisu:backend', ()=>{ watchDay(); backend().onSettings(()=>{ renderSlots(); if(dlg.open && view==='checkout') renderCart(); }); });
+  dateIn.addEventListener('change',()=>{ setErr('f-date',''); watchDay(); renderSlots(); });
   forIn.addEventListener('change',()=>{ setErr('f-time',''); renderSlots(); });
   $('#slots').addEventListener('click',e=>{ const b=e.target.closest('[data-slot]'); if(!b||b.disabled) return; chosen=Number(b.dataset.slot); setErr('f-time',''); renderSlots(); const a=document.querySelector(`[data-slot="${chosen}"]`); if(a) a.focus(); });
-  $('#reserveForm').addEventListener('submit',e=>{
+  let booking=false;
+  $('#reserveForm').addEventListener('submit',async e=>{
     e.preventDefault();
+    if(booking) return;
+    $('#resErr').hidden=true;
     const name=$('#r-name').value.trim(), phone=$('#r-phone').value.trim(), email=$('#r-email').value.trim(), dv=dateIn.value, errs=[];
     const dateOk = dv && dv>=dateIn.min && dv<=dateIn.max;
     setErr('f-date',dateOk?'':t('err.date')); if(!dateOk) errs.push(dateIn);
@@ -1362,11 +1321,28 @@ summary.grp-head{list-style:none}
     setErr('f-email',emailOk?'':t('err.email')); if(!emailOk) errs.push($('#r-email'));
     if(errs.length){ errs[0].focus(); return; }
     const seatVal=document.querySelector('input[name="seat"]:checked').value, done=$('#reserveDone');
-    const occasion = forIn.selectedOptions[0].textContent;
-    done.innerHTML=`<p class="fine">${t('done.ref')}</p><div class="ref">${ref()}</div>
+    const occasion = forIn.selectedOptions[0].textContent, bookingRef=ref(), notes=($('#r-notes').value||'').trim();
+    const be=backend(); let live=false;
+    if(be){
+      const btn=$('#reserveForm button[type=submit]');
+      booking=true; btn.disabled=true; btn.setAttribute('aria-busy','true'); btn.textContent=t('send.sending');
+      try{
+        await be.createReservation({ref:bookingRef, date:dv, time:chosen, guests:party, occasion:forIn.value, seat:seatVal,
+          name:name.slice(0,80), phone:phone.slice(0,30), email:email.slice(0,120), notes:notes.slice(0,500), lang});
+        live=true;
+      }catch(err){
+        const code=err&&err.code;
+        if(code==='aisu/full'){ setErr('f-time',t('err.full')); chosen=null; renderSlots(); }
+        else { $('#resErr').textContent=t(code==='aisu/refused'?'err.resRefused':'err.resOffline'); $('#resErr').hidden=false; }
+        return;
+      }finally{
+        booking=false; btn.disabled=false; btn.removeAttribute('aria-busy'); btn.textContent=t('res.submit');
+      }
+    }
+    done.innerHTML=`<p class="fine">${t('done.ref')}</p><div class="ref">${bookingRef}</div>
       <dl class="summary"><dt>${t('done.date')}</dt><dd>${esc(niceDate(dv))}</dd><dt>${t('done.time')}</dt><dd>${fmt(chosen)}</dd><dt>${t('done.guests')}</dt><dd>${party}</dd>
       <dt>${t('done.for')}</dt><dd>${esc(occasion)}</dd><dt>${t('done.seat')}</dt><dd>${t('seat.'+seatVal)}</dd><dt>${t('done.name')}</dt><dd>${esc(name)}</dd></dl>
-      <p class="fine">${t('done.note')}</p>
+      <p class="fine">${t(live?'done.noteLive':'done.note')}</p>
       <button class="btn btn-ring" type="button" id="newBooking" style="justify-self:start">${t('done.again')}</button>`;
     $('#reserveForm').hidden=true; done.hidden=false; done.focus();
   });
