@@ -22,6 +22,8 @@ Edit `assets/menu-data.js`. The website and the dashboard both read it, so total
 
 Cloudflare Pages publishes this repository automatically on every push to `main`. There is no build step.
 
+The page and `assets/` are served with `Cache-Control: no-cache` (see `_headers`), so phones always check for a newer copy. The script tags in `index.html` and `staff/index.html` also carry a `?v=` version; change it whenever a script in `assets/` changes, so phones that cached an older copy fetch the new one straight away.
+
 ## Staff alerts
 
 New orders and bookings take over the dashboard screen and ring until someone answers, on whichever tab is open. Browsers keep a freshly opened page silent until it is touched, so the dashboard opens with a "Start service" screen that takes that one tap.

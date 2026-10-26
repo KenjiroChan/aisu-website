@@ -4,3 +4,14 @@
 
 /dev/*
   X-Robots-Tag: noindex, nofollow
+
+# Pages and scripts are checked for a newer copy on every visit (cheap: unchanged files answer
+# "not modified"), so a phone never mixes a new page with old scripts.
+/
+  Cache-Control: no-cache
+
+/index.html
+  Cache-Control: no-cache
+
+/assets/*
+  Cache-Control: no-cache

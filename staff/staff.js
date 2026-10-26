@@ -18,6 +18,9 @@ const TEAM_LOGIN = 'aisuparfaiteria+staff@gmail.com';
 // must match DEFAULTS in assets/backend.js and the defaults in firestore.rules
 const DEFAULTS = { capacity: 20, ordersPaused: false, bookingsPaused: false, closedDays: [], notice: '', soldOut: {}, alertTopic: '' };
 const MENU = window.AISU_MENU;
+// newer menu helpers, with fallbacks in case a device still has an older copy of menu-data.js cached
+const isColdKey = k => typeof MENU.isCold === 'function' ? MENU.isCold(k) : false;
+const deadlineOf = (day, mins) => typeof MENU.pickupDeadline === 'function' ? MENU.pickupDeadline(day, mins) : mins + 30;
 const ORDER_WAIT_MIN = 5;      // a new order nobody has started after this many minutes triggers a reminder
 const RES_WAIT_MIN = 15;       // same for a booking nobody has confirmed
 const REMIND_EVERY_MS = 3 * 60 * 1000;
@@ -769,7 +772,7 @@ const PREV_O = {preparing: 'new', ready: 'preparing', collected: 'ready'};
 const snowIcon = () => `<svg class="snow" role="img" aria-label="${esc(t('cold'))}"><use href="#i-snow"/></svg>`;
 // on a ready order: how long we hold it, and whether the customer has seen on their phone that it's ready
 function readyInfo(o){
-  const n = nowParts(), dl = MENU.pickupDeadline(o.pickupDay, o.pickupTime);
+  const n = nowParts(), dl = deadlineOf(o.pickupDay, o.pickupTime);
   const over = o.pickupDay < n.ymd || (o.pickupDay === n.ymd && n.mins > dl);
   const p = pickByOrder[o.id];
   const seen = o.track ? (p && p.seen === 'ready' ? `<div class="seen ok">✓ ${esc(t('seen.ready'))}</div>` : `<div class="seen no">${esc(t('seen.not'))}</div>`) : '';
@@ -784,10 +787,10 @@ function orderCard(o, flash){
   return `<article class="card is-${esc(o.status)}${flash ? ' flash' : ''}${late ? ' late' : ''}" data-id="${esc(o.id)}">
     <div class="card-top"><span class="when">${hm(o.pickupTime)}</span><span class="due ${due.cls}">${esc(due.txt)}</span><span class="ref">${esc(o.ref)}</span></div>
     <div class="who"><b>${esc(o.name)}</b>${contactLinks(o.phone)}</div>
-    <ul class="items">${lines.map(l => `<li><span><span class="q">${l.q}×</span>${esc(l.name)}${MENU.isCold(l.k) ? snowIcon() : ''}</span><span class="pr">${l.price == null ? t('priceCheck') : ar(l.price)}</span></li>`).join('')}</ul>
+    <ul class="items">${lines.map(l => `<li><span><span class="q">${l.q}×</span>${esc(l.name)}${isColdKey(l.k) ? snowIcon() : ''}</span><span class="pr">${l.price == null ? t('priceCheck') : ar(l.price)}</span></li>`).join('')}</ul>
     <div class="total"><span>${t('total')}</span><span>${ar(total)}${unknown ? ' + ?' : ''}</span></div>
     ${o.notes ? `<div class="note">${esc(o.notes)}</div>` : ''}
-    ${live && lines.some(l => MENU.isCold(l.k)) ? `<div class="note cold">${snowIcon()}<span>${esc(t('cold.note'))}</span></div>` : ''}
+    ${live && lines.some(l => isColdKey(l.k)) ? `<div class="note cold">${snowIcon()}<span>${esc(t('cold.note'))}</span></div>` : ''}
     ${o.status === 'ready' ? readyInfo(o) : ''}
     <div class="meta"><span class="chip st-${esc(o.status)}">${t('o.' + o.status)}</span><span>${esc(t('ago', {n: minsSince(o.createdAt)}))}</span>${o.statusBy ? `<span>${esc(t('by', {n: firstName(o.statusBy)}))}</span>` : ''}${o.status === 'collected' && o.handoff === 'nocode' ? `<span class="chip st-new">${esc(t('hand.nocodeChip'))}</span>` : ''}</div>
     <div class="actions">${PREV_O[o.status] && o.status !== 'collected' ? `<button class="btn btn-ghost btn-back" type="button" data-order="${esc(o.id)}" data-to="${PREV_O[o.status]}" aria-label="${t('back')}">‹ ${t('back')}</button>` : ''}${next ? `<button class="btn btn-fill" type="button" data-order="${esc(o.id)}" data-to="${next[0]}">${t(next[1])}</button>` : ''}${live ? `<button class="btn btn-danger" type="button" data-order="${esc(o.id)}" data-to="cancelled">${t('act.cancel')}</button>` : ''}${o.status === 'collected' || o.status === 'cancelled' ? `<button class="btn btn-ghost btn-sm" type="button" data-order="${esc(o.id)}" data-to="${o.status === 'collected' ? 'ready' : 'new'}">‹ ${t('back')}</button>` : ''}</div>
@@ -834,7 +837,7 @@ function openHand(id, typed){
   const o = orders.find(x => x.id === id); if(!o) return;
   handId = id;
   const {lines, unknown, total} = orderTotal(o);
-  const cold = lines.some(l => MENU.isCold(l.k));
+  const cold = lines.some(l => isColdKey(l.k));
   $('#handBody').innerHTML = `
     <p class="hint" style="margin:0">${esc(t('hand.ask'))}</p>
     <input type="text" id="handCode" class="code-in" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off" aria-label="${esc(t('hand.code'))}" placeholder="····">
@@ -842,7 +845,7 @@ function openHand(id, typed){
     ${o.status !== 'ready' ? `<p class="msg warn">${esc(t('hand.notReady', {s: t('o.' + o.status)}))}</p>` : ''}
     <div class="hand-sum">
       <div class="hs-top"><b>${esc(o.name)}</b><span class="ref">${esc(o.ref)}</span><span>${esc(relDay(o.pickupDay))} · ${hm(o.pickupTime)}</span></div>
-      <ul class="items">${lines.map(l => `<li><span><span class="q">${l.q}×</span>${esc(l.name)}${MENU.isCold(l.k) ? snowIcon() : ''}</span></li>`).join('')}</ul>
+      <ul class="items">${lines.map(l => `<li><span><span class="q">${l.q}×</span>${esc(l.name)}${isColdKey(l.k) ? snowIcon() : ''}</span></li>`).join('')}</ul>
       <div class="total"><span>${t('total')}</span><span>${ar(total)}${unknown ? ' + ?' : ''}</span></div>
     </div>
     ${cold ? `<div class="note cold">${snowIcon()}<span>${esc(t('cold.note'))}</span></div>` : ''}

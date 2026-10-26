@@ -991,9 +991,9 @@ summary.grp-head{list-style:none}
 <button class="track-chip" type="button" id="trackChip" hidden></button>
 <div class="toast" id="toast" role="status" aria-live="polite"><span id="toastText"></span><button type="button" data-open-cart data-i18n="cart.view">Voir la commande</button></div>
 
-<script src="assets/menu-data.js"></script>
-<script src="assets/firebase-config.js"></script>
-<script type="module" src="assets/backend.js"></script>
+<script src="assets/menu-data.js?v=20261026c"></script>
+<script src="assets/firebase-config.js?v=20261026c"></script>
+<script type="module" src="assets/backend.js?v=20261026c"></script>
 <script>
 (function(){
   /* ================= translations ================= */
@@ -1163,7 +1163,14 @@ summary.grp-head{list-style:none}
   const MONTHS_MG = ['Janoary','Febroary','Martsa','Aprily','Mey','Jona','Jolay','Aogositra','Septambra','Oktobra','Novambra','Desambra'];
 
   /* ================= data from the AISU menus (assets/menu-data.js) ================= */
-  const {TZ, HOURS, BRUNCH, brunchFor, PICKUP_HOLD, isCold, PARFAITS, CARTE, TEAS, EXTRA_ITEMS} = window.AISU_MENU;
+  const {TZ, HOURS, BRUNCH, PARFAITS, CARTE, TEAS, EXTRA_ITEMS} = window.AISU_MENU;
+  // Newer helpers from menu-data.js, with fallbacks so the page keeps working if a phone still has an
+  // older copy of that file cached (that once stopped the basket from opening).
+  const MENU_ = window.AISU_MENU, fn = (f, alt) => typeof f === 'function' ? f : alt;
+  const PICKUP_HOLD = MENU_.PICKUP_HOLD || 30;
+  const brunchFor = fn(MENU_.brunchFor, dow => (dow===0||dow===6) && HOURS[dow] ? [BRUNCH[0], Math.min(BRUNCH[1], HOURS[dow][1])] : null);
+  const isCold = fn(MENU_.isCold, () => false);
+  const pickupDeadline = fn(MENU_.pickupDeadline, (day, mins) => mins + PICKUP_HOLD);
 
   /* ================= helpers ================= */
   const $ = s => document.querySelector(s);
@@ -1354,7 +1361,7 @@ summary.grp-head{list-style:none}
       foot.innerHTML=tot+`<div style="display:flex;gap:12px"><button class="btn btn-ring" type="button" id="backCart">${t('cart.back')}</button><button class="btn btn-fill" type="button" id="placeOrder" style="flex:1" ${backend() && backend().settings().ordersPaused ? 'disabled' : ''}>${t('cart.place')}</button></div>`;
     }
   }
-  function openCart(){ if(view==='track') view='cart'; renderCart(); if(!dlg.open) dlg.showModal(); }
+  function openCart(){ if(view==='track') view='cart'; try{ renderCart(); }catch(e){ console.error(e); } if(!dlg.open) dlg.showModal(); }
   document.addEventListener('click', e=>{ if(e.target.closest('[data-open-cart]')){ hideToast(); if(mnav.open) mnav.close(); openCart(); } });
   $('#closeCart').addEventListener('click',()=>dlg.close());
   dlg.addEventListener('click', e=>{
@@ -1429,7 +1436,7 @@ summary.grp-head{list-style:none}
   const atWord = () => lang==='en'?'at':lang==='mg'?"amin'ny":'à';
   function dayWord(day){ const now=cafeNow(); return day===now.ymd?t('Today').toLowerCase():day===addDays(now.ymd,1)?t('Tomorrow').toLowerCase():niceDate(day); }
   const whenText = (day,mins) => `${dayWord(day)} ${atWord()} ${fmt(mins)}`;
-  const deadline = o => window.AISU_MENU.pickupDeadline(o.day,o.mins);
+  const deadline = o => pickupDeadline(o.day,o.mins);
   function isLate(o){ const n=cafeNow(); return n.ymd>o.day || (n.ymd===o.day && n.mins>deadline(o)); }
   const finished = s => s==='collected'||s==='cancelled';
   function activeOrders(){ return myOrders.filter(o=>!finished(o.status) && !(isLate(o) && cafeNow().ymd>o.day)); }
@@ -1445,7 +1452,7 @@ summary.grp-head{list-style:none}
     if(trackUnsub){ trackUnsub(); trackUnsub=null; }
     watchedId=id; trackId=id; trackData=undefined;
     const o=orderFor(id), be=backend();
-    if(!o || !o.track || !be) return;
+    if(!o || !o.track || !be || typeof be.watchPickup!=='function') return;
     trackUnsub=be.watchPickup(o.track, d=>{
       const prev=trackData ? trackData.status : (o.status||null);
       trackData=d;
@@ -1460,7 +1467,7 @@ summary.grp-head{list-style:none}
   }
   function markSeen(o){
     const be=backend();
-    if(!be || !o.track || !trackData || document.visibilityState!=='visible') return;
+    if(!be || typeof be.markSeen!=='function' || !o.track || !trackData || document.visibilityState!=='visible') return;
     if(trackData.seen===trackData.status || marked[o.track]===trackData.status) return;
     marked[o.track]=trackData.status; be.markSeen(o.track, trackData.status);
   }
@@ -1497,7 +1504,7 @@ summary.grp-head{list-style:none}
     else msg=withPhone('trk.m.'+s,{t: s==='new'?fmt(o.mins):until});
     const cur=STEPS.indexOf(s);
     const steps = live && !lost && s!=='cancelled' ? `<ol class="steps" aria-label="${esc(t('trk.title'))}">${STEPS.map((x,i)=>`<li class="${i<cur?'done':i===cur?'now':''}"${i===cur?' aria-current="step"':''}><span class="dot"></span>${esc(t('trk.s.'+x))}</li>`).join('')}</ol>` : '';
-    const cold=o.items.some(l=>window.AISU_MENU.isCold(l.k));
+    const cold=o.items.some(l=>isCold(l.k));
     const codeBox = o.code
       ? `<div class="trk-code"><span class="lbl">${t('trk.code')}</span><b class="code tnum" aria-label="${esc(o.code.split('').join(' '))}">${o.code}</b><span class="fine">${esc(t('trk.order',{r:o.ref}))}</span></div>`
       : `<div class="trk-code"><span class="lbl">${t('cart.no')}</span><b class="code ref-code">${esc(o.ref)}</b></div>`;
@@ -1508,7 +1515,7 @@ summary.grp-head{list-style:none}
       <div class="trk-status" role="status" aria-live="polite">${steps}<p class="trk-msg">${msg}</p></div>
       ${codeBox}
       <dl class="summary"><dt>${t('trk.when')}</dt><dd>${esc(whenText(o.day,o.mins))}</dd><dt>${t('trk.until')}</dt><dd>${esc(until)}</dd><dt>${t('trk.pay')}</dt><dd class="tnum">${ar(o.total)}</dd></dl>
-      <ul class="trk-items">${o.items.map(l=>`<li><span class="q">${l.q}×</span><span>${esc(l.n)}</span>${window.AISU_MENU.isCold(l.k)?snowIcon():''}</li>`).join('')}</ul>
+      <ul class="trk-items">${o.items.map(l=>`<li><span class="q">${l.q}×</span><span>${esc(l.n)}</span>${isCold(l.k)?snowIcon():''}</li>`).join('')}</ul>
       ${finished(s) ? '' : `<div class="trk-know"><h3>${t('trk.know')}</h3><ul>${know.map(k=>`<li>${k}</li>`).join('')}</ul></div>`}
       ${canNotify ? (Notification.permission==='granted' ? `<p class="fine">${t('trk.notifyOn')}</p>` : Notification.permission==='default' ? `<button class="btn btn-ring btn-sm" type="button" id="trkNotify">${t('trk.notify')}</button>` : '') : ''}
       ${live && !finished(s) ? `<p class="fine">${t('trk.live')}</p>` : ''}
@@ -1543,7 +1550,7 @@ summary.grp-head{list-style:none}
     const m=/#commande=([A-Za-z0-9]{20,40})/.exec(location.hash); if(!m) return;
     const key=m[1]; let o=myOrders.find(x=>x.track===key);
     if(!o){
-      const be=backend(); if(!be) return;
+      const be=backend(); if(!be || typeof be.watchPickup!=='function') return;
       await new Promise(res=>{ const un=be.watchPickup(key, d=>{ un();
         if(d){ o={id:key, track:key, ref:d.ref, code:d.code, day:d.pickupDay, mins:d.pickupTime, items:d.items||[], total:totalOf(d.items||[]), status:d.status, seen:d.seen};
           myOrders.push(o); saveMyOrders(); }

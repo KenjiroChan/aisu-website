@@ -189,6 +189,23 @@ async def main():
         check('added staff member gets in, without the Team tab', await dash.is_visible('#shell') and await dash.is_hidden('#teamTab'))
         mob=await ctx.new_page(); await mob.set_viewport_size({'width':390,'height':844}); await mob.goto(BASE+'staff/'); await mob.wait_for_timeout(700)
         await mob.screenshot(path=S+'/e2e-dash-mobile.png'); print('mobile dash scrollW', await mob.evaluate('document.documentElement.scrollWidth'))
+        # ---- a phone that still has an older menu file cached must still open the basket ----
+        import os, re as _re
+        menu=open(os.path.join(os.path.dirname(os.path.abspath(__file__)),'..','..','assets','menu-data.js')).read()
+        old_menu=_re.sub(r'Object\.freeze\(\{TZ, HOURS, BRUNCH,[^}]*?PARFAITS', 'Object.freeze({TZ, HOURS, BRUNCH, PARFAITS', menu)
+        assert old_menu!=menu
+        sctx=await b.new_context(viewport={'width':390,'height':844},is_mobile=True,has_touch=True)
+        await sctx.clock.install(time=cafe_open_time())
+        await sctx.route('https://www.gstatic.com/firebasejs/**', route)
+        await sctx.route('**/assets/menu-data.js*', lambda r: r.fulfill(status=200, headers={'content-type':'application/javascript'}, body=old_menu))
+        await sctx.add_init_script("localStorage.setItem('aisu-cart', JSON.stringify([{key:'p1',name:'Miss Coco Cherry',price:38000,img:'miss-coco-cherry',qty:1}]))")
+        st=await sctx.new_page(); serrs=[]; st.on('pageerror',lambda e: serrs.append(str(e)))
+        await st.goto(BASE); await st.wait_for_timeout(800)
+        await st.evaluate("document.querySelector('.hero [data-open-cart]').click()"); await st.wait_for_timeout(300)
+        check('with an old cached menu file, "Order for pickup" still opens the basket', await st.is_visible('#cart') and 'Miss Coco Cherry' in await st.inner_text('#cartBody') and not serrs)
+        await st.click('#closeCart'); await st.evaluate("document.querySelector('.tabbar .tb-order').click()"); await st.wait_for_timeout(300)
+        check('…and so does the Order tab', await st.is_visible('#cart') and not serrs)
+        await sctx.close()
         print('page errors:', errs or 'none')
         await b.close()
 asyncio.run(main())
