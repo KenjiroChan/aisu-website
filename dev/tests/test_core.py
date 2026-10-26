@@ -1,0 +1,127 @@
+import asyncio, json
+from playwright.async_api import async_playwright
+import os
+S=os.path.dirname(os.path.abspath(__file__))+'/out'
+os.makedirs(S, exist_ok=True)
+M=os.path.dirname(os.path.abspath(__file__))+'/mock/'
+BASE='http://localhost:8765/'
+async def route(r):
+    name=r.request.url.rsplit('/',1)[1]
+    await r.fulfill(status=200, headers={'content-type':'application/javascript','access-control-allow-origin':'*'}, body=open(M+name).read())
+def check(label, cond):
+    print(('PASS ' if cond else 'FAIL ')+label)
+async def main():
+    async with async_playwright() as p:
+        b=await p.chromium.launch()
+        ctx=await b.new_context(viewport={'width':390,'height':844},is_mobile=True,has_touch=True)
+        await ctx.route('https://www.gstatic.com/firebasejs/**', route)
+        await ctx.add_init_script("if(!localStorage.getItem('testInit')){localStorage.clear();localStorage.setItem('aisu-lang','\"en\"');localStorage.setItem('testInit','1')}")
+        site=await ctx.new_page(); errs=[]
+        site.on('pageerror',lambda e: errs.append('site: '+str(e)))
+        await site.goto(BASE); await site.wait_for_timeout(800)
+        check('backend connected on the site', await site.evaluate('!!window.aisuBackend && window.aisuBackend.live'))
+        db=lambda: site.evaluate("JSON.parse(localStorage.getItem('mockDB')||'{}')")
+        # ---- booking ----
+        tomorrow=await site.evaluate("(()=>{const i=document.getElementById('r-date');const d=new Date(i.value);d.setDate(d.getDate()+1);return d.toISOString().slice(0,10)})()")
+        await site.evaluate(f"(()=>{{const i=document.getElementById('r-date');i.value='{tomorrow}';i.dispatchEvent(new Event('change'))}})()"); await site.wait_for_timeout(200)
+        first=await site.evaluate("document.querySelector('#slots .opt:not([disabled])').dataset.slot")
+        await site.evaluate(f"document.querySelector('#slots [data-slot=\"{first}\"]').click()")
+        await site.fill('#r-name','Rado Test'); await site.fill('#r-phone','034 12 345 67'); await site.fill('#r-notes','Birthday')
+        await site.evaluate("document.querySelector('#reserveForm button[type=submit]').click()"); await site.wait_for_timeout(500)
+        d=await db()
+        res=list((d.get('reservations') or {}).values())
+        check('booking saved to the database', len(res)==1 and res[0]['name']=='Rado Test' and res[0]['date']==tomorrow and res[0]['time']==int(first) and res[0]['occasion']=='cafe' and res[0]['seat']=='table')
+        check('half-hour guest count updated', (d.get('slots') or {}).get(tomorrow,{}).get('g',{}).get(first)==2)
+        check('confirmation shows live wording', 'hold your table' in (await site.inner_text('#reserveDone')) and 'Preview only' not in (await site.inner_text('#reserveDone')))
+        # ---- capacity: set to 3, then 2 more guests must not fit at that time ----
+        await site.evaluate("(()=>{const db=JSON.parse(localStorage.getItem('mockDB'));db.settings={main:{capacity:3,ordersPaused:false,bookingsPaused:false,closedDays:[],notice:'',soldOut:{},alertTopic:''}};localStorage.setItem('mockDB',JSON.stringify(db))})()")
+        await site.reload(); await site.wait_for_timeout(800)
+        await site.evaluate(f"(()=>{{const i=document.getElementById('r-date');i.value='{tomorrow}';i.dispatchEvent(new Event('change'))}})()"); await site.wait_for_timeout(300)
+        full=await site.evaluate(f"(()=>{{const b=document.querySelector('#slots [data-slot=\"{first}\"]');return b.disabled && b.classList.contains('full')}})()")
+        check('full half hour is disabled for a party of 2', full)
+        await site.evaluate("document.getElementById('partyMinus').click()"); await site.wait_for_timeout(100)
+        check('same half hour opens again for 1 guest', await site.evaluate(f"!document.querySelector('#slots [data-slot=\"{first}\"]').disabled"))
+        # ---- pickup order ----
+        await site.evaluate("document.querySelector('[data-padd=\"0\"]').click(); document.querySelector('[data-padd=\"0\"]').click(); document.querySelector('[data-drink=\"cafes|0|3|0\"]').click()")
+        await site.evaluate("document.querySelector('.tabbar .tb-order').click()"); await site.wait_for_timeout(200)
+        await site.click('#toCheckout'); await site.fill('#c-name','Hery'); await site.fill('#c-phone','032 11 222 33'); await site.fill('#c-notes','No cherry')
+        await site.click('#placeOrder'); await site.wait_for_timeout(500)
+        d=await db(); ords=list((d.get('orders') or {}).values())
+        check('order saved with item keys and quantities', len(ords)==1 and sorted((i['k'],i['q']) for i in ords[0]['items'])==[('cafes-0-3-0',1),('p1',2)] and isinstance(ords[0]['pickupTime'],int) and ords[0]['pickupTime']%15==0)
+        check('order confirmation shows live wording', 'Keep this number' in await site.inner_text('#cartBody'))
+        await site.screenshot(path=S+'/e2e-order-done.png')
+        await site.click('#closeCart')
+        # ---- paused orders ----
+        await site.evaluate("(()=>{const db=JSON.parse(localStorage.getItem('mockDB'));db.settings.main.ordersPaused=true;localStorage.setItem('mockDB',JSON.stringify(db))})()")
+        await site.reload(); await site.wait_for_timeout(800)
+        await site.evaluate("document.querySelector('[data-padd=\"1\"]').click(); document.querySelector('.tabbar .tb-order').click()"); await site.wait_for_timeout(200)
+        await site.click('#toCheckout'); await site.wait_for_timeout(200)
+        check('paused: message shown and Place order disabled', (not await site.is_hidden('#orderErr')) and 'paused' in (await site.inner_text('#orderErr')) and await site.is_disabled('#placeOrder'))
+        await site.screenshot(path=S+'/e2e-paused.png')
+        await site.evaluate("(()=>{const db=JSON.parse(localStorage.getItem('mockDB'));db.settings.main.ordersPaused=false;db.settings.main.capacity=20;localStorage.setItem('mockDB',JSON.stringify(db))})()")
+        # ---- dashboard ----
+        dash=await ctx.new_page(); dash.on('pageerror',lambda e: errs.append('dash: '+str(e)))
+        await dash.set_viewport_size({'width':1280,'height':860})
+        await dash.goto(BASE+'staff/'); await dash.wait_for_timeout(500)
+        check('dashboard shows sign-in first', await dash.is_visible('#loginForm'))
+        await dash.click('[data-mode="manager"]')
+        await dash.fill('#lEmail','someone@example.com'); await dash.fill('#lPass','wrong'); await dash.click('#lBtn'); await dash.wait_for_timeout(200)
+        check('wrong password shows an error', await dash.is_visible('#lErr'))
+        await dash.fill('#lPass','secret'); await dash.click('#lBtn'); await dash.wait_for_timeout(400)
+        check('non-staff account is refused', await dash.is_visible('#denied'))
+        await dash.evaluate("document.querySelector('#denied [data-signout]').click()"); await dash.wait_for_timeout(200)
+        await dash.click('[data-lang-toggle]')
+        await dash.click('[data-mode="manager"]')
+        await dash.fill('#lEmail','aisuparfaiteria@gmail.com'); await dash.fill('#lPass','secret'); await dash.click('#lBtn'); await dash.wait_for_timeout(700)
+        await dash.click('#startQuiet'); await dash.wait_for_timeout(100)
+        check('owner gets the dashboard and Team tab', await dash.is_visible('#shell') and await dash.is_visible('#teamTab'))
+        await dash.click('[data-view="orders"]'); await dash.wait_for_timeout(200)
+        card=await dash.inner_text('#colNew')
+        check('order appears in New with menu total 86 000 Ar', 'Hery' in card and '86' in card and '000' in card and 'No cherry' in card)
+        print('   card text:', ' | '.join(card.split('\n')[:9]))
+        await dash.screenshot(path=S+'/e2e-dash-orders.png')
+        # a new order arriving while the dashboard is open
+        await site.evaluate("document.querySelector('#placeOrder') && document.querySelector('#placeOrder').removeAttribute('disabled')")
+        await site.reload(); await site.wait_for_timeout(800)
+        await site.evaluate("document.querySelector('.tabbar .tb-order').click()"); await site.wait_for_timeout(200)
+        await site.click('#toCheckout'); await site.click('#placeOrder'); await site.wait_for_timeout(600)
+        await dash.wait_for_timeout(500)
+        check('new order flashes and badge shows 2', await dash.evaluate("document.getElementById('badgeOrders').textContent")=='2' and await dash.evaluate("!!document.querySelector('#colNew .card.flash')"))
+        check('alarm takes over the screen', await dash.is_visible('#alarm'))
+        await dash.click('#alarmSeen'); await dash.wait_for_timeout(300)
+        check('tab title shows the count', (await dash.title()).startswith('(2)'))
+        # advance an order
+        await dash.click('#colNew .card [data-to="preparing"]'); await dash.wait_for_timeout(300)
+        check('Start moves the order to Preparing', await dash.evaluate("document.querySelectorAll('#colPrep .card').length")==1)
+        await dash.click('#colPrep .card [data-to="ready"]'); await dash.wait_for_timeout(300)
+        await dash.click('#colReady .card [data-to="collected"]'); await dash.wait_for_timeout(300)
+        check('Collected moves it to the done list', await dash.evaluate("document.getElementById('pastCount').textContent")=='1')
+        # tables
+        await dash.click('[data-view="tables"]'); await dash.evaluate(f"(()=>{{const i=document.getElementById('dayPick');i.value='{tomorrow}';i.dispatchEvent(new Event('change'))}})()"); await dash.wait_for_timeout(400)
+        check('tomorrow\'s booking shows in Tables', 'Rado Test' in await dash.inner_text('#resList'))
+        await dash.screenshot(path=S+'/e2e-dash-tables.png')
+        cancel='#resList [data-to="cancelled"]'
+        await dash.click(cancel); await dash.wait_for_timeout(100)
+        check('first tap on Cancel only arms it', 'Confirm' in await dash.inner_text(cancel))
+        await dash.click(cancel); await dash.wait_for_timeout(400)
+        d=await db()
+        check('cancel frees the half hour', (d['slots'][tomorrow]['g'][first])==0 and list(d['reservations'].values())[0]['status']=='cancelled')
+        # settings and team
+        await dash.click('[data-view="settings"]'); await dash.fill('#capIn','12'); await dash.click('#capSave'); await dash.wait_for_timeout(300)
+        check('capacity saves', (await db())['settings']['main']['capacity']==12)
+        await dash.click('[data-view="team"]'); await dash.fill('#teamIn','Mialy@Example.com'); await dash.click('#teamForm button'); await dash.wait_for_timeout(400)
+        check('owner adds staff (stored lower case)', 'mialy@example.com' in (await db()).get('staff',{}))
+        await dash.screenshot(path=S+'/e2e-dash-team.png')
+        # search
+        await dash.click('#searchBtn'); await dash.wait_for_timeout(300); await dash.fill('#searchIn','hery'); await dash.wait_for_timeout(300)
+        check('search finds orders by name', await dash.evaluate("document.querySelectorAll('#results .card').length")>=1)
+        await dash.click('#searchDlg [data-close]')
+        # staff member signs in
+        await dash.evaluate("document.querySelector('#shell [data-signout]').click()"); await dash.wait_for_timeout(200)
+        await dash.click('[data-mode="manager"]'); await dash.fill('#lEmail','mialy@example.com'); await dash.fill('#lPass','secret'); await dash.click('#lBtn'); await dash.wait_for_timeout(600)
+        check('added staff member gets in, without the Team tab', await dash.is_visible('#shell') and await dash.is_hidden('#teamTab'))
+        mob=await ctx.new_page(); await mob.set_viewport_size({'width':390,'height':844}); await mob.goto(BASE+'staff/'); await mob.wait_for_timeout(700)
+        await mob.screenshot(path=S+'/e2e-dash-mobile.png'); print('mobile dash scrollW', await mob.evaluate('document.documentElement.scrollWidth'))
+        print('page errors:', errs or 'none')
+        await b.close()
+asyncio.run(main())

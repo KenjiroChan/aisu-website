@@ -1,3 +1,6 @@
 /staff/*
   X-Robots-Tag: noindex, nofollow
   Cache-Control: no-store
+
+/dev/*
+  X-Robots-Tag: noindex, nofollow
