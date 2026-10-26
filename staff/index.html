@@ -310,6 +310,8 @@ dialog::backdrop{background:rgba(58,14,34,.55)}
 .toast button{border:0;background:var(--gold);color:var(--ink);font-weight:700;border-radius:999px;padding:8px 14px;cursor:pointer;min-height:36px}
 .toast:not(.has-undo){padding-right:18px}
 
+.remember{display:flex;align-items:center;gap:10px;font-size:14px;cursor:pointer}
+.remember input{width:20px;height:20px;accent-color:var(--wine)}
 /* handing over pickup orders */
 .handbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--surface);border-radius:16px;padding:12px 14px;box-shadow:0 0 0 1px var(--line);margin:4px 0 14px}
 .handbar label{display:flex;align-items:center;gap:12px;flex-wrap:wrap;flex:1;min-width:0;font-weight:600}
@@ -357,6 +359,7 @@ dialog::backdrop{background:rgba(58,14,34,.55)}
     <p class="hint" id="lHint" style="margin:-6px 0 0"></p>
     <div class="field" id="lEmailField"><label for="lEmail" data-t="email">E-mail</label><input type="email" id="lEmail" autocomplete="username" required></div>
     <div class="field"><label for="lPass" data-t="password">Mot de passe</label><input type="password" id="lPass" autocomplete="current-password" required></div>
+    <label class="remember"><input type="checkbox" id="lRemember" checked> <span data-t="login.remember">Rester connecté sur cet appareil</span></label>
     <p class="msg err" id="lErr" role="alert" hidden></p>
     <p class="msg ok" id="lOk" role="status" hidden></p>
     <button class="btn btn-fill" type="submit" id="lBtn" data-t="signin">Se connecter</button>
@@ -637,8 +640,8 @@ dialog::backdrop{background:rgba(58,14,34,.55)}
 
 <div class="toast" id="toast" role="status" aria-live="polite"><span id="toastText"></span><button type="button" id="toastUndo" hidden data-t="undo">Annuler</button></div>
 
-<script src="../assets/menu-data.js?v=20261026c"></script>
-<script src="../assets/firebase-config.js?v=20261026c"></script>
-<script type="module" src="staff.js?v=20261026c"></script>
+<script src="../assets/menu-data.js?v=20261026d"></script>
+<script src="../assets/firebase-config.js?v=20261026d"></script>
+<script type="module" src="staff.js?v=20261026d"></script>
 </body>
 </html>

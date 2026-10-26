@@ -5,7 +5,7 @@ The stand-in database lives in the browser's localStorage and is shared across t
 any password except `wrong`. It does **not** enforce `firestore.rules`, so rule changes still need a live check.
 
 ```
-cd <repo root> && python3 -m http.server 8765 &      # serve the site
+python3 dev/serve.py &                               # serve the site with the live security headers
 python3 dev/tests/test_core.py                        # site booking/order + basic dashboard (26 checks)
 python3 dev/tests/test_staff.py                       # alarms, roles, sold out, pausing, staff bookings, reports (46 checks)
 ```

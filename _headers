@@ -1,12 +1,20 @@
-/staff/*
-  X-Robots-Tag: noindex, nofollow
-  Cache-Control: no-store
+# Cloudflare Pages response headers for every file on the site.
 
-/dev/*
-  X-Robots-Tag: noindex, nofollow
+# ---- security, for every page ----
+# Content-Security-Policy: scripts only from this site and Google's Firebase/reCAPTCHA hosts, no inline
+# scripts, no plugins, no other site may frame the pages, forms only post here, and network requests only
+# to Firebase, Google (reCAPTCHA / App Check) and ntfy.sh (staff phone alerts).
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://www.gstatic.com https://www.google.com https://www.recaptcha.net; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://*.googleapis.com https://*.firebaseapp.com https://www.google.com https://www.recaptcha.net https://ntfy.sh; frame-src https://*.firebaseapp.com https://www.google.com https://www.recaptcha.net; worker-src 'self'; manifest-src 'self'; media-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=(), bluetooth=()
+  Strict-Transport-Security: max-age=31536000
+  Cross-Origin-Opener-Policy: same-origin
 
-# Pages and scripts are checked for a newer copy on every visit (cheap: unchanged files answer
-# "not modified"), so a phone never mixes a new page with old scripts.
+# ---- pages and scripts are checked for a newer copy on every visit ----
+# (cheap: unchanged files answer "not modified"), so a phone never mixes a new page with old scripts.
 /
   Cache-Control: no-cache
 
@@ -15,3 +23,13 @@
 
 /assets/*
   Cache-Control: no-cache
+
+# ---- staff dashboard: never indexed, never cached, never sends its address to other sites ----
+/staff/*
+  X-Robots-Tag: noindex, nofollow
+  Cache-Control: no-store
+  Referrer-Policy: no-referrer
+
+# ---- test files are published with the repository but are not part of the site ----
+/dev/*
+  X-Robots-Tag: noindex, nofollow

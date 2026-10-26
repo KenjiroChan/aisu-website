@@ -4,6 +4,7 @@
    When AISU_FIREBASE_CONFIG is null, or Firebase can't load, nothing is exposed and the page stays in
    preview mode. */
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
+import { initializeAppCheck, ReCaptchaV3Provider } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app-check.js';
 import {
   getFirestore, doc, collection, runTransaction, serverTimestamp, onSnapshot, addDoc, writeBatch, updateDoc
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
@@ -58,6 +59,11 @@ function randomCode(){
 
 if(cfg){
   const app = initializeApp(cfg);
+  // App Check proves requests come from this website (see firebase-config.js); off until a key is set
+  if(window.AISU_APPCHECK_SITE_KEY){
+    try{ initializeAppCheck(app, { provider: new ReCaptchaV3Provider(window.AISU_APPCHECK_SITE_KEY), isTokenAutoRefreshEnabled: true }); }
+    catch(e){ /* the site still works if App Check can't start */ }
+  }
   const db = getFirestore(app);
 
   let settings = { ...DEFAULTS };

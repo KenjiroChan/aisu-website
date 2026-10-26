@@ -30,6 +30,7 @@ async def main():
         ctx=await b.new_context(viewport={'width':1280,'height':860})
         await ctx.clock.install(time=cafe_open_time())
         await ctx.route('https://www.gstatic.com/firebasejs/**', route)
+        csp=[]; ctx.on('console', lambda m: ('Content Security Policy' in m.text or 'Refused to' in m.text) and csp.append(m.text[:200]))
         await ctx.route('https://ntfy.sh/**', ntfy_route)
         await ctx.add_init_script("if(!localStorage.getItem('testInit')){localStorage.clear();localStorage.setItem('aisu-lang','\"en\"');localStorage.setItem('aisu-staff-lang','\"en\"');localStorage.setItem('testInit','1')}"+OSC)
         errs=[]
@@ -253,6 +254,9 @@ async def main():
         await book('Late Night', tomorrow); await dash.bring_to_front(); await dash.wait_for_timeout(600)
         await dash.screenshot(path=S+'/v2-mobile-alarm.png')
         check('alarm fills the phone screen', await dash.evaluate("(()=>{const r=document.getElementById('alarm').getBoundingClientRect();return r.width>=389&&r.height>=840})()"))
+        check('nothing blocked by the security policy (CSP)', not csp)
+        if csp: print('   CSP:', csp[:5])
+        check('no script errors on any page', not errs)
         print('page errors:', errs or 'none')
         print(f'{sum(results)}/{len(results)} passed')
         await b.close()

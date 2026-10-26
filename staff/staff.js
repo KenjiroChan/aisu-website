@@ -3,8 +3,10 @@
    settings that change the public site straight away, and alerts that keep ringing until someone answers.
    Menu prices come from ../assets/menu-data.js, so totals never come from the customer's phone. */
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
+import { initializeAppCheck, ReCaptchaV3Provider } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app-check.js';
 import {
-  getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut, sendPasswordResetEmail
+  getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut, sendPasswordResetEmail,
+  setPersistence, browserLocalPersistence, browserSessionPersistence
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 import {
   getFirestore, collection, doc, query, where, orderBy, limit, onSnapshot, getDoc, getDocs,
@@ -110,7 +112,7 @@ const S = {
     'alarm.items':'{n} article(s)', 'alarm.pick':'Retrait {d} à {h}', 'alarm.for':'{d} à {h} · {g}',
     'wait.orders':'{n} commande(s) attendent depuis plus de 5 min', 'wait.late':'{n} commande(s) en retard', 'wait.res':'{n} réservation(s) à confirmer',
     'notif.order':'Nouvelle commande {r}', 'notif.res':'Nouvelle réservation {r}', 'test.title':'Test AISU', 'test.body':'Les alertes téléphone fonctionnent.',
-    'lang.label':'Langue', close:'Fermer', role:'Rôle',
+    'login.remember':"Rester connecté sur cet appareil", 'lang.label':'Langue', close:'Fermer', role:'Rôle',
     'hand.title':"Remettre la commande", 'hand.ask':"Demandez au client son code de retrait à 4 chiffres (sur son téléphone ou une capture d'écran) et tapez-le ici.", 'hand.code':"Code de retrait", 'hand.ok':"Code correct : remettez la commande et encaissez {t}.", 'hand.bad':"Ce code ne correspond pas à cette commande. Vérifiez-le avec le client.", 'hand.done':"Remise faite", 'hand.nocode':"Le client n'a pas son code ?", 'hand.check':"Demandez son nom et son numéro et comparez avec {n} · {p}. En cas de doute, appelez ce numéro devant lui : son téléphone doit sonner.", 'hand.anyway':"Remettre sans code", 'hand.sure':"Confirmer la remise sans code", 'hand.notReady':"Attention : cette commande est encore « {s} ».", 'hand.find':"Code du client", 'hand.findL':"Un client vient chercher sa commande ?", 'hand.findBtn':"Trouver", 'hand.none':"Aucune commande en cours avec ce code. Vérifiez le code, ou cherchez le nom avec Rechercher.", 'hand.nocodeChip':"remise sans code", 'cold.note':"Articles glacés : gardez-les au froid et sortez-les à l'arrivée du client.", cold:"glacé", 'hold.until':"Gardée jusqu'à {t}", 'hold.over':"Délai de retrait passé ({t}) : appelez le client", 'seen.ready':"Le client a vu que c'est prêt", 'seen.not':"Le client n'a pas encore vu que c'est prêt : appelez-le si besoin"
   },
   en: {
@@ -187,7 +189,7 @@ const S = {
     'alarm.items':'{n} item(s)', 'alarm.pick':'Pickup {d} at {h}', 'alarm.for':'{d} at {h} · {g}',
     'wait.orders':'{n} order(s) waiting more than 5 min', 'wait.late':'{n} order(s) late', 'wait.res':'{n} booking(s) to confirm',
     'notif.order':'New order {r}', 'notif.res':'New booking {r}', 'test.title':'AISU test', 'test.body':'Phone alerts are working.',
-    'lang.label':'Language', close:'Close', role:'Role',
+    'login.remember':"Stay signed in on this device", 'lang.label':'Language', close:'Close', role:'Role',
     'hand.title':"Hand over the order", 'hand.ask':"Ask the customer for their 4-digit pickup code (on their phone or a screenshot) and type it here.", 'hand.code':"Pickup code", 'hand.ok':"Code matches: hand the order over and take {t}.", 'hand.bad':"This code doesn't match this order. Check it with the customer.", 'hand.done':"Handed over", 'hand.nocode':"Customer doesn't have their code?", 'hand.check':"Ask for their name and number and compare with {n} · {p}. If in doubt, call that number in front of them: their phone should ring.", 'hand.anyway':"Hand over without the code", 'hand.sure':"Confirm handover without code", 'hand.notReady':"Note: this order is still \"{s}\".", 'hand.find':"Customer's code", 'hand.findL':"Customer here to collect?", 'hand.findBtn':"Find", 'hand.none':"No current order has this code. Check the code, or search for the name with Search.", 'hand.nocodeChip':"handed over without code", 'cold.note':"Iced items: keep them cold and bring them out when the customer arrives.", cold:"iced", 'hold.until':"Held until {t}", 'hold.over':"Pickup deadline passed ({t}): call the customer", 'seen.ready':"Customer has seen it's ready", 'seen.not':"Customer hasn't seen it's ready yet: call them if needed"
   },
   mg: {
@@ -264,7 +266,7 @@ const S = {
     'alarm.items':'zavatra {n}', 'alarm.pick':"Fakana {d} amin'ny {h}", 'alarm.for':"{d} amin'ny {h} · {g}",
     'wait.orders':'Kaomandy {n} miandry mihoatra ny 5 minitra', 'wait.late':'Kaomandy {n} tara', 'wait.res':'Fandrihana {n} hamafisina',
     'notif.order':'Kaomandy vaovao {r}', 'notif.res':'Fandrihana vaovao {r}', 'test.title':'Fitsapana AISU', 'test.body':"Mandeha ny fanairana amin'ny finday.",
-    'lang.label':'Fiteny', close:'Akatony', role:'Andraikitra',
+    'login.remember':"Mijanòna ho tafiditra amin'ity fitaovana ity", 'lang.label':'Fiteny', close:'Akatony', role:'Andraikitra',
     'hand.title':"Hanolotra ny kaomandy", 'hand.ask':"Angataho amin'ny mpanjifa ny kaody fakana misy isa 4 (ao amin'ny findainy na sary nalainy) ary soraty eto.", 'hand.code':"Kaody fakana", 'hand.ok':"Marina ny kaody: atolory ny kaomandy ary andraiso ny {t}.", 'hand.bad':"Tsy mifanaraka amin'ity kaomandy ity io kaody io. Hamarino miaraka amin'ny mpanjifa.", 'hand.done':"Voatolotra", 'hand.nocode':"Tsy manana ny kaodiny ve ny mpanjifa?", 'hand.check':"Anontanio ny anarany sy ny laharany ary ampitahao amin'ny {n} · {p}. Raha misalasala, antsoy eo anatrehany io laharana io: tokony haneno ny findainy.", 'hand.anyway':"Atolory na tsy misy kaody", 'hand.sure':"Hamafiso ny fanolorana tsy misy kaody", 'hand.notReady':"Tandremo: mbola « {s} » ity kaomandy ity.", 'hand.find':"Kaodin'ny mpanjifa", 'hand.findL':"Misy mpanjifa tonga haka ny kaomandiny?", 'hand.findBtn':"Tadiavo", 'hand.none':"Tsy misy kaomandy mbola miandry manana io kaody io. Hamarino ny kaody, na tadiavo amin'ny Hikaroka ny anarana.", 'hand.nocodeChip':"natolotra tsy nisy kaody", 'cold.note':"Zavatra mangatsiaka: tehirizo mangatsiaka ary avoahy rehefa tonga ny mpanjifa.", cold:"mangatsiaka", 'hold.until':"Tehirizina hatramin'ny {t}", 'hold.over':"Lasa ny fotoana fakana ({t}): antsoy ny mpanjifa", 'seen.ready':"Hitan'ny mpanjifa fa vonona", 'seen.not':"Mbola tsy hitan'ny mpanjifa fa vonona: antsoy raha ilaina"
   }
 };
@@ -298,6 +300,9 @@ const firstName = em => { const l = String(em || '').split('@')[0]; return l.inc
 
 /* ---------------- Firebase ---------------- */
 const app = initializeApp(window.AISU_FIREBASE_CONFIG);
+if(window.AISU_APPCHECK_SITE_KEY){
+  try{ initializeAppCheck(app, {provider: new ReCaptchaV3Provider(window.AISU_APPCHECK_SITE_KEY), isTokenAutoRefreshEnabled: true}); }catch(e){}
+}
 const auth = getAuth(app);
 const db = getFirestore(app);
 let me = null, isOwner = false, role = 'staff';
@@ -486,6 +491,8 @@ function renderLoginMode(){
   $$('#loginMode [data-mode]').forEach(b => b.setAttribute('aria-pressed', b.dataset.mode === loginMode));
   $('#lEmailField').hidden = loginMode === 'team';
   $('#lHint').textContent = t(loginMode === 'team' ? 'login.teamHint' : 'login.mgrHint');
+  // the counter device stays signed in; a manager's sign-in ends when the browser closes unless they tick this
+  $('#lRemember').checked = loginMode === 'team';
 }
 $('#loginMode').addEventListener('click', e => { const b = e.target.closest('[data-mode]'); if(!b) return; loginMode = b.dataset.mode; store.set('aisu-staff-login-mode', loginMode); renderLoginMode(); (loginMode === 'team' ? $('#lPass') : $('#lEmail')).focus(); });
 $('#loginForm').addEventListener('submit', async e => {
@@ -494,7 +501,7 @@ $('#loginForm').addEventListener('submit', async e => {
   $('#lErr').hidden = true; $('#lOk').hidden = true;
   if(!em || !pw){ $('#lErr').textContent = t('badLogin'); $('#lErr').hidden = false; return; }
   $('#lBtn').disabled = true;
-  try{ await signInWithEmailAndPassword(auth, em, pw); }
+  try{ await setPersistence(auth, $('#lRemember').checked ? browserLocalPersistence : browserSessionPersistence).catch(() => {}); await signInWithEmailAndPassword(auth, em, pw); }
   catch(err){
     const c = err && err.code;
     $('#lErr').textContent = t(c === 'auth/too-many-requests' ? 'tooMany' : c === 'auth/network-request-failed' ? 'netErr' : 'badLogin');
@@ -629,7 +636,7 @@ function syncAlarm(){
     const lines = (x.items || []).map(it => ({...itemLine(it), q: it.q}));
     $('#alarmCard').innerHTML = `<div class="big">${t('alarm.pick', {d: relDay(x.pickupDay).toLowerCase(), h: hm(x.pickupTime)})}</div>
       <div><b>${esc(x.name)}</b> · <span class="ref">${esc(x.ref)}</span></div>
-      <ul class="items">${lines.map(l => `<li><span><span class="q">${l.q}×</span>${esc(l.name)}</span></li>`).join('')}</ul>${x.notes ? `<div class="note">${esc(x.notes)}</div>` : ''}`;
+      <ul class="items">${lines.map(l => `<li><span><span class="q">${esc(l.q)}×</span>${esc(l.name)}</span></li>`).join('')}</ul>${x.notes ? `<div class="note">${esc(x.notes)}</div>` : ''}`;
     $('#alarmAct').textContent = t('alarm.start');
   }else{
     $('#alarmCard').innerHTML = `<div class="big">${esc(t('alarm.for', {d: relDay(x.date), h: hm(x.time), g: t('guests', {n: x.guests})}))}</div>
@@ -787,12 +794,12 @@ function orderCard(o, flash){
   return `<article class="card is-${esc(o.status)}${flash ? ' flash' : ''}${late ? ' late' : ''}" data-id="${esc(o.id)}">
     <div class="card-top"><span class="when">${hm(o.pickupTime)}</span><span class="due ${due.cls}">${esc(due.txt)}</span><span class="ref">${esc(o.ref)}</span></div>
     <div class="who"><b>${esc(o.name)}</b>${contactLinks(o.phone)}</div>
-    <ul class="items">${lines.map(l => `<li><span><span class="q">${l.q}×</span>${esc(l.name)}${isColdKey(l.k) ? snowIcon() : ''}</span><span class="pr">${l.price == null ? t('priceCheck') : ar(l.price)}</span></li>`).join('')}</ul>
+    <ul class="items">${lines.map(l => `<li><span><span class="q">${esc(l.q)}×</span>${esc(l.name)}${isColdKey(l.k) ? snowIcon() : ''}</span><span class="pr">${l.price == null ? t('priceCheck') : ar(l.price)}</span></li>`).join('')}</ul>
     <div class="total"><span>${t('total')}</span><span>${ar(total)}${unknown ? ' + ?' : ''}</span></div>
     ${o.notes ? `<div class="note">${esc(o.notes)}</div>` : ''}
     ${live && lines.some(l => isColdKey(l.k)) ? `<div class="note cold">${snowIcon()}<span>${esc(t('cold.note'))}</span></div>` : ''}
     ${o.status === 'ready' ? readyInfo(o) : ''}
-    <div class="meta"><span class="chip st-${esc(o.status)}">${t('o.' + o.status)}</span><span>${esc(t('ago', {n: minsSince(o.createdAt)}))}</span>${o.statusBy ? `<span>${esc(t('by', {n: firstName(o.statusBy)}))}</span>` : ''}${o.status === 'collected' && o.handoff === 'nocode' ? `<span class="chip st-new">${esc(t('hand.nocodeChip'))}</span>` : ''}</div>
+    <div class="meta"><span class="chip st-${esc(o.status)}">${esc(t('o.' + o.status))}</span><span>${esc(t('ago', {n: minsSince(o.createdAt)}))}</span>${o.statusBy ? `<span>${esc(t('by', {n: firstName(o.statusBy)}))}</span>` : ''}${o.status === 'collected' && o.handoff === 'nocode' ? `<span class="chip st-new">${esc(t('hand.nocodeChip'))}</span>` : ''}</div>
     <div class="actions">${PREV_O[o.status] && o.status !== 'collected' ? `<button class="btn btn-ghost btn-back" type="button" data-order="${esc(o.id)}" data-to="${PREV_O[o.status]}" aria-label="${t('back')}">‹ ${t('back')}</button>` : ''}${next ? `<button class="btn btn-fill" type="button" data-order="${esc(o.id)}" data-to="${next[0]}">${t(next[1])}</button>` : ''}${live ? `<button class="btn btn-danger" type="button" data-order="${esc(o.id)}" data-to="cancelled">${t('act.cancel')}</button>` : ''}${o.status === 'collected' || o.status === 'cancelled' ? `<button class="btn btn-ghost btn-sm" type="button" data-order="${esc(o.id)}" data-to="${o.status === 'collected' ? 'ready' : 'new'}">‹ ${t('back')}</button>` : ''}</div>
   </article>`;
 }
@@ -845,7 +852,7 @@ function openHand(id, typed){
     ${o.status !== 'ready' ? `<p class="msg warn">${esc(t('hand.notReady', {s: t('o.' + o.status)}))}</p>` : ''}
     <div class="hand-sum">
       <div class="hs-top"><b>${esc(o.name)}</b><span class="ref">${esc(o.ref)}</span><span>${esc(relDay(o.pickupDay))} · ${hm(o.pickupTime)}</span></div>
-      <ul class="items">${lines.map(l => `<li><span><span class="q">${l.q}×</span>${esc(l.name)}${isColdKey(l.k) ? snowIcon() : ''}</span></li>`).join('')}</ul>
+      <ul class="items">${lines.map(l => `<li><span><span class="q">${esc(l.q)}×</span>${esc(l.name)}${isColdKey(l.k) ? snowIcon() : ''}</span></li>`).join('')}</ul>
       <div class="total"><span>${t('total')}</span><span>${ar(total)}${unknown ? ' + ?' : ''}</span></div>
     </div>
     ${cold ? `<div class="note cold">${snowIcon()}<span>${esc(t('cold.note'))}</span></div>` : ''}
@@ -1169,7 +1176,8 @@ function renderReports(){
 }
 $('#repCsv').addEventListener('click', () => {
   if(!repData) return;
-  const q = v => { const s = String(v ?? ''); return /[;"\n\r]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
+  // a cell starting with = + - @ (or a tab) could run as a formula in Excel: prefix it with an apostrophe
+  const q = v => { let s = String(v ?? ''); if(typeof v === 'string' && /^[=+\-@\t\r]/.test(s)) s = "'" + s; return /[;"\n\r]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
   const rows = [['type', 'date', 'heure', 'reference', 'nom', 'telephone', 'statut', 'personnes', 'articles', 'total_ar', 'table', 'note']];
   repData.orders.slice().sort(byPickup).forEach(o => { const {lines, total} = orderTotal(o);
     rows.push(['commande', o.pickupDay, hm(o.pickupTime), o.ref, o.name, o.phone, o.status, '', lines.map(l => `${l.q}x ${l.name}`).join(' | '), total, '', o.notes || '']); });

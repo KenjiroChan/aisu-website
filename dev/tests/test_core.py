@@ -24,6 +24,7 @@ async def main():
         ctx=await b.new_context(viewport={'width':390,'height':844},is_mobile=True,has_touch=True)
         await ctx.clock.install(time=cafe_open_time())
         await ctx.route('https://www.gstatic.com/firebasejs/**', route)
+        csp=[]; ctx.on('console', lambda m: ('Content Security Policy' in m.text or 'Refused to' in m.text) and csp.append(m.text[:200]))
         await ctx.add_init_script("if(!localStorage.getItem('testInit')){localStorage.clear();localStorage.setItem('aisu-lang','\"en\"');localStorage.setItem('testInit','1')}")
         site=await ctx.new_page(); errs=[]
         site.on('pageerror',lambda e: errs.append('site: '+str(e)))
@@ -206,6 +207,9 @@ async def main():
         await st.click('#closeCart'); await st.evaluate("document.querySelector('.tabbar .tb-order').click()"); await st.wait_for_timeout(300)
         check('…and so does the Order tab', await st.is_visible('#cart') and not serrs)
         await sctx.close()
+        check('nothing blocked by the security policy (CSP)', not csp)
+        if csp: print('   CSP:', csp[:5])
+        check('no script errors on any page', not errs)
         print('page errors:', errs or 'none')
         await b.close()
 asyncio.run(main())

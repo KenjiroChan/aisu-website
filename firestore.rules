@@ -45,6 +45,40 @@ service cloud.firestore {
     function isDay(v) {
       return v is string && v.matches('^20[0-9][0-9]-[01][0-9]-[0-3][0-9]$');
     }
+    // A YYYY-MM-DD day as a timestamp, to keep public bookings and orders within a sensible window
+    // (a few days of slack on each side covers time zones).
+    function dayStamp(d) {
+      let p = d.split('-');
+      return timestamp.date(int(p[0]), int(p[1]), int(p[2]));
+    }
+    function dayWithin(d, daysBack, daysAhead) {
+      return dayStamp(d) >= request.time - duration.value(daysBack, 'd')
+        && dayStamp(d) <= request.time + duration.value(daysAhead, 'd');
+    }
+    function isRef(v) {
+      return v is string && v.matches('^AISU-[A-Z0-9]{4}$');
+    }
+    // phone numbers as customers type them: digits, spaces, + ( ) . -
+    function isPhone(v) {
+      return v is string && v.matches('^[0-9+() .-]{6,30}$');
+    }
+    // One basket line: a menu key (p1, pal4, cafes-0-3-0 …), its display name and a whole quantity.
+    function basketLine(it) {
+      return it is map && it.keys().hasAll(['k', 'n', 'q']) && it.keys().hasOnly(['k', 'n', 'q'])
+        && it.k is string && it.k.matches('^[a-z0-9-]{1,24}$')
+        && text(it.n, 1, 80)
+        && it.q is int && it.q >= 1 && it.q <= 50;
+    }
+    function lineAt(items, i) {
+      return items.size() <= i || basketLine(items[i]);
+    }
+    function validItems(items) {
+      return items is list && items.size() >= 1 && items.size() <= 20
+        && lineAt(items, 0) && lineAt(items, 1) && lineAt(items, 2) && lineAt(items, 3) && lineAt(items, 4)
+        && lineAt(items, 5) && lineAt(items, 6) && lineAt(items, 7) && lineAt(items, 8) && lineAt(items, 9)
+        && lineAt(items, 10) && lineAt(items, 11) && lineAt(items, 12) && lineAt(items, 13) && lineAt(items, 14)
+        && lineAt(items, 15) && lineAt(items, 16) && lineAt(items, 17) && lineAt(items, 18) && lineAt(items, 19);
+    }
     function settingsPath() {
       return /databases/$(database)/documents/settings/main;
     }
@@ -64,7 +98,7 @@ service cloud.firestore {
 
     // ---------- bookings ----------
     function bookingShape(r) {
-      return text(r.ref, 9, 9)
+      return isRef(r.ref)
         && isDay(r.date)
         && r.time is int && r.time >= 0 && r.time < 1440 && r.time % 30 == 0
         && r.occasion in ['cafe', 'brunch', 'peppa', 'classique', 'gourmand']
@@ -80,7 +114,8 @@ service cloud.firestore {
       return r.keys().hasAll(['ref', 'date', 'time', 'guests', 'occasion', 'seat', 'name', 'phone', 'email', 'notes', 'lang', 'status', 'createdAt'])
         && r.keys().hasOnly(['ref', 'date', 'time', 'guests', 'occasion', 'seat', 'name', 'phone', 'email', 'notes', 'lang', 'status', 'createdAt'])
         && bookingShape(r)
-        && text(r.phone, 6, 30)
+        && isPhone(r.phone)
+        && dayWithin(r.date, 2, 62)
         && r.guests is int && r.guests >= 1 && r.guests <= 8
         && r.status == 'new';
     }
@@ -184,12 +219,13 @@ service cloud.firestore {
       return o.keys().hasAll(['ref', 'items', 'pickupDay', 'pickupTime', 'name', 'phone', 'notes', 'lang', 'status', 'createdAt'])
         && o.keys().hasOnly(['ref', 'items', 'pickupDay', 'pickupTime', 'name', 'phone', 'notes', 'lang', 'status', 'createdAt', 'track', 'code'])
         && trackedOrNot(id, o)
-        && text(o.ref, 9, 9)
-        && o.items is list && o.items.size() >= 1 && o.items.size() <= 30
+        && isRef(o.ref)
+        && validItems(o.items)
         && isDay(o.pickupDay)
+        && dayWithin(o.pickupDay, 2, 9)
         && o.pickupTime is int && o.pickupTime >= 0 && o.pickupTime < 1440 && o.pickupTime % 15 == 0
         && text(o.name, 1, 80)
-        && text(o.phone, 6, 30)
+        && isPhone(o.phone)
         && text(o.notes, 0, 500)
         && o.lang in ['fr', 'en', 'mg']
         && o.status == 'new'
@@ -221,7 +257,7 @@ service cloud.firestore {
         && o.get('track', '') == key
         && o.code == p.code && o.ref == p.ref
         && o.pickupDay == p.pickupDay && o.pickupTime == p.pickupTime
-        && p.items is list && p.items.size() >= 1 && p.items.size() <= 30
+        && p.items == o.items
         && p.lang in ['fr', 'en', 'mg']
         && p.status == 'new'
         && p.createdAt == request.time;

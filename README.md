@@ -46,6 +46,15 @@ The counter team shares one login, `aisuparfaiteria+staff@gmail.com`. Gmail deli
 
 Phone alerts are optional: Settings → Phone alerts creates a private channel code for the free ntfy app (ntfy.sh). The website then pings that channel with each new order or booking: reference, time and size only, never a name or phone number.
 
+## Security
+
+- **Database rules** (`firestore.rules`) are the real gatekeeper. The public can only add a booking or an order in the exact expected shape: reference `AISU-XXXX`, a phone made of phone characters, basket lines that are menu keys with whole quantities (at most 20 lines, 50 of each), and dates within a sensible window (orders up to 9 days ahead, bookings up to 62). Names and phone numbers are never readable without a staff sign-in.
+- **Browser protections** (`_headers`): a strict Content-Security-Policy (scripts only from this site and Google's Firebase/reCAPTCHA hosts, no inline scripts, no framing by other sites), plus nosniff, no framing, a strict referrer policy, HSTS and a locked-down permissions policy. The page script lives in `assets/site.js` because inline scripts are blocked. If a new outside service is ever added, its address must be added to the policy too.
+- **Escaping**: everything customers type is escaped wherever it's shown, and hidden control or text-direction characters are stripped before saving. The CSV export prefixes anything that starts like a formula.
+- **Spam**: a hidden field only bots fill in, and a few orders or bookings per phone per hour (beyond that, customers are asked to call). The strong protection is Firebase App Check with reCAPTCHA v3, ready in the code and switched on by adding a site key in `assets/firebase-config.js` (see the setup guide).
+- **Staff sign-in**: the counter's team login stays signed in; a manager's sign-in ends when the browser closes unless "stay signed in" is ticked.
+- **Tests**: run the site with `python3 dev/serve.py` (it applies `_headers`, so the tests fail on anything the live security policy would block), then `dev/tests/test_core.py`, `test_staff.py` and `test_security.py`.
+
 ## After changing `firestore.rules`
 
 Paste the whole file into Firebase console → Firestore Database → Rules and press Publish. The site and dashboard rely on the published rules, not the copy in this repository.

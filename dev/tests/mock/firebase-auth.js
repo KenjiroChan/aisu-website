@@ -7,3 +7,6 @@ export function onAuthStateChanged(_a, fn){ ls.add(fn); setTimeout(() => fn(cur(
 export async function signInWithEmailAndPassword(_a, email, pw){ if(pw === 'wrong') throw Object.assign(new Error('x'), { code: 'auth/invalid-credential' }); localStorage.setItem(K, JSON.stringify({ email, uid: 'u_' + email })); fire(); return { user: cur() }; }
 export async function signOut(){ localStorage.removeItem(K); fire(); }
 export async function sendPasswordResetEmail(){ }
+export const browserLocalPersistence = { type: 'LOCAL' };
+export const browserSessionPersistence = { type: 'SESSION' };
+export async function setPersistence(_a, p){ window.__authPersistence = p.type; }
