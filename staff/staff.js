@@ -107,7 +107,7 @@ const S = {
     'alarm.items':'{n} article(s)', 'alarm.pick':'Retrait {d} à {h}', 'alarm.for':'{d} à {h} · {g}',
     'wait.orders':'{n} commande(s) attendent depuis plus de 5 min', 'wait.late':'{n} commande(s) en retard', 'wait.res':'{n} réservation(s) à confirmer',
     'notif.order':'Nouvelle commande {r}', 'notif.res':'Nouvelle réservation {r}', 'test.title':'Test AISU', 'test.body':'Les alertes téléphone fonctionnent.',
-    other:'EN'
+    'lang.label':'Langue', close:'Fermer', role:'Rôle'
   },
   en: {
     'login.team':'Team', 'login.manager':'Manager', 'login.teamHint':'Type the team password.', 'login.mgrHint':'Your manager email and password.',
@@ -183,7 +183,83 @@ const S = {
     'alarm.items':'{n} item(s)', 'alarm.pick':'Pickup {d} at {h}', 'alarm.for':'{d} at {h} · {g}',
     'wait.orders':'{n} order(s) waiting more than 5 min', 'wait.late':'{n} order(s) late', 'wait.res':'{n} booking(s) to confirm',
     'notif.order':'New order {r}', 'notif.res':'New booking {r}', 'test.title':'AISU test', 'test.body':'Phone alerts are working.',
-    other:'FR'
+    'lang.label':'Language', close:'Close', role:'Role'
+  },
+  mg: {
+    'login.team':'Ekipa', 'login.manager':"Tompon'andraikitra", 'login.teamHint':"Soraty ny tenimiafin'ny ekipa.", 'login.mgrHint':"Ny mailakao sy ny tenimiafinao amin'ny maha tompon'andraikitra anao.",
+    'forgot.team':"Angataho amin'ny tompon'andraikitra ny tenimiafin'ny ekipa.",
+    'start.title':'Vonona hanomboka ny asa ve?', 'start.body':"Tsindrio ny bokotra mba haneno ity fitaovana ity isaky ny misy kaomandy na fandrihana vaovao, na aiza na aiza pejy misy anao. Mitaky io fanindriana io indray mandeha ny mpitety tranonkala isaky ny misokatra ny pejy.",
+    'start.go':'Hanomboka ny asa', 'start.quiet':"Tsy misy feo amin'ity fitaovana ity",
+    'role.staff':'Ekipa', 'role.manager':"Tompon'andraikitra", 'role.owner':'Tompony', 'lock.short':"ho an'ny tompon'andraikitra ihany",
+    'team.shared':"Ho an'ny ekipa, kaonty iombonana iray dia ampy. Ao amin'ny Firebase, Authentication, Users, mamorona ny mpampiasa {e} misy tenimiafina, dia ampidiro eto ho « Ekipa ». Misafidy « Ekipa » ny mpiasa rehefa miditra ary ny tenimiafina ihany no soratany. Tonga ao amin'ny boaty mailakao mahazatra ny mailaka ho an'ity kaonty ity.",
+    'team.addShared':"Ampidiro ny kaontin'ny ekipa", 'team.sharedOk':"Ao anatin'ny lisitra ny kaontin'ny ekipa {e}.", 'role.saved':'Voatahiry ny andraikitra',
+    'signin.title':"Fidirana ho an'ny mpiasa", email:'Mailaka', password:'Tenimiafina', signin:'Hiditra',
+    forgot:'Adinoko ny tenimiafina', needEmail:'Soraty aloha ny mailakao.', resetSent:"Raha misy io kaonty io, nisy mailaka hanovana ny tenimiafina nalefa any amin'i {e}.",
+    badLogin:'Diso ny mailaka na ny tenimiafina.', tooMany:'Be loatra ny andrana. Miandrasa minitra vitsivitsy dia andramo indray.', netErr:'Tsy misy aterineto. Andramo indray.',
+    'denied.title':'Tsy mahazo miditra ity kaonty ity', 'denied.body':"Angataho amin'ny tompony mba hampiditra an'i {e} ao amin'ny pejy Ekipa, dia midira indray.", signout:'Hivoaka', 'signout.short':'Hivoaka',
+    'tab.today':'Anio', 'tab.orders':'Kaomandy', 'tab.tables':'Fandrihana', 'tab.menu':'Menio', 'tab.reports':'Tarehimarika', 'tab.settings':'Fikirana', 'tab.team':'Ekipa',
+    search:'Hikaroka', 'search.ph':'Anarana, finday na kaody', 'search.hint':"Mikaroka ao amin'ireo fandrihana sy kaomandy 300 farany.", 'search.none':'Tsy nisy hita.', loading:'Eo am-pakana…',
+    offline:"Tsy misy aterineto: hiseho ny vaovao rehefa miverina ny fifandraisana.",
+    'alerts.ok':'Mandeha ny fanairana', 'alerts.off':'Fanairana: alefaso', unlock:"Tsindrio eto mba hamerenana ny feon'ny fanairana", see:'Jereo',
+    'q.orders':'Kaomandy an-tserasera', 'q.bookings':'Fandrihana an-tserasera', 'q.open':'Misokatra: afaka manao kaomandy ny mpanjifa', 'q.openB':'Misokatra: afaka mamandrika ny mpanjifa',
+    'q.paused':'Mijanona: tsy mandray kaomandy intsony ny tranonkala', 'q.pausedB':'Mijanona: tsy mandray fandrihana intsony ny tranonkala',
+    'st.orders.on':'Misokatra ny kaomandy an-tserasera', 'st.orders.off':'Mijanona ny kaomandy an-tserasera', 'st.book.on':'Misokatra ny fandrihana an-tserasera', 'st.book.off':'Mijanona ny fandrihana an-tserasera',
+    's.online':"Ao amin'ny tranonkala", 's.onlineHint':"Ajanony amin'ny andro be olona: mahita hafatra ny mpanjifa ary mbola afaka miantso anareo foana.",
+    'setup.title':"Mba tsy hisy kaomandy diso tsy hita amin'ity fitaovana ity", 'setup.sound':'Maneno isaky ny misy kaomandy na fandrihana vaovao', 'setup.soundBtn':'Alefaso ary andramo',
+    'setup.wake':'Avelao hirehitra ny efijery (tsy maintsy misokatra foana ny pejy)', 'setup.wakeBtn':'Alefaso', 'setup.notif':'Fampandrenesana rehefa any ambadika ny pejy', 'setup.notifBtn':'Avelao',
+    'setup.phone':"Ataovy maneno koa ny findain'ny ekipa", 'setup.phoneBtn':'Amboary', done:'Vita',
+    'tile.todo':'Kaomandy homanina', 'tile.ready':'Vonona, miandry halaina', 'tile.tables':'Fandrihana anio', 'tile.sales':'Varotra anio (efa nalaina)', guestsShort:'olona {n}',
+    'next.orders':'Kaomandy halaina manaraka', 'next.tables':'Latabatra manaraka', 'next.noneO':'Tsy misy kaomandy ho avy.', 'next.noneT':'Tsy misy latabatra voafandrika intsony anio.',
+    'to.confirm':'Fandrihana hamafisina', 'sold.title':"Lany amin'izao fotoana izao", 'sold.none':'Misy avokoa ny zavatra rehetra.', manage:'Tantano', edit:'Ovay',
+    'notice.live':"Hafatra aseho ao amin'ny tranonkala",
+    'col.new':'Vaovao', 'col.preparing':'Eo am-panomanana', 'col.ready':'Vonona', 'col.done':'Nalaina sy nofoanana', 'empty.col':'Tsy misy na inona na inona.',
+    today:'Anio', tomorrow:'Rahampitso', total:'Totaliny', priceCheck:'hamarino ny vidiny', justNow:'vao izao', ago:'voaray {n} minitra lasa izay', by:"nataon'i {n}",
+    'due.in':'afaka {n} minitra', 'due.now':'izao', 'due.late':'tara {n} minitra', 'due.h':'afaka {h} ora {m}',
+    'act.start':'Atombohy', 'act.ready':'Vonona', 'act.collected':'Nalaina', 'act.cancel':'Foanana', 'act.sure':'Hamafiso ny fanafoanana', back:'Hiverina',
+    'act.confirm':'Hamafiso', 'act.seat':'Tonga', 'act.noshow':'Tsy tonga',
+    'o.new':'Vaovao', 'o.preparing':'Eo am-panomanana', 'o.ready':'Vonona', 'o.collected':'Nalaina', 'o.cancelled':'Nofoanana',
+    'r.new':'Hamafisina', 'r.confirmed':'Voamafy', 'r.seated':'Tonga', 'r.noshow':'Tsy tonga', 'r.cancelled':'Nofoanana',
+    'moved.o':'{r}: {s}', 'moved.r':'{n}: {s}', undo:'Averina', undone:'Naverina.',
+    'tables.title':'{d}', 'tables.sum':'Fandrihana {b} · olona {g}', 'tables.empty':"Tsy misy fandrihana amin'io andro io.", guests:'olona {n}', table:'Latabatra {n}', staffMade:"nampidirin'ny ekipa",
+    'day.closed':"Mihidy amin'io andro io (tranonkala)", 'day.open':"Hidio amin'ny tranonkala io andro io", 'day.closedChip':'mihidy',
+    'res.add':'Fandrihana', 'res.addLong':'Fandrihana vaovao', 'res.editTitle':'Hanova ny fandrihana', 'res.newTitle':'Fandrihana vaovao',
+    'f.name':'Anarana', 'f.phone':'Finday', 'f.date':'Daty', 'f.time':'Ora', 'f.guests':'Olona', 'f.table':'Latabatra laharana', 'f.occasion':"Ho an'ny", 'f.seat':'Toerana', 'f.status':'Toe-javatra', 'f.staffNote':"Fanamarihan'ny ekipa (eto ihany no hita)",
+    'f.namePh':'Mpanjifa tonga teo', 'f.over':"Hihoatra ny fetra io ora io ({n} / olona {c}). Afaka mitahiry ihany ianao.", 'f.errDate':'Misafidiana daty.', walkin:'Mpanjifa tonga teo',
+    cancel:'Foano', save:'Tehirizo', saved:'Voatahiry', add:'Ampidiro', copy:'Adikao', copied:'Voadika',
+    'occ.cafe':'Kafe sy parfaits', 'occ.brunch':'Brunch', 'occ.peppa':'Peppa Pig Afternoon Tea', 'occ.classique':'Afternoon Tea Classique', 'occ.gourmand':'Afternoon Tea Gourmand',
+    'seat.table':'Latabatra', 'seat.booth':'Seza lava', 'seat.outside':'Ivelany', 'seat.any':'Na aiza na aiza',
+    'opt.hot':'mafana', 'opt.cold':'mangatsiaka', 'opt.glass':'vera', 'opt.pitcher':'siny',
+    'type.order':'Kaomandy', 'type.res':'Fandrihana', pickup:'Fakana',
+    'menu.title':'Izay misy', 'menu.hint':"Tsindrio ny zavatra iray raha lany izy. Aseho avy hatrany ho « Lany » ao amin'ny tranonkala izy ary tsy amidy intsony. Tsindrio indray rehefa misy indray.",
+    'menu.filter':'Hikaroka zavatra', 'menu.restock':'Averina misy avokoa', 'menu.sure':'Hamafiso', avail:'Misy', soldout:'Lany',
+    'm.parfaits':'Parfaits', 'm.extras':'Brunch: palette glacée', 'm.both':'habe rehetra', nSold:'lany {n}',
+    'g.esp':'Espresso sy kilasika', 'g.latte':'Kafe latte', 'g.sans':'Tsy misy kafe', 'g.matcha':'Matcha voafantina', 'g.thes':'Dite mangatsiaka manokana', 'g.jus':'Ranom-boankazo sy smoothie', 'g.avo':'Zavoka sy milkshake',
+    'r.today':'Anio', 'r.7':'7 andro', 'r.30':'30 andro', 'r.csv':'Alaina (CSV)', 'r.top':'Be mpividy indrindra', 'r.none':"Mbola tsy misy varotra tamin'io fotoana io.",
+    'r.sales':'Varotra', 'r.orders':'Kaomandy nalaina', 'r.avg':"Salanisan'ny kaomandy", 'r.cancel':'Kaomandy nofoanana', 'r.byHour':'Varotra isaky ny ora fakana', 'r.byDay':"Varotra isan'andro",
+    'r.bookings':'Fandrihana', 'r.guests':'Olona tonga na andrasana', 'r.noshow':'Tsy tonga', 'r.rcancel':'Fandrihana nofoanana',
+    'r.note':"Ny kaomandy an-tserasera efa nalaina ihany no isaina ao amin'ny varotra, araka ny vidiny ao amin'ny menio. Tsy tafiditra eto ny varotra eo amin'ny kesy.",
+    'cap.label':"Olona betsaka indrindra isaky ny antsasak'adiny", 'cap.hint':"Tsy aseho intsony amin'ny fandrihana an-tserasera ny ora iray raha vao tratra io isa io. Afaka mihoatra izany ny fandrihana ampidirina eto.",
+    'closed.title':'Andro mihidy manokana', 'closed.hint':"Amin'ireo andro ireo dia tsy manolotra fandrihana na fakana kaomandy ny tranonkala.", 'closed.none':'Tsy misy andro mihidy.',
+    'notice.title':"Hafatra ao amin'ny tranonkala", 'notice.hint':"Aseho eo an-tampon'ny tranonkala amin'ny fiteny rehetra, ohatra hoe « Mihidy ny Asabotsy ity noho ny fety manokana ». Litera 200 farafahabetsany.",
+    'notice.publish':'Avoahy', 'notice.clear':'Esory', 'notice.done':'Navoaka', 'notice.removed':'Nesorina',
+    'dev.title':"Fanairana amin'ity fitaovana ity", 'dev.hint':"Amboary amin'ny fitaovana mijanona eo amin'ny kesy. Isaky ny misy kaomandy na fandrihana vaovao dia feno ny efijery ary maneno mandra-pamaly ny olona iray.",
+    'dev.sound':'Feo', 'dev.volume':"Hamafin'ny feo", 'dev.test':'Andramo', 'dev.remind':'Maneno indray raha misy kaomandy miandry mihoatra ny 5 minitra na tara', 'dev.wake':'Avelao hirehitra ny efijery',
+    'dev.notif':'Avelao ny fampandrenesana', 'notif.on':'Navela ny fampandrenesana', 'notif.denied':"Voasakana ao amin'ny mpitety: ovay ao amin'ny fikirana ny tranonkala.", 'notif.na':"Tsy misy amin'ity mpitety ity. Amin'ny iPhone, ampidiro aloha amin'ny efijery fandraisana ity pejy ity.",
+    'wake.na':"Tsy misy amin'ity mpitety ity.",
+    'ph.title':"Fanairana amin'ny finday", 'ph.hint':"Mampaneno ny findain'ny ekipa isaky ny misy kaomandy na fandrihana vaovao, na dia tsy misy mijery ity efijery ity aza. Maimaim-poana, amin'ny alalan'ny fampiharana ntfy. Ny kaody, ny ora ary ny isa ihany no ao amin'ny hafatra, fa tsy misy anarana na laharana finday mihitsy.",
+    'ph.on':"Alefaso ny fanairana amin'ny finday", 'ph.s1':"Apetraho amin'ny finday tsirairay ny fampiharana maimaim-poana « ntfy » (Google Play na App Store).",
+    'ph.s2':"Ao amin'ny fampiharana, tsindrio ny + dia misoratra anarana amin'ity kaody ity (mpizara ntfy.sh, ilay efa voafidy mialoha):",
+    'ph.s3':"Amin'ny Android, mariho ny « Instant delivery » (na « Livraison instantanée ») rehefa misoratra anarana. Avy eo tsindrio ny « Andramo ny fandefasana » etsy ambany: tokony haneno avy ny finday tsirairay.",
+    'ph.test':'Andramo ny fandefasana', 'ph.new':'Ovay ny kaody', 'ph.off':'Ajanony', 'ph.sent':"Lasa. Tokony haneno ao anatin'ny segondra vitsivitsy ireo finday nisoratra anarana.", 'ph.fail':'Tsy lasa. Hamarino ny fifandraisana.',
+    'ph.newSure':'Hamafiso: tsy maintsy misoratra anarana indray ireo finday', 'ph.offSure':'Hamafiso',
+    'cleanup.title':'Diovy ireo angona taloha', 'cleanup.body':'Mamafa ireo fandrihana sy kaomandy efa mihoatra ny 12 volana.', 'cleanup.btn':'Fafao', 'cleanup.sure':'Hamafiso ny famafana', 'cleanup.done':'Voafafa ny firaketana {n}.',
+    'team.body':"Mahita ny zava-drehetra afa-tsy ity pejy ity ny « Tompon'andraikitra », fa ny « Ekipa » kosa mahita ny Anio, Kaomandy, Fandrihana ary Menio. Ho an'ny tompon'andraikitra, mamorona aloha ny kaontiny ao amin'ny Firebase, Authentication, Users, dia ampidiro eto ny mailany. Ny tompony ihany no mahita ity pejy ity.", remove:'Esory', 'remove.sure':'Hamafiso', owner:'Tompony', 'team.bad':'Soraty mailaka marina.', 'team.empty':'Mbola tsy misy olona nampidirina.',
+    saveFail:'Tsy voatahiry. Hamarino ny fifandraisana ary andramo indray.',
+    'alarm.order':'Kaomandy vaovao', 'alarm.res':'Fandrihana vaovao', 'alarm.start':'Atombohy ny fanomanana', 'alarm.confirm':'Hamafiso ny fandrihana', 'alarm.seen':'Hitako, izaho no hikarakara', 'alarm.more':'+ {n} hafa miandry',
+    'alarm.items':'zavatra {n}', 'alarm.pick':"Fakana {d} amin'ny {h}", 'alarm.for':"{d} amin'ny {h} · {g}",
+    'wait.orders':'Kaomandy {n} miandry mihoatra ny 5 minitra', 'wait.late':'Kaomandy {n} tara', 'wait.res':'Fandrihana {n} hamafisina',
+    'notif.order':'Kaomandy vaovao {r}', 'notif.res':'Fandrihana vaovao {r}', 'test.title':'Fitsapana AISU', 'test.body':"Mandeha ny fanairana amin'ny finday.",
+    'lang.label':'Fiteny', close:'Akatony', role:'Andraikitra'
   }
 };
 let lang = store.get('aisu-staff-lang', 'fr');
@@ -199,8 +275,13 @@ function nowParts(){
 const ymdDate = s => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
 const addDays = (s, n) => { const d = ymdDate(s); d.setDate(d.getDate() + n); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; };
 const loc = () => lang === 'en' ? 'en-GB' : 'fr-FR';
-const niceDay = s => ymdDate(s).toLocaleDateString(loc(), {weekday:'long', day:'numeric', month:'long'});
-const shortDay = s => ymdDate(s).toLocaleDateString(loc(), {weekday:'short', day:'numeric', month:'short'});
+// browsers don't reliably carry Malagasy date names, so Malagasy dates are spelled out here (same words as the public site)
+const MG_DAYS = ['Alahady','Alatsinainy','Talata','Alarobia','Alakamisy','Zoma','Asabotsy'];
+const MG_DAYS_S = ['Alah','Alats','Tal','Alar','Alak','Zom','Asab'];
+const MG_MONTHS = ['Janoary','Febroary','Martsa','Aprily','Mey','Jona','Jolay','Aogositra','Septambra','Oktobra','Novambra','Desambra'];
+const MG_MONTHS_S = ['Jan','Feb','Mar','Apr','Mey','Jon','Jol','Aog','Sep','Okt','Nov','Des'];
+const niceDay = s => { const d = ymdDate(s); return lang === 'mg' ? `${MG_DAYS[d.getDay()]} ${d.getDate()} ${MG_MONTHS[d.getMonth()]}` : d.toLocaleDateString(loc(), {weekday:'long', day:'numeric', month:'long'}); };
+const shortDay = s => { const d = ymdDate(s); return lang === 'mg' ? `${MG_DAYS_S[d.getDay()]} ${d.getDate()} ${MG_MONTHS_S[d.getMonth()]}` : d.toLocaleDateString(loc(), {weekday:'short', day:'numeric', month:'short'}); };
 const relDay = s => { const td = nowParts().ymd; return s === td ? t('today') : s === addDays(td, 1) ? t('tomorrow') : shortDay(s); };
 const hm = m => lang === 'en'
   ? (() => { const h = Math.floor(m / 60), mm = m % 60, ap = h >= 12 ? 'pm' : 'am', hh = h % 12 || 12; return mm ? `${hh}:${String(mm).padStart(2, '0')} ${ap}` : `${hh} ${ap}`; })()
@@ -219,19 +300,28 @@ const unsubs = [];
 const stop = () => { while(unsubs.length) try{ unsubs.pop()(); }catch(e){} };
 
 /* ---------------- static text ---------------- */
+function closeLangMenu(){ const m = $('#langMenu'); if(m && !m.hidden){ m.hidden = true; $('#langBtn').setAttribute('aria-expanded', 'false'); } }
+document.addEventListener('keydown', e => { if(e.key === 'Escape' && !$('#langMenu').hidden){ closeLangMenu(); $('#langBtn').focus(); } });
 function applyText(){
   document.documentElement.lang = lang;
   $$('[data-t]').forEach(el => { el.textContent = t(el.dataset.t); });
-  $$('[data-lang-toggle]').forEach(el => { el.textContent = t('other'); });
+  $$('[data-t-aria]').forEach(el => { el.setAttribute('aria-label', t(el.dataset.tAria)); });
+  $$('[data-set-lang]').forEach(el => { el.setAttribute('aria-pressed', String(el.dataset.setLang === lang)); });
+  $('#langCode').textContent = lang.toUpperCase();
   $('#searchIn').placeholder = t('search.ph');
   $('#menuFilter').placeholder = t('menu.filter');
   $('#rfName').placeholder = t('f.namePh');
   renderLoginMode();
 }
 document.addEventListener('click', e => {
-  if(e.target.closest('[data-lang-toggle]')){
-    lang = lang === 'fr' ? 'en' : 'fr'; store.set('aisu-staff-lang', lang);
-    applyText(); renderAll();
+  // language: three-way choice (French, English, Malagasy), remembered on this device
+  const lb = e.target.closest('#langBtn');
+  if(lb){ const open = $('#langMenu').hidden; $('#langMenu').hidden = !open; lb.setAttribute('aria-expanded', String(open)); }
+  else if(!e.target.closest('#langMenu')) closeLangMenu();
+  const sl = e.target.closest('[data-set-lang]');
+  if(sl && S[sl.dataset.setLang]){
+    closeLangMenu();
+    if(sl.dataset.setLang !== lang){ lang = sl.dataset.setLang; store.set('aisu-staff-lang', lang); applyText(); renderAll(); }
   }
   if(e.target.closest('[data-signout]')){ stopAlarm(); stop(); signOut(auth); }
   const go = e.target.closest('[data-go]'); if(go) setView(go.dataset.go);
@@ -586,7 +676,8 @@ const baseTitle = () => { const n = orders.filter(o => o.status === 'new').lengt
 /* ================= today ================= */
 function renderClock(){
   const now = new Date();
-  $('#clock').textContent = now.toLocaleString(loc(), {timeZone: MENU.TZ, weekday:'short', day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'});
+  if(lang === 'mg'){ const np = nowParts(); $('#clock').textContent = `${shortDay(np.ymd)}, ${hm(np.mins)}`; }
+  else $('#clock').textContent = now.toLocaleString(loc(), {timeZone: MENU.TZ, weekday:'short', day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'});
   $('#todayTitle').textContent = niceDay(nowParts().ymd).replace(/^./, c => c.toUpperCase());
 }
 function renderQuick(){
@@ -793,7 +884,7 @@ document.addEventListener('click', async e => {
 let editing = null;
 const OCCASIONS = ['cafe', 'brunch', 'peppa', 'classique', 'gourmand'], SEATS = ['table', 'booth', 'outside', 'any'];
 function fillTimes(day, keep){
-  const h = MENU.HOURS[ymdDate(day).getDay()] || [540, 1260], opts = [];
+  const h = MENU.HOURS[ymdDate(day).getDay()] || [450, 1080], opts = [];
   for(let m = h[0]; m <= h[1] - 30; m += 30) opts.push(m);
   if(keep != null && !opts.includes(keep)){ opts.push(keep); opts.sort((a, b) => a - b); }
   const cur = keep != null ? keep : Number($('#rfTime').value);
@@ -962,11 +1053,11 @@ function renderReports(){
   let buckets;
   if(repRange === 1){
     const hrs = {}; done.forEach(o => { const h = Math.floor(o.pickupTime / 60); hrs[h] = (hrs[h] || 0) + orderTotal(o).total; });
-    const h = MENU.HOURS[ymdDate(td).getDay()] || [540, 1260];
+    const h = MENU.HOURS[ymdDate(td).getDay()] || [450, 1080];
     buckets = []; for(let x = Math.floor(h[0] / 60); x < Math.ceil(h[1] / 60); x++) buckets.push([lang === 'en' ? hm(x * 60) : x + 'h', hrs[x] || 0]);
     $('#repChartTitle').textContent = t('r.byHour');
   }else{
-    buckets = []; for(let d = start; d <= td; d = addDays(d, 1)) buckets.push([ymdDate(d).toLocaleDateString(loc(), {day:'numeric', month: repRange > 7 ? 'numeric' : 'short'}), done.filter(o => o.pickupDay === d).reduce((a, o) => a + orderTotal(o).total, 0)]);
+    buckets = []; for(let d = start; d <= td; d = addDays(d, 1)) buckets.push([lang === 'mg' ? (repRange > 7 ? `${ymdDate(d).getDate()}/${ymdDate(d).getMonth() + 1}` : `${ymdDate(d).getDate()} ${MG_MONTHS_S[ymdDate(d).getMonth()]}`) : ymdDate(d).toLocaleDateString(loc(), {day:'numeric', month: repRange > 7 ? 'numeric' : 'short'}), done.filter(o => o.pickupDay === d).reduce((a, o) => a + orderTotal(o).total, 0)]);
     $('#repChartTitle').textContent = t('r.byDay');
   }
   const max = Math.max(1, ...buckets.map(b => b[1]));

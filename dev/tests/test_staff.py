@@ -16,10 +16,19 @@ async def ntfy_route(r):
 def check(label, cond):
     results.append(bool(cond)); print(('PASS ' if cond else 'FAIL ')+label)
 OSC="window.__osc=0;(()=>{const C=window.AudioContext||window.webkitAudioContext;if(!C)return;const o=C.prototype.createOscillator;C.prototype.createOscillator=function(){if(this.state==='running')window.__osc++;return o.call(this)};})();"
+
+# Pin the browser clock to the next Wednesday, 10:00 in Madagascar, so the tests behave the same
+# whatever time they're run (orders placed after closing would otherwise land on the next day).
+import datetime as _dt
+def cafe_open_time():
+    tz=_dt.timezone(_dt.timedelta(hours=3)); now=_dt.datetime.now(tz)
+    d=now+_dt.timedelta(days=(2-now.weekday())%7 or 7)
+    return d.replace(hour=10,minute=0,second=0,microsecond=0)
 async def main():
     async with async_playwright() as p:
         b=await p.chromium.launch()
         ctx=await b.new_context(viewport={'width':1280,'height':860})
+        await ctx.clock.install(time=cafe_open_time())
         await ctx.route('https://www.gstatic.com/firebasejs/**', route)
         await ctx.route('https://ntfy.sh/**', ntfy_route)
         await ctx.add_init_script("if(!localStorage.getItem('testInit')){localStorage.clear();localStorage.setItem('aisu-lang','\"en\"');localStorage.setItem('aisu-staff-lang','\"en\"');localStorage.setItem('testInit','1')}"+OSC)

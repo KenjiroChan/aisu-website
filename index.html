@@ -259,7 +259,10 @@ section{padding-block:clamp(72px,9vw,112px)}
 .extras div{display:flex;gap:12px;align-items:baseline;font-size:.9375rem}
 .extras div::after{content:"";order:1;flex:1;border-bottom:1px dotted var(--line)}
 .extras div span:last-child{order:2;font-variant-numeric:tabular-nums lining-nums}
-.teas{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:28px}
+.teas-head{display:grid;gap:4px;justify-items:center;text-align:center;margin-top:clamp(36px,5vw,56px)}
+.teas-head h3{font-family:var(--f-display);font-weight:600;font-size:clamp(1.6rem,3vw,2rem);line-height:1.1}
+.teas-head .when{font-family:var(--f-display);font-style:italic;font-size:var(--t-md);color:var(--muted)}
+.teas{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:20px}
 @media (max-width:960px){.teas{grid-template-columns:1fr;max-width:620px;margin-inline:auto}}
 .tea{border:1px solid var(--line);border-radius:20px;padding:26px;background:var(--paper);display:grid;gap:14px;align-content:start;min-width:0}
 .tea-top{display:grid;gap:4px;text-align:center;padding-bottom:14px;border-bottom:1px dashed var(--line)}
@@ -341,6 +344,10 @@ footer .wrap{padding-block:72px calc(28px + env(safe-area-inset-bottom,0px));dis
 .foot-hours td:last-child{text-align:right}
 .foot-hours tr.today td{color:var(--gold-lt);font-weight:600}
 .contact-line{display:flex;gap:10px;justify-content:center;align-items:baseline;flex-wrap:wrap;overflow-wrap:anywhere}
+a.tel{color:inherit;text-decoration:none;font-weight:500}
+a.tel:hover{text-decoration:underline;text-underline-offset:3px}
+.foot-extra{margin-top:8px;font-size:var(--t-sm)}
+.foot-extra + .foot-extra{margin-top:2px}
 .copy{border:0;background:none;color:inherit;opacity:.7;font-size:var(--t-xs);letter-spacing:.06em;text-transform:uppercase;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
 .copy:hover{opacity:1}
 .foot-lang{color:var(--paper)}
@@ -511,7 +518,7 @@ summary.grp-head{list-style:none}
   .brunch-side .btn{width:100%}
   .brunch-main{padding:4px 22px 10px;gap:0}
   .brunch-main .fold-body{padding-bottom:12px}
-  .teas.snap{margin-top:26px;max-width:none}
+  .teas.snap{margin-top:18px;max-width:none}
   .tea{padding:22px 20px;gap:10px}
   .tea .m-fold>summary{border-top:0;justify-content:center;gap:10px}
   .tea .fold-body{padding-bottom:6px}
@@ -729,7 +736,7 @@ summary.grp-head{list-style:none}
       <div class="brunch">
         <div class="brunch-side on-wine">
           <h3>Le Brunch</h3>
-          <span class="when" data-i18n="brunch.when">Samedis &amp; dimanches, 11h30 – 16h00</span>
+          <span class="when" data-i18n="brunch.when">Samedi 11h30 – 16h00, dimanche 11h30 – 15h00</span>
           <span class="big-price" data-bigprice="85000"></span>
           <p data-i18n="brunch.inc">Comprend une boisson chaude au choix et un jus de fruits frais pressés 20 cl.</p>
           <a class="btn btn-ring" href="#reserve" data-reserve-for="brunch" data-i18n="brunch.book" style="justify-self:start">Réserver le brunch</a>
@@ -758,6 +765,7 @@ summary.grp-head{list-style:none}
         </div>
       </div>
 
+      <div class="teas-head"><h3>Afternoon Tea</h3><span class="when" data-i18n="tea.when">Servi tous les jours, pour 2 personnes</span></div>
       <div class="teas snap" id="teaList"></div>
       <div class="dine"><p data-i18n="tea.note">Brunch et afternoon tea sont servis sur place. Réservez votre table pour être sûr d'en profiter.</p><a class="btn btn-fill" href="#reserve" data-i18n="nav.book">Réserver</a></div>
     </div>
@@ -781,7 +789,7 @@ summary.grp-head{list-style:none}
                   <output id="partyOut" aria-live="polite"></output>
                   <button type="button" id="partyPlus" aria-label="+">+</button>
                 </div>
-                <span class="hint" id="bigParty" hidden data-i18n="res.big">Pour 9 personnes ou plus, appelez-nous.</span>
+                <span class="hint" id="bigParty" hidden data-i18n="res.big">Pour 9 personnes ou plus, appelez-nous au +261 36 08 266 88.</span>
               </div>
             </div>
             <div class="field">
@@ -857,17 +865,17 @@ summary.grp-head{list-style:none}
     <div class="foot-cols">
       <div>
         <h3 data-i18n="foot.contact">Contact</h3>
-        <p class="contact-line"><span class="tnum" id="copy-phone">+261 34 00 000 00</span><button class="copy" type="button" data-copy="copy-phone" data-i18n="copy">Copier</button></p>
-        <p class="contact-line"><span id="copy-email">bonjour@aisu.example</span><button class="copy" type="button" data-copy="copy-email" data-i18n="copy">Copier</button></p>
+        <p class="contact-line"><a class="tnum tel" id="copy-phone" href="tel:+261360826688">+261 36 08 266 88</a><button class="copy" type="button" data-copy="copy-phone" data-i18n="copy">Copier</button></p>
       </div>
       <div>
         <h3 data-i18n="foot.hours">Horaires</h3>
         <table class="foot-hours" aria-label="Horaires"><tbody id="hoursBody"></tbody></table>
+        <p class="foot-extra" data-i18n="foot.tea">Afternoon tea : tous les jours</p>
+        <p class="foot-extra" data-i18n="foot.brunch">Brunch : samedi 11h30 – 16h00, dimanche 11h30 – 15h00</p>
       </div>
       <div>
         <h3 data-i18n="foot.find">Nous trouver</h3>
         <p data-i18n="foot.addr">Adresse à venir</p>
-        <p style="margin-top:6px" data-i18n="foot.brunch">Brunch : samedis et dimanches, 11h30 – 16h00</p>
       </div>
     </div>
     <div class="foot-lang lang" role="group" aria-label="Language">
@@ -900,7 +908,7 @@ summary.grp-head{list-style:none}
     </div>
     <a class="btn btn-ring" href="#reserve" data-i18n="nav.book">Réserver</a>
     <button class="btn order-btn" type="button" data-open-cart><span data-i18n="nav.order">Commander</span> <b class="cart-count">0</b></button>
-    <p class="tnum">+261 34 00 000 00</p>
+    <a class="tnum tel" href="tel:+261360826688">+261 36 08 266 88</a>
   </div>
 </dialog>
 
@@ -946,7 +954,7 @@ summary.grp-head{list-style:none}
       add:"Ajouter","pal.sub":"Mini saveurs de glaces à composer","pal.4":"4 mini boules, 4 saveurs au choix","pal.6":"6 mini boules, 6 saveurs au choix",
       "fondue.sub":"À partager","fondue.d":"Dix mini boules (5 saveurs) à plonger dans une sauce chocolat, avec fruits de saison, cookies, waffles et noix concassées.",dinein:"Sur place uniquement",
       "offers.title":"À ne pas manquer","offers.sub":"Les moments forts de la semaine chez AISU.","offers.note":"Vos promotions apparaîtront ici",
-      "of.brunch.t":"Le Brunch","of.brunch.w":"Samedis et dimanches, 11h30 – 16h00","of.brunch.b":"Viennoiseries, un plat au choix, une boisson chaude et un jus pressé.",
+      "of.brunch.t":"Le Brunch","of.brunch.w":"Samedi 11h30 – 16h00, dimanche 11h30 – 15h00","of.brunch.b":"Viennoiseries, un plat au choix, une boisson chaude et un jus pressé.",
       "of.tea.t":"Afternoon Tea","of.tea.w":"Tous les jours, pour 2 personnes","of.tea.b":"Trois formules à partager, de la Peppa Pig à la Gourmande avec sa coupe de bulles.",
       "of.soda.t":"Crème Soda","of.soda.w":"Tous les jours","of.soda.b":"Soda pomme pétillant, glace vanille et cerise, le petit plaisir de l'après-midi.",
       "of.from":"dès","of.on":"En ce moment","of.today":"Aujourd'hui","of.weekend":"Ce week-end","of.daily":"Tous les jours",
@@ -954,12 +962,12 @@ summary.grp-head{list-style:none}
       "tab.cafes":"Cafés","tab.matcha":"Matcha & Thés","tab.jus":"Jus & Smoothies",
       hot:"Chaud",cold:"Froid",glass:"Verre",pitcher:"Pichet",
       "g.esp":"Espressos & classiques","g.latte":"Cafés latte","g.sans":"Sans café","g.matcha":"Sélection matcha","g.thes":"Thés glacés signature","g.jus":"Jus & smoothies","g.jus.sub":"Pressés à froid, sans sucre ajouté",
-      "brunch.eyebrow":"Servi à table","brunch.title":"Brunch & Afternoon Tea","brunch.when":"Samedis & dimanches, 11h30 – 16h00","brunch.inc":"Comprend une boisson chaude au choix et un jus de fruits frais pressés 20 cl.","brunch.book":"Réserver le brunch",
+      "brunch.eyebrow":"Servi à table","brunch.title":"Brunch & Afternoon Tea","brunch.when":"Samedi 11h30 – 16h00, dimanche 11h30 – 15h00","brunch.inc":"Comprend une boisson chaude au choix et un jus de fruits frais pressés 20 cl.","brunch.book":"Réserver le brunch",
       "brunch.start":"Pour commencer","brunch.plates":"Plats au choix","brunch.extra":"Pour compléter",sweet:"sucré",
       "tea.for2":"pour 2 personnes","tea.sal":"Salés","tea.suc":"Sucreries","tea.book":"Réserver","tea.note":"Brunch et afternoon tea sont servis sur place. Réservez votre table pour être sûr d'en profiter.",
       "tea.inc.peppa":"Thé (chaud ou froid) ou chocolat chaud inclus","tea.inc.classique":"Café, thé ou chocolat chaud inclus","tea.inc.gourmand":"Une coupe de bulles par personne, thé chaud ou froid ou chocolat chaud inclus",
       "res.title":"Réserver une table","res.sub":"Réservez jusqu'à 60 jours à l'avance, de 1 à 8 personnes. Nous gardons votre table 15 minutes.",
-      "res.date":"Date","res.guests":"Personnes","res.big":"Pour 9 personnes ou plus, appelez-nous.","res.for":"Pour quelle occasion ?","for.cafe":"Café & parfaits","for.brunch":"Le Brunch (samedi et dimanche)",
+      "res.date":"Date","res.guests":"Personnes","res.big":"Pour 9 personnes ou plus, appelez-nous au +261 36 08 266 88.","res.for":"Pour quelle occasion ?","for.cafe":"Café & parfaits","for.brunch":"Le Brunch (samedi et dimanche)",
       "res.time":"Heure","res.seat":"Placement","seat.table":"Table","seat.table.d":"En salle","seat.booth":"Banquette","seat.booth.d":"Assise confortable","seat.outside":"Extérieur","seat.outside.d":"En terrasse","seat.any":"Sans préférence","seat.any.d":"La première libre",
       "res.name":"Nom","res.phone":"Téléphone mobile","res.email":"E-mail",optional:"facultatif","res.notes":"Remarques","res.notesHint":"allergies, anniversaire, chaise haute","res.submit":"Réserver la table",
       "res.closed":"Nous sommes fermés ce jour-là. Choisissez une autre date.","res.nomore":"Plus de créneaux aujourd'hui. Choisissez une autre date.","res.brunchOnly":"Le brunch est servi uniquement le samedi et le dimanche. Choisissez un week-end.",
@@ -969,7 +977,7 @@ summary.grp-head{list-style:none}
       "aside.title":"Avant votre visite","aside.1":"Sans réservation, nous vous installons dès qu'une table se libère.","aside.2":"Le brunch est servi les samedis et dimanches, de 11h30 à 16h00.","aside.3":"Pour modifier une réservation, appelez-nous avec votre référence.",
       "skip.title":"Évitez l'attente","skip.body":"Commandez à l'avance et récupérez votre commande au comptoir à l'heure choisie.","skip.btn":"Commander à emporter",
       "closing.title":"Un parfait, un café, et tout le temps qu'il faut.","closing.body":"Le week-end, les tables partent vite. Réservez si vous venez entre amis ou pour le brunch.",
-      "foot.contact":"Contact","foot.hours":"Horaires","foot.find":"Nous trouver","foot.addr":"Adresse à venir","foot.brunch":"Brunch : samedis et dimanches, 11h30 – 16h00","foot.legal":"Prix en ariary (Ar)",
+      "foot.contact":"Contact","foot.hours":"Horaires","foot.find":"Nous trouver","foot.addr":"Adresse à venir","foot.brunch":"Brunch : samedi 11h30 – 16h00, dimanche 11h30 – 15h00","foot.tea":"Afternoon tea : tous les jours","tea.when":"Servi tous les jours, pour 2 personnes","foot.legal":"Prix en ariary (Ar)",
       copy:"Copier",copied:"Copié",selected:"Sélectionné",
       "cart.title":"Votre commande","cart.checkout":"Retrait","cart.placed":"Commande passée","cart.empty":"Votre commande est vide. Ajoutez un parfait ou une boisson depuis la carte.","cart.browse":"Voir la carte",
       "cart.continue":"Choisir l'heure de retrait","cart.pickup":"Heure de retrait","cart.pickupHint":"Comptez environ 20 minutes de préparation.","cart.name":"Nom","cart.phone":"Téléphone mobile","cart.phoneHint":"nous vous prévenons quand c'est prêt",
@@ -997,7 +1005,7 @@ summary.grp-head{list-style:none}
       add:"Add","pal.sub":"Mini scoops to mix and match","pal.4":"4 mini scoops, 4 flavours of your choice","pal.6":"6 mini scoops, 6 flavours of your choice",
       "fondue.sub":"For sharing","fondue.d":"Ten mini scoops (5 flavours) to dip in chocolate sauce, with seasonal fruit, cookies, waffles and crushed nuts.",dinein:"Dine-in only",
       "offers.title":"Don't miss","offers.sub":"The highlights of the week at AISU.","offers.note":"Your promotions will appear here",
-      "of.brunch.t":"Weekend Brunch","of.brunch.w":"Saturdays and Sundays, 11:30 am – 4 pm","of.brunch.b":"Pastries, a main of your choice, a hot drink and a fresh-pressed juice.",
+      "of.brunch.t":"Weekend Brunch","of.brunch.w":"Saturday 11:30 am – 4 pm, Sunday 11:30 am – 3 pm","of.brunch.b":"Pastries, a main of your choice, a hot drink and a fresh-pressed juice.",
       "of.tea.t":"Afternoon Tea","of.tea.w":"Every day, for two","of.tea.b":"Three sets to share, from Peppa Pig to the Gourmand with a glass of bubbles.",
       "of.soda.t":"Crème Soda","of.soda.w":"Every day","of.soda.b":"Sparkling apple soda, vanilla ice cream and a cherry, the little afternoon treat.",
       "of.from":"from","of.on":"On now","of.today":"Today","of.weekend":"This weekend","of.daily":"Every day",
@@ -1005,12 +1013,12 @@ summary.grp-head{list-style:none}
       "tab.cafes":"Coffee","tab.matcha":"Matcha & Tea","tab.jus":"Juices & Smoothies",
       hot:"Hot",cold:"Iced",glass:"Glass",pitcher:"Pitcher",
       "g.esp":"Espressos & classics","g.latte":"Lattes","g.sans":"Coffee-free","g.matcha":"Matcha selection","g.thes":"Signature iced teas","g.jus":"Juices & smoothies","g.jus.sub":"Cold-pressed, no added sugar",
-      "brunch.eyebrow":"Served at the table","brunch.title":"Brunch & Afternoon Tea","brunch.when":"Saturdays & Sundays, 11:30 am – 4 pm","brunch.inc":"Includes a hot drink of your choice and a 20 cl fresh-pressed fruit juice.","brunch.book":"Book brunch",
+      "brunch.eyebrow":"Served at the table","brunch.title":"Brunch & Afternoon Tea","brunch.when":"Saturday 11:30 am – 4 pm, Sunday 11:30 am – 3 pm","brunch.inc":"Includes a hot drink of your choice and a 20 cl fresh-pressed fruit juice.","brunch.book":"Book brunch",
       "brunch.start":"To start","brunch.plates":"Choose a main","brunch.extra":"On the side",sweet:"sweet",
       "tea.for2":"for 2 people","tea.sal":"Savoury","tea.suc":"Sweet","tea.book":"Book","tea.note":"Brunch and afternoon tea are served in the café. Book a table to make sure you get one.",
       "tea.inc.peppa":"Tea (hot or iced) or hot chocolate included","tea.inc.classique":"Coffee, tea or hot chocolate included","tea.inc.gourmand":"A glass of bubbles each, plus hot or iced tea or hot chocolate",
       "res.title":"Book a table","res.sub":"Book up to 60 days ahead for 1 to 8 people. We hold your table for 15 minutes.",
-      "res.date":"Date","res.guests":"Guests","res.big":"For 9 or more, please call us.","res.for":"What are you coming for?","for.cafe":"Coffee & parfaits","for.brunch":"Brunch (Saturday and Sunday)",
+      "res.date":"Date","res.guests":"Guests","res.big":"For 9 or more, please call us on +261 36 08 266 88.","res.for":"What are you coming for?","for.cafe":"Coffee & parfaits","for.brunch":"Brunch (Saturday and Sunday)",
       "res.time":"Time","res.seat":"Seating","seat.table":"Table","seat.table.d":"Inside","seat.booth":"Booth","seat.booth.d":"Cushioned seating","seat.outside":"Outside","seat.outside.d":"On the terrace","seat.any":"No preference","seat.any.d":"First available",
       "res.name":"Name","res.phone":"Mobile number","res.email":"Email",optional:"optional","res.notes":"Notes","res.notesHint":"allergies, a birthday, a high chair","res.submit":"Book table",
       "res.closed":"We're closed that day. Choose another date.","res.nomore":"No more times today. Choose another date.","res.brunchOnly":"Brunch is only served on Saturday and Sunday. Choose a weekend date.",
@@ -1020,7 +1028,7 @@ summary.grp-head{list-style:none}
       "aside.title":"Before you visit","aside.1":"Without a booking, we'll seat you as soon as a table is free.","aside.2":"Brunch is served on Saturdays and Sundays from 11:30 am to 4 pm.","aside.3":"To change a booking, call us with your reference.",
       "skip.title":"Skip the wait","skip.body":"Order ahead and collect at the counter at the time you choose.","skip.btn":"Order for pickup",
       "closing.title":"A parfait, a coffee, and all the time you need.","closing.body":"Tables go quickly on weekends, so book ahead if you're coming with friends or for brunch.",
-      "foot.contact":"Contact","foot.hours":"Opening hours","foot.find":"Find us","foot.addr":"Address to come","foot.brunch":"Brunch: Saturdays and Sundays, 11:30 am – 4 pm","foot.legal":"Prices in ariary (Ar)",
+      "foot.contact":"Contact","foot.hours":"Opening hours","foot.find":"Find us","foot.addr":"Address to come","foot.brunch":"Brunch: Saturday 11:30 am – 4 pm, Sunday 11:30 am – 3 pm","foot.tea":"Afternoon tea: every day","tea.when":"Served every day, for two","foot.legal":"Prices in ariary (Ar)",
       copy:"Copy",copied:"Copied",selected:"Selected",
       "cart.title":"Your order","cart.checkout":"Pickup details","cart.placed":"Order placed","cart.empty":"Your order is empty. Add a parfait or a drink from the menu.","cart.browse":"Browse the menu",
       "cart.continue":"Choose a pickup time","cart.pickup":"Pickup time","cart.pickupHint":"Orders take about 20 minutes.","cart.name":"Name","cart.phone":"Mobile number","cart.phoneHint":"we'll let you know when it's ready",
@@ -1048,7 +1056,7 @@ summary.grp-head{list-style:none}
       add:"Ampio","pal.sub":"Gilasy kely hafangaroinao","pal.4":"Gilasy kely 4, tsiro 4 hosafidianao","pal.6":"Gilasy kely 6, tsiro 6 hosafidianao",
       "fondue.sub":"Iarahana mizara","fondue.d":"Gilasy kely folo (tsiro 5) atsoboka anaty saosy sôkôla, miaraka amin'ny voankazo isan-taona, cookies, waffles ary voanjo voatoto.",dinein:"Hohanina eo an-toerana ihany",
       "offers.title":"Aza diso","offers.sub":"Ireo zava-dehibe amin'ity herinandro ity ao amin'ny AISU.","offers.note":"Hiseho eto ny tolotra manokana",
-      "of.brunch.t":"Brunch","of.brunch.w":"Asabotsy sy Alahady, 11h30 – 16h00","of.brunch.b":"Mofomamy, sakafo iray hosafidianao, zava-pisotro mafana ary ranom-boankazo voafintina.",
+      "of.brunch.t":"Brunch","of.brunch.w":"Asabotsy 11h30 – 16h00, Alahady 11h30 – 15h00","of.brunch.b":"Mofomamy, sakafo iray hosafidianao, zava-pisotro mafana ary ranom-boankazo voafintina.",
       "of.tea.t":"Afternoon Tea","of.tea.w":"Isan'andro, ho an'olona 2","of.tea.b":"Safidy telo iarahana mizara, manomboka amin'ny Peppa Pig ka hatramin'ny Gourmand miaraka amin'ny divay mitsiranoka.",
       "of.soda.t":"Crème Soda","of.soda.w":"Isan'andro","of.soda.b":"Soda paoma mitsiranoka, gilasy vanily ary serizy, ilay fialamboly kely amin'ny tolakandro.",
       "of.from":"manomboka","of.on":"Izao","of.today":"Anio","of.weekend":"Amin'ity faran'ny herinandro ity","of.daily":"Isan'andro",
@@ -1056,12 +1064,12 @@ summary.grp-head{list-style:none}
       "tab.cafes":"Kafe","tab.matcha":"Matcha sy Dite","tab.jus":"Ranom-boankazo",
       hot:"Mafana",cold:"Mangatsiaka",glass:"Vera",pitcher:"Siny",
       "g.esp":"Espresso sy kilasika","g.latte":"Kafe latte","g.sans":"Tsy misy kafe","g.matcha":"Matcha voafantina","g.thes":"Dite mangatsiaka manokana","g.jus":"Ranom-boankazo sy smoothie","g.jus.sub":"Voafintina mangatsiaka, tsy misy siramamy fanampiny",
-      "brunch.eyebrow":"Aroso eo ambony latabatra","brunch.title":"Brunch sy Afternoon Tea","brunch.when":"Asabotsy sy Alahady, 11h30 – 16h00","brunch.inc":"Ahitana zava-pisotro mafana iray hosafidianao sy ranom-boankazo voafintina 20 cl.","brunch.book":"Hamandrika brunch",
+      "brunch.eyebrow":"Aroso eo ambony latabatra","brunch.title":"Brunch sy Afternoon Tea","brunch.when":"Asabotsy 11h30 – 16h00, Alahady 11h30 – 15h00","brunch.inc":"Ahitana zava-pisotro mafana iray hosafidianao sy ranom-boankazo voafintina 20 cl.","brunch.book":"Hamandrika brunch",
       "brunch.start":"Fanombohana","brunch.plates":"Sakafo hosafidianao","brunch.extra":"Fanampiny",sweet:"mamy",
       "tea.for2":"ho an'olona 2","tea.sal":"Masira","tea.suc":"Mamy","tea.book":"Hamandrika","tea.note":"Aroso eto an-toerana ny brunch sy ny afternoon tea. Mamandrika latabatra mba hahazoana antoka.",
       "tea.inc.peppa":"Tafiditra ny dite (mafana na mangatsiaka) na sôkôla mafana","tea.inc.classique":"Tafiditra ny kafe, dite na sôkôla mafana","tea.inc.gourmand":"Divay mitsiranoka iray isan'olona, miampy dite mafana na mangatsiaka na sôkôla mafana",
       "res.title":"Hamandrika latabatra","res.sub":"Afaka mamandrika hatramin'ny 60 andro mialoha ianao, ho an'olona 1 ka hatramin'ny 8. Tahirizinay mandritra ny 15 minitra ny latabatrao.",
-      "res.date":"Daty","res.guests":"Olona","res.big":"Raha olona 9 na mihoatra, antsoy izahay.","res.for":"Ho amin'ny inona?","for.cafe":"Kafe sy parfaits","for.brunch":"Brunch (Asabotsy sy Alahady)",
+      "res.date":"Daty","res.guests":"Olona","res.big":"Raha olona 9 na mihoatra, antsoy amin'ny +261 36 08 266 88 izahay.","res.for":"Ho amin'ny inona?","for.cafe":"Kafe sy parfaits","for.brunch":"Brunch (Asabotsy sy Alahady)",
       "res.time":"Ora","res.seat":"Toerana","seat.table":"Latabatra","seat.table.d":"Ao anatiny","seat.booth":"Seza lava","seat.booth.d":"Seza malemy","seat.outside":"Ivelany","seat.outside.d":"Eny an-kalamanjana","seat.any":"Na aiza na aiza","seat.any.d":"Izay malalaka voalohany",
       "res.name":"Anarana","res.phone":"Laharana finday","res.email":"Mailaka",optional:"tsy voatery","res.notes":"Fanamarihana","res.notesHint":"tsy fahazakana sakafo, fitsingerenan'ny andro nahaterahana, seza ho an'ny zaza","res.submit":"Hamandrika latabatra",
       "res.closed":"Mihidy izahay amin'io andro io. Misafidiana daty hafa.","res.nomore":"Tsy misy ora malalaka intsony anio. Misafidiana daty hafa.","res.brunchOnly":"Asabotsy sy Alahady ihany no misy brunch. Misafidiana faran'ny herinandro.",
@@ -1071,7 +1079,7 @@ summary.grp-head{list-style:none}
       "aside.title":"Alohan'ny hahatongavanao","aside.1":"Raha tsy nanao fandrihana ianao dia hampipetrahinay raha vao misy latabatra malalaka.","aside.2":"Aroso ny Asabotsy sy Alahady ny brunch, manomboka amin'ny 11h30 ka hatramin'ny 16h00.","aside.3":"Raha hanova fandrihana dia antsoy izahay ary omeo ny laharana fandrihana.",
       "skip.title":"Aza miandry","skip.body":"Manaova kaomandy mialoha ary alaivo eo amin'ny kesy amin'ny ora tianao.","skip.btn":"Kaomandy halaina",
       "closing.title":"Parfait iray, kafe iray, ary fotoana ampy ho anao.","closing.body":"Lany haingana ny latabatra amin'ny faran'ny herinandro, ka mamandrika mialoha raha hiaraka amin'ny namana na ho amin'ny brunch ianao.",
-      "foot.contact":"Fifandraisana","foot.hours":"Ora fisokafana","foot.find":"Toerana misy anay","foot.addr":"Ho fantatra tsy ho ela ny adiresy","foot.brunch":"Brunch: Asabotsy sy Alahady, 11h30 – 16h00","foot.legal":"Vidiny amin'ny ariary (Ar)",
+      "foot.contact":"Fifandraisana","foot.hours":"Ora fisokafana","foot.find":"Toerana misy anay","foot.addr":"Ho fantatra tsy ho ela ny adiresy","foot.brunch":"Brunch: Asabotsy 11h30 – 16h00, Alahady 11h30 – 15h00","foot.tea":"Afternoon tea: isan'andro","tea.when":"Aroso isan'andro, ho an'olona 2","foot.legal":"Vidiny amin'ny ariary (Ar)",
       copy:"Adikao",copied:"Voadika",selected:"Voafidy",
       "cart.title":"Ny kaomandinao","cart.checkout":"Fakana","cart.placed":"Voaray ny kaomandy","cart.empty":"Mbola foana ny kaomandinao. Misafidiana parfait na zava-pisotro ao amin'ny menio.","cart.browse":"Jereo ny menio",
       "cart.continue":"Misafidiana ora hakana","cart.pickup":"Ora hakana","cart.pickupHint":"Eo amin'ny 20 minitra eo ho eo ny fanomanana.","cart.name":"Anarana","cart.phone":"Laharana finday","cart.phoneHint":"hampahafantarinay anao rehefa vonona",
@@ -1089,7 +1097,7 @@ summary.grp-head{list-style:none}
   const MONTHS_MG = ['Janoary','Febroary','Martsa','Aprily','Mey','Jona','Jolay','Aogositra','Septambra','Oktobra','Novambra','Desambra'];
 
   /* ================= data from the AISU menus (assets/menu-data.js) ================= */
-  const {TZ, HOURS, BRUNCH, PARFAITS, CARTE, TEAS, EXTRA_ITEMS} = window.AISU_MENU;
+  const {TZ, HOURS, BRUNCH, brunchFor, PARFAITS, CARTE, TEAS, EXTRA_ITEMS} = window.AISU_MENU;
 
   /* ================= helpers ================= */
   const $ = s => document.querySelector(s);
@@ -1148,9 +1156,9 @@ summary.grp-head{list-style:none}
     else for(let i=1;i<=7;i++){ const d=(now.dow+i)%7; if(HOURS[d]){ msg=t('st.later',{d:i===1?t('tomorrow'):DAYS[lang][d].toLowerCase(),t:fmt(HOURS[d][0])}); break; } }
     $('#status').dataset.open=open; $('#statusText').textContent=msg;
     $('#hoursBody').innerHTML=[1,2,3,4,5,6,0].map(d=>{ const x=HOURS[d]; return `<tr class="${d===now.dow?'today':''}"><td>${DAYS[lang][d]}</td><td>${x?fmt(x[0])+' – '+fmt(x[1]):'—'}</td></tr>`; }).join('');
-    const weekend = now.dow===0||now.dow===6, brunchOn = weekend && now.mins>=BRUNCH[0] && now.mins<BRUNCH[1];
+    const bw = brunchFor(now.dow), weekend = !!bw, brunchOn = weekend && now.mins>=bw[0] && now.mins<bw[1], brunchLater = weekend && now.mins<bw[0];
     const offers = [
-      {fig:arBig(85000), t:'of.brunch.t', w:'of.brunch.w', b:'of.brunch.b', state: brunchOn ? ['on','of.on'] : weekend ? ['','of.today'] : ['','of.weekend']},
+      {fig:arBig(85000), t:'of.brunch.t', w:'of.brunch.w', b:'of.brunch.b', state: brunchOn ? ['on','of.on'] : brunchLater ? ['','of.today'] : ['','of.weekend']},
       {fig:`<small>${t('of.from')}</small> ${arBig(70000)}`, t:'of.tea.t', w:'of.tea.w', b:'of.tea.b', state:['','of.daily']},
       {fig:arBig(10000), t:'of.soda.t', w:'of.soda.w', b:'of.soda.b', state: open ? ['on','of.on'] : ['','of.daily']}
     ];
@@ -1336,7 +1344,7 @@ summary.grp-head{list-style:none}
   $('#partyPlus').addEventListener('click',()=>{party=Math.min(8,party+1);renderParty();renderSlots();});
   function windowFor(dow){
     const h=HOURS[dow]; if(!h) return null;
-    if(forIn.value==='brunch') return (dow===0||dow===6) ? [BRUNCH[0], BRUNCH[1]-60] : 'nobrunch';
+    if(forIn.value==='brunch'){ const b=brunchFor(dow); return b ? [b[0], b[1]-60] : 'nobrunch'; }
     return [h[0], h[1]-60];
   }
   function renderSlots(){

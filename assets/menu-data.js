@@ -2,9 +2,13 @@
    Change a price or item here and both update together. Prices are in ariary. */
 (function(){
   const TZ = 'Indian/Antananarivo';
-  // placeholder opening hours, minutes from midnight; brunch runs Sat & Sun 11:30–16:00 per the menu
-  const HOURS = { 0:[540,1260], 1:[540,1200], 2:[540,1200], 3:[540,1200], 4:[540,1200], 5:[540,1260], 6:[540,1260] };
+  // opening hours in minutes from midnight, keyed by day (0 = Sunday):
+  // Monday to Saturday 7:30 am – 6 pm, Sunday 9 am – 3 pm (confirmed by the café, October 2026)
+  const HOURS = { 0:[540,900], 1:[450,1080], 2:[450,1080], 3:[450,1080], 4:[450,1080], 5:[450,1080], 6:[450,1080] };
+  // brunch is Saturday and Sunday from 11:30, until 4 pm or closing time, whichever comes first,
+  // so it runs 11:30–16:00 on Saturday and 11:30–15:00 on Sunday; afternoon tea is served every day
   const BRUNCH = [690, 960];
+  const brunchFor = dow => (dow === 0 || dow === 6) && HOURS[dow] ? [BRUNCH[0], Math.min(BRUNCH[1], HOURS[dow][1])] : null;
 
   const PARFAITS = [
     {id:'p1',no:'01',name:'Miss Coco Cherry',img:'miss-coco-cherry',price:38000,
@@ -99,5 +103,5 @@
     }
     return null;
   }
-  window.AISU_MENU = Object.freeze({TZ, HOURS, BRUNCH, PARFAITS, CARTE, TEAS, EXTRA_ITEMS, itemFor});
+  window.AISU_MENU = Object.freeze({TZ, HOURS, BRUNCH, brunchFor, PARFAITS, CARTE, TEAS, EXTRA_ITEMS, itemFor});
 })();

@@ -71,6 +71,9 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--wine);bo
 .top-row .mark{font-size:20px}
 .clock{font-size:14px;opacity:.9;white-space:nowrap}
 .top-tools{margin-left:auto;display:flex;align-items:center;gap:8px}
+.top-tools{min-width:0}
+#alertBtn{min-width:0;flex:0 1 auto}
+#alertBtnText{overflow:hidden;text-overflow:ellipsis}
 .chipbtn{display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(255,255,255,.45);background:transparent;color:#fff;border-radius:999px;padding:6px 12px;font-size:13px;font-weight:600;cursor:pointer;min-height:38px;white-space:nowrap}
 .chipbtn[aria-pressed="true"]{background:#fff;color:var(--wine)}
 .chipbtn.alert-off{background:var(--gold);color:var(--ink);border-color:var(--gold)}
@@ -220,6 +223,16 @@ details.past summary{cursor:pointer;font-weight:600;color:var(--muted);padding:8
 .seg{display:inline-flex;background:var(--surface);box-shadow:0 0 0 1px var(--line);border-radius:999px;padding:4px}
 .seg button{border:0;background:none;border-radius:999px;padding:8px 14px;font-weight:600;cursor:pointer;min-height:38px}
 .seg button[aria-pressed="true"]{background:var(--wine);color:#fff}
+.langseg button{padding:6px 12px;min-height:34px;font-size:13px}
+.langwrap{position:relative}
+.langwrap .chipbtn{gap:5px}
+.langmenu{position:absolute;right:0;top:calc(100% + 8px);z-index:40;min-width:180px;background:var(--surface);color:var(--ink);border-radius:14px;padding:6px;box-shadow:0 0 0 1px var(--line),0 18px 36px -18px rgba(120,10,50,.5);display:grid;gap:2px}
+.langmenu[hidden]{display:none}
+.langmenu button{display:flex;align-items:center;gap:12px;border:0;background:none;border-radius:10px;padding:10px 12px;min-height:44px;font-size:15px;text-align:left;cursor:pointer;color:inherit}
+.langmenu button b{font-size:12px;letter-spacing:.06em;color:var(--muted);width:24px}
+.langmenu button:hover{background:var(--surface-2)}
+.langmenu button[aria-pressed="true"]{background:var(--wine);color:#fff}
+.langmenu button[aria-pressed="true"] b{color:rgba(255,255,255,.8)}
 .chart{background:var(--surface);border-radius:18px;padding:18px;box-shadow:0 0 0 1px var(--line)}
 .bars{display:flex;align-items:flex-end;gap:4px;height:160px;margin-top:10px}
 .bars div{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:4px;height:100%;min-width:0}
@@ -324,7 +337,7 @@ dialog::backdrop{background:rgba(58,14,34,.55)}
     <p class="msg ok" id="lOk" role="status" hidden></p>
     <button class="btn btn-fill" type="submit" id="lBtn" data-t="signin">Se connecter</button>
     <button class="linkbtn" type="button" id="lForgot" data-t="forgot">Mot de passe oublié ?</button>
-    <div class="row" style="justify-content:flex-end"><button class="linkbtn" type="button" data-lang-toggle>English</button></div>
+    <div class="seg langseg" role="group" aria-label="Langue" data-t-aria="lang.label" style="justify-self:center"><button type="button" data-set-lang="fr" lang="fr" aria-pressed="true">Français</button><button type="button" data-set-lang="en" lang="en" aria-pressed="false">English</button><button type="button" data-set-lang="mg" lang="mg" aria-pressed="false">Malagasy</button></div>
   </form>
 </section>
 
@@ -344,7 +357,7 @@ dialog::backdrop{background:rgba(58,14,34,.55)}
       <div class="top-tools">
         <button class="chipbtn" type="button" id="alertBtn"><svg><use href="#i-bell"/></svg><span id="alertBtnText"></span></button>
         <button class="chipbtn" type="button" id="searchBtn"><svg><use href="#i-search"/></svg><span class="lbl-wide" data-t="search">Rechercher</span></button>
-        <button class="chipbtn" type="button" data-lang-toggle>EN</button>
+        <div class="langwrap"><button class="chipbtn" type="button" id="langBtn" aria-haspopup="true" aria-expanded="false" aria-label="Langue" data-t-aria="lang.label"><span id="langCode">FR</span><svg viewBox="0 0 12 12" style="width:10px;height:10px" aria-hidden="true"><path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="langmenu" id="langMenu" hidden><button type="button" data-set-lang="fr" lang="fr"><b>FR</b>Français</button><button type="button" data-set-lang="en" lang="en"><b>EN</b>English</button><button type="button" data-set-lang="mg" lang="mg"><b>MG</b>Malagasy</button></div></div>
         <button class="chipbtn top-signout" type="button" data-signout><span data-t="signout.short">Quitter</span></button>
       </div>
     </div>
@@ -509,7 +522,7 @@ dialog::backdrop{background:rgba(58,14,34,.55)}
       <div class="panel" style="max-width:640px">
         <p data-t="team.body"></p>
         <div class="msg warn" id="teamShared"></div>
-        <form class="row" id="teamForm"><input type="email" id="teamIn" autocomplete="off" style="flex:1;min-width:200px" aria-label="E-mail"><select id="teamRole" style="width:auto" aria-label="Rôle"><option value="staff" data-t="role.staff">Équipe</option><option value="manager" data-t="role.manager">Responsable</option></select><button class="btn btn-fill" type="submit" data-t="add">Ajouter</button></form>
+        <form class="row" id="teamForm"><input type="email" id="teamIn" autocomplete="off" style="flex:1;min-width:200px" aria-label="E-mail"><select id="teamRole" style="width:auto" aria-label="Rôle" data-t-aria="role"><option value="staff" data-t="role.staff">Équipe</option><option value="manager" data-t="role.manager">Responsable</option></select><button class="btn btn-fill" type="submit" data-t="add">Ajouter</button></form>
         <p class="msg err" id="teamErr" role="alert" hidden></p>
         <ul class="team-list" id="teamList"></ul>
       </div>
@@ -519,7 +532,7 @@ dialog::backdrop{background:rgba(58,14,34,.55)}
 
 <!-- this device's alert settings: opened from the bell, for every role -->
 <dialog id="deviceDlg" aria-labelledby="deviceTitle">
-  <div class="dlg-head"><h2 id="deviceTitle" data-t="dev.title">Alertes sur cet appareil</h2><button class="dlg-x" type="button" data-close aria-label="Fermer">×</button></div>
+  <div class="dlg-head"><h2 id="deviceTitle" data-t="dev.title">Alertes sur cet appareil</h2><button class="dlg-x" type="button" data-close aria-label="Fermer" data-t-aria="close">×</button></div>
   <div class="dlg-body" id="devicePanel">
           <p data-t="dev.hint"></p>
           <label class="switch"><input type="checkbox" id="soundIn"><span class="track"></span><span data-t="dev.sound">Sonnerie</span></label>
@@ -554,7 +567,7 @@ dialog::backdrop{background:rgba(58,14,34,.55)}
 <!-- add or edit a booking -->
 <dialog id="resDlg" aria-labelledby="resDlgTitle">
   <form method="dialog" id="resForm" novalidate>
-    <div class="dlg-head"><h2 id="resDlgTitle"></h2><button class="dlg-x" type="button" data-close aria-label="Fermer">×</button></div>
+    <div class="dlg-head"><h2 id="resDlgTitle"></h2><button class="dlg-x" type="button" data-close aria-label="Fermer" data-t-aria="close">×</button></div>
     <div class="dlg-body">
       <div class="two" id="rfWho">
         <div class="field"><label for="rfName" data-t="f.name">Nom</label><input type="text" id="rfName" maxlength="80" autocomplete="off"></div>
@@ -581,7 +594,7 @@ dialog::backdrop{background:rgba(58,14,34,.55)}
 
 <!-- search -->
 <dialog id="searchDlg" aria-labelledby="searchTitle" style="max-width:min(980px,calc(100% - 24px))">
-  <div class="dlg-head"><h2 id="searchTitle" data-t="search">Rechercher</h2><button class="dlg-x" type="button" data-close aria-label="Fermer">×</button></div>
+  <div class="dlg-head"><h2 id="searchTitle" data-t="search">Rechercher</h2><button class="dlg-x" type="button" data-close aria-label="Fermer" data-t-aria="close">×</button></div>
   <div class="dlg-body">
     <input type="search" id="searchIn" autocomplete="off">
     <p class="hint" style="margin:0" data-t="search.hint"></p>

@@ -1,6 +1,6 @@
 # AISU Café & Parfaiteria
 
-The AISU website in French, English and Malagasy: the parfait collection, the full drinks menu, brunch and afternoon tea, pickup orders and table bookings, plus a private staff dashboard.
+The AISU website in French, English and Malagasy: the parfait collection, the full drinks menu, brunch and afternoon tea, pickup orders and table bookings, plus a private staff dashboard (also in French, English and Malagasy).
 
 ## What's where
 
