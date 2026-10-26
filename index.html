@@ -547,6 +547,23 @@ summary.grp-head{list-style:none}
 .opt.full{text-decoration:line-through;opacity:.45}
 .form-err{margin:0;padding:12px 14px;border-radius:12px;background:rgba(179,38,30,.08);color:var(--err);font-size:var(--t-sm)}
 .btn[aria-busy="true"]{opacity:.7;cursor:progress}
+/* ===== phone landing: picture first, buttons kept, words moved out of the first screen ===== */
+@media (max-width:760px){
+  .hero{position:relative;display:block;min-height:520px;max-height:880px;
+    height:calc(100vh - 60px - 68px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));
+    height:calc(100svh - 60px - 68px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))}
+  .hero .hero-art{position:absolute;inset:0;height:auto;max-height:none;aspect-ratio:auto}
+  .hero .arch{left:11%;right:11%;top:66px;bottom:150px}
+  .hero .hero-copy{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:space-between;gap:0;
+    padding:16px max(20px, env(safe-area-inset-right,0px)) 22px max(20px, env(safe-area-inset-left,0px));pointer-events:none}
+  .hero .hero-copy > *{pointer-events:auto}
+  .hero .tagline,.hero h1,.hero .lede{position:absolute;width:1px;height:1px;margin:0;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  .hero .status{align-self:flex-start;background:var(--paper);color:var(--wine);padding:7px 14px 7px 12px;border-radius:999px;box-shadow:0 8px 18px -12px rgba(80,0,30,.6)}
+  .hero .hero-ctas{display:grid;grid-template-columns:1fr;gap:10px}
+  .hero .hero-ctas .btn{min-height:50px}
+  .hero .hero-ctas .btn-fill{background:var(--paper);color:var(--wine);box-shadow:0 10px 24px -14px rgba(60,0,20,.7)}
+  .hero .hero-ctas .btn-ring{color:var(--paper);background:rgba(120,8,48,.25)}
+}
 .toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,160%);visibility:hidden;background:var(--wine);color:var(--paper);padding:8px 8px 8px 20px;border-radius:999px;display:flex;align-items:center;gap:16px;z-index:70;box-shadow:0 14px 30px -12px rgba(50,10,18,.5);transition:transform .25s ease, visibility 0s linear .25s;max-width:calc(100% - 40px);font-size:.9375rem}
 .toast.show{transform:translate(-50%,0);visibility:visible;transition:transform .25s ease}
 .toast button{background:var(--gold-lt);color:var(--wine-dk);border:0;border-radius:999px;padding:7px 14px;font-weight:600;cursor:pointer;white-space:nowrap}
@@ -744,7 +761,7 @@ summary.grp-head{list-style:none}
         <div class="card">
           <form id="reserveForm" novalidate>
             <div class="row">
-              <div class="field" id="f-date"><label for="r-date" data-i18n="res.date">Date</label><input type="date" id="r-date" required><span class="err" hidden></span></div>
+              <div class="field" id="f-date"><label for="r-date" data-i18n="res.date">Date</label><input type="date" id="r-date" required><span class="hint" id="brunchNote" role="status" hidden></span><span class="err" hidden></span></div>
               <div class="field">
                 <span class="label" id="party-label" data-i18n="res.guests">Personnes</span>
                 <div class="stepper" role="group" aria-labelledby="party-label">
@@ -899,6 +916,7 @@ summary.grp-head{list-style:none}
   /* ================= translations ================= */
   const I18N = {
     fr:{
+      "res.brunchMoved":"Le brunch est servi le week-end : nous avons choisi le {d}.",
       "send.sending":"Envoi…","err.full":"Ce créneau vient d'être complet. Choisissez une autre heure.","err.resOffline":"Nous n'avons pas pu envoyer votre réservation. Vérifiez votre connexion et réessayez, ou appelez-nous.","err.resRefused":"Votre réservation n'a pas pu être enregistrée. Réessayez, ou appelez-nous.","err.orderOffline":"Nous n'avons pas pu envoyer votre commande. Vérifiez votre connexion et réessayez, ou appelez-nous.","err.orderRefused":"Votre commande n'a pas pu être enregistrée. Réessayez, ou appelez-nous.","err.paused":"Les commandes en ligne sont en pause pour le moment. Commandez au comptoir ou réessayez plus tard.","slot.full":"Complet","done.noteLive":"Nous gardons votre table 15 minutes. Pour modifier ou annuler, appelez-nous avec votre référence.","cart.live":"Gardez ce numéro : il vous sera demandé au comptoir.",
       "tb.label":"Raccourcis","tb.parfaits":"Parfaits","tb.menu":"Carte","tb.brunch":"Brunch","tb.book":"Réserver","tb.order":"Panier","col.layersShow":"Voir les couches","brunch.show":"Voir le menu du brunch","tea.show":"Ce qui est servi","g.avo":"Avocat & milkshake",
       "nav.home":"Accueil","nav.open":"Ouvrir le menu","nav.close":"Fermer le menu","nav.sections":"Sections",
@@ -948,6 +966,7 @@ summary.grp-head{list-style:none}
       guests1:"1 personne",guestsN:"{n} personnes"
     },
     en:{
+      "res.brunchMoved":"Brunch is served at weekends, so we've picked {d}.",
       "send.sending":"Sending…","err.full":"That time just filled up. Choose another time.","err.resOffline":"We couldn't send your booking. Check your connection and try again, or call us.","err.resRefused":"Your booking couldn't be saved. Try again, or call us.","err.orderOffline":"We couldn't send your order. Check your connection and try again, or call us.","err.orderRefused":"Your order couldn't be saved. Try again, or call us.","err.paused":"Online orders are paused right now. Order at the counter or try again later.","slot.full":"Full","done.noteLive":"We'll hold your table for 15 minutes. To change or cancel, call us with your reference.","cart.live":"Keep this number; we'll ask for it at the counter.",
       "tb.label":"Shortcuts","tb.parfaits":"Parfaits","tb.menu":"Menu","tb.brunch":"Brunch","tb.book":"Book","tb.order":"Order","col.layersShow":"See the layers","brunch.show":"See the brunch menu","tea.show":"What's on the tray","g.avo":"Avocado & milkshake",
       "nav.home":"Home","nav.open":"Open menu","nav.close":"Close menu","nav.sections":"Sections",
@@ -997,6 +1016,7 @@ summary.grp-head{list-style:none}
       guests1:"1 guest",guestsN:"{n} guests"
     },
     mg:{
+      "res.brunchMoved":"Amin'ny faran'ny herinandro ihany no misy brunch, ka nofidianay ny {d}.",
       "send.sending":"Mandefa…","err.full":"Feno ity ora ity. Misafidiana ora hafa.","err.resOffline":"Tsy lasa ny fandrihanao. Hamarino ny fifandraisana ary andramo indray, na antsoy izahay.","err.resRefused":"Tsy voatahiry ny fandrihanao. Andramo indray, na antsoy izahay.","err.orderOffline":"Tsy lasa ny kaomandinao. Hamarino ny fifandraisana ary andramo indray, na antsoy izahay.","err.orderRefused":"Tsy voatahiry ny kaomandinao. Andramo indray, na antsoy izahay.","err.paused":"Mijanona vonjimaika ny kaomandy an-tserasera. Manaova kaomandy eo amin'ny kesy na andramo indray afaka kelikely.","slot.full":"Feno","done.noteLive":"Tahirizinay mandritra ny 15 minitra ny latabatrao. Raha hanova na hanafoana dia antsoy izahay ary omeo ny laharana fandrihana.","cart.live":"Tehirizo ity laharana ity; hangatahina aminao eo amin'ny kesy izy.",
       "tb.label":"Hitsin-dalana","tb.parfaits":"Parfaits","tb.menu":"Menio","tb.brunch":"Brunch","tb.book":"Hamandrika","tb.order":"Kaomandy","col.layersShow":"Jereo ny sosona","brunch.show":"Jereo ny menio brunch","tea.show":"Izay aroso","g.avo":"Zavoka sy milkshake",
       "nav.home":"Fandraisana","nav.open":"Sokafy ny menio","nav.close":"Akatony ny menio","nav.sections":"Fizarana",
@@ -1175,7 +1195,7 @@ summary.grp-head{list-style:none}
     </article>`).join('');
     syncFolds(); setupDots($('#teaList'));
   }
-  document.addEventListener('click', e=>{ const a=e.target.closest('[data-reserve-for]'); if(!a) return; $('#r-for').value=a.dataset.reserveFor; renderSlots(); });
+  document.addEventListener('click', e=>{ const a=e.target.closest('[data-reserve-for]'); if(!a) return; $('#r-for').value=a.dataset.reserveFor; occasionChanged(); });
 
   /* ================= cart ================= */
   let cart=store.get('aisu-cart',[]), view='cart', lastOrder=null;
@@ -1303,8 +1323,27 @@ summary.grp-head{list-style:none}
   }
   function watchDay(){ const be=backend(); slotCounts={}; if(be && dateIn.value) be.watchSlots(dateIn.value, g=>{ slotCounts=g; renderSlots(); }); }
   window.addEventListener('aisu:backend', ()=>{ watchDay(); backend().onSettings(()=>{ renderSlots(); if(dlg.open && view==='checkout') renderCart(); }); });
-  dateIn.addEventListener('change',()=>{ setErr('f-date',''); watchDay(); renderSlots(); });
-  forIn.addEventListener('change',()=>{ setErr('f-time',''); renderSlots(); });
+  dateIn.addEventListener('change',()=>{ setErr('f-date',''); $('#brunchNote').hidden=true; watchDay(); renderSlots(); });
+
+  // Brunch is weekend-only: picking it moves a weekday date to the next Saturday or Sunday.
+  function occasionChanged(){
+    setErr('f-time','');
+    const note=$('#brunchNote'); note.hidden=true;
+    if(forIn.value==='brunch' && dateIn.value){
+      const dow=ymdToDate(dateIn.value).getDay();
+      if(dow!==0 && dow!==6){
+        let d=dateIn.value;
+        for(let i=0;i<7;i++){ d=addDays(d,1); const w=ymdToDate(d).getDay(); if(w===6||w===0) break; }
+        if(d<=dateIn.max){
+          dateIn.value=d; chosen=null;
+          if(typeof watchDay==='function') watchDay();
+          note.textContent=t('res.brunchMoved',{d:niceDate(d)}); note.hidden=false;
+        }
+      }
+    }
+    renderSlots();
+  }
+  forIn.addEventListener('change', occasionChanged);
   $('#slots').addEventListener('click',e=>{ const b=e.target.closest('[data-slot]'); if(!b||b.disabled) return; chosen=Number(b.dataset.slot); setErr('f-time',''); renderSlots(); const a=document.querySelector(`[data-slot="${chosen}"]`); if(a) a.focus(); });
   let booking=false;
   $('#reserveForm').addEventListener('submit',async e=>{
