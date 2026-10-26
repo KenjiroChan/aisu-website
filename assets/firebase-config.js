@@ -23,8 +23,9 @@ window.AISU_FIREBASE_CONFIG = {
   appId: "1:46502066456:web:36b11e9ad81e85eff7066d"
 };
 
-/* Spam protection (Firebase App Check with reCAPTCHA v3), off while this is empty.
-   To switch it on: create a reCAPTCHA v3 key for the site's address, register it in Firebase → App Check,
-   paste the SITE key (never the secret key) here, and only after a few days of traffic showing as verified,
-   press Enforce for Cloud Firestore. The website and the staff dashboard both read this. */
+/* Spam protection (Firebase App Check with reCAPTCHA Enterprise, free on the Spark plan), off while empty.
+   To switch it on: create a score-based Web key in Google Cloud console → Security → reCAPTCHA (for the
+   site's real address, never localhost), register it in Firebase → Security → App Check → Apps, paste the
+   KEY ID here, and only after a few days of traffic showing as verified, press Enforce for Cloud Firestore.
+   The website and the staff dashboard both read this. */
 window.AISU_APPCHECK_SITE_KEY = '';

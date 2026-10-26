@@ -3,7 +3,7 @@
    settings that change the public site straight away, and alerts that keep ringing until someone answers.
    Menu prices come from ../assets/menu-data.js, so totals never come from the customer's phone. */
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
-import { initializeAppCheck, ReCaptchaV3Provider } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app-check.js';
+import { initializeAppCheck, ReCaptchaEnterpriseProvider } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app-check.js';
 import {
   getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut, sendPasswordResetEmail,
   setPersistence, browserLocalPersistence, browserSessionPersistence
@@ -301,7 +301,7 @@ const firstName = em => { const l = String(em || '').split('@')[0]; return l.inc
 /* ---------------- Firebase ---------------- */
 const app = initializeApp(window.AISU_FIREBASE_CONFIG);
 if(window.AISU_APPCHECK_SITE_KEY){
-  try{ initializeAppCheck(app, {provider: new ReCaptchaV3Provider(window.AISU_APPCHECK_SITE_KEY), isTokenAutoRefreshEnabled: true}); }catch(e){}
+  try{ initializeAppCheck(app, {provider: new ReCaptchaEnterpriseProvider(window.AISU_APPCHECK_SITE_KEY), isTokenAutoRefreshEnabled: true}); }catch(e){}
 }
 const auth = getAuth(app);
 const db = getFirestore(app);
