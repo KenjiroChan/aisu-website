@@ -550,8 +550,8 @@ summary.grp-head{list-style:none}
 /* ===== phone landing: picture first, buttons kept, words moved out of the first screen ===== */
 @media (max-width:760px){
   .hero{position:relative;display:block;min-height:520px;max-height:880px;
-    height:calc(100vh - 60px - 68px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));
-    height:calc(100svh - 60px - 68px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))}
+    height:calc(100vh - 60px - 68px - var(--notice-h,0px) - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));
+    height:calc(100svh - 60px - 68px - var(--notice-h,0px) - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))}
   .hero .hero-art{position:absolute;inset:0;height:auto;max-height:none;aspect-ratio:auto}
   .hero .arch{left:11%;right:11%;top:66px;bottom:150px}
   .hero .hero-copy{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:space-between;gap:0;
@@ -564,6 +564,16 @@ summary.grp-head{list-style:none}
   .hero .hero-ctas .btn-fill{background:var(--paper);color:var(--wine);box-shadow:0 10px 24px -14px rgba(60,0,20,.7)}
   .hero .hero-ctas .btn-ring{color:var(--paper);background:rgba(120,8,48,.25)}
 }
+/* ===== staff controls: notice, sold out ===== */
+.site-notice{background:var(--paper);color:var(--wine);border-bottom:1px solid var(--line);font-size:var(--t-sm);line-height:1.45}
+.site-notice .wrap{display:flex;gap:10px;align-items:flex-start;padding-top:10px;padding-bottom:10px}
+.site-notice svg{width:16px;height:16px;flex:none;margin-top:2px}
+.site-notice p{margin:0;flex:1}
+.is-sold{opacity:.45;text-decoration:line-through;cursor:not-allowed!important}
+.p.is-sold:hover{background:none;color:inherit}
+.so-tag{display:inline-block;margin-left:6px;padding:1px 8px;border-radius:999px;background:var(--wine);color:var(--paper);font-size:.72rem;font-weight:600;letter-spacing:.02em;text-decoration:none;vertical-align:1px}
+.line.sold .line-name,.line.sold .price{opacity:.5}
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 .toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,160%);visibility:hidden;background:var(--wine);color:var(--paper);padding:8px 8px 8px 20px;border-radius:999px;display:flex;align-items:center;gap:16px;z-index:70;box-shadow:0 14px 30px -12px rgba(50,10,18,.5);transition:transform .25s ease, visibility 0s linear .25s;max-width:calc(100% - 40px);font-size:.9375rem}
 .toast.show{transform:translate(-50%,0);visibility:visible;transition:transform .25s ease}
 .toast button{background:var(--gold-lt);color:var(--wine-dk);border:0;border-radius:999px;padding:7px 14px;font-weight:600;cursor:pointer;white-space:nowrap}
@@ -575,6 +585,8 @@ summary.grp-head{list-style:none}
   <symbol id="heart" viewBox="0 0 24 24"><path d="M12 20.5s-7.5-4.6-9.3-9.4C1.4 7.6 3.6 4.5 6.8 4.5c2.1 0 3.6 1.2 5.2 3.1 1.6-1.9 3.1-3.1 5.2-3.1 3.2 0 5.4 3.1 4.1 6.6-1.8 4.8-9.3 9.4-9.3 9.4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
   <symbol id="heart-f" viewBox="0 0 24 24"><path d="M12 20.5s-7.5-4.6-9.3-9.4C1.4 7.6 3.6 4.5 6.8 4.5c2.1 0 3.6 1.2 5.2 3.1 1.6-1.9 3.1-3.1 5.2-3.1 3.2 0 5.4 3.1 4.1 6.6-1.8 4.8-9.3 9.4-9.3 9.4z" fill="currentColor"/></symbol>
 </svg>
+
+<div class="site-notice" id="siteNotice" role="status" hidden><div class="wrap"><svg aria-hidden="true"><use href="#heart-f"/></svg><p><span class="sr-only" data-i18n="notice.label">Info du café</span> <span id="siteNoticeText"></span></p></div></div>
 
 <header class="nav">
   <div class="wrap">
@@ -916,6 +928,7 @@ summary.grp-head{list-style:none}
   /* ================= translations ================= */
   const I18N = {
     fr:{
+      "so.tag":"Épuisé","so.toast":"{x} est épuisé pour le moment.","so.cart":"Certains articles sont épuisés. Retirez-les pour continuer.","res.paused":"Les réservations en ligne sont en pause pour le moment. Appelez-nous pour réserver.","err.closed":"Le café est fermé ce jour-là. Choisissez une autre date.","notice.label":"Info du café",
       "res.brunchMoved":"Le brunch est servi le week-end : nous avons choisi le {d}.",
       "send.sending":"Envoi…","err.full":"Ce créneau vient d'être complet. Choisissez une autre heure.","err.resOffline":"Nous n'avons pas pu envoyer votre réservation. Vérifiez votre connexion et réessayez, ou appelez-nous.","err.resRefused":"Votre réservation n'a pas pu être enregistrée. Réessayez, ou appelez-nous.","err.orderOffline":"Nous n'avons pas pu envoyer votre commande. Vérifiez votre connexion et réessayez, ou appelez-nous.","err.orderRefused":"Votre commande n'a pas pu être enregistrée. Réessayez, ou appelez-nous.","err.paused":"Les commandes en ligne sont en pause pour le moment. Commandez au comptoir ou réessayez plus tard.","slot.full":"Complet","done.noteLive":"Nous gardons votre table 15 minutes. Pour modifier ou annuler, appelez-nous avec votre référence.","cart.live":"Gardez ce numéro : il vous sera demandé au comptoir.",
       "tb.label":"Raccourcis","tb.parfaits":"Parfaits","tb.menu":"Carte","tb.brunch":"Brunch","tb.book":"Réserver","tb.order":"Panier","col.layersShow":"Voir les couches","brunch.show":"Voir le menu du brunch","tea.show":"Ce qui est servi","g.avo":"Avocat & milkshake",
@@ -966,6 +979,7 @@ summary.grp-head{list-style:none}
       guests1:"1 personne",guestsN:"{n} personnes"
     },
     en:{
+      "so.tag":"Sold out","so.toast":"{x} is sold out right now.","so.cart":"Some items are sold out. Remove them to continue.","res.paused":"Online booking is paused right now. Call us to book.","err.closed":"The café is closed that day. Choose another date.","notice.label":"Café notice",
       "res.brunchMoved":"Brunch is served at weekends, so we've picked {d}.",
       "send.sending":"Sending…","err.full":"That time just filled up. Choose another time.","err.resOffline":"We couldn't send your booking. Check your connection and try again, or call us.","err.resRefused":"Your booking couldn't be saved. Try again, or call us.","err.orderOffline":"We couldn't send your order. Check your connection and try again, or call us.","err.orderRefused":"Your order couldn't be saved. Try again, or call us.","err.paused":"Online orders are paused right now. Order at the counter or try again later.","slot.full":"Full","done.noteLive":"We'll hold your table for 15 minutes. To change or cancel, call us with your reference.","cart.live":"Keep this number; we'll ask for it at the counter.",
       "tb.label":"Shortcuts","tb.parfaits":"Parfaits","tb.menu":"Menu","tb.brunch":"Brunch","tb.book":"Book","tb.order":"Order","col.layersShow":"See the layers","brunch.show":"See the brunch menu","tea.show":"What's on the tray","g.avo":"Avocado & milkshake",
@@ -1016,6 +1030,7 @@ summary.grp-head{list-style:none}
       guests1:"1 guest",guestsN:"{n} guests"
     },
     mg:{
+      "so.tag":"Lany","so.toast":"Lany aloha ny {x}.","so.cart":"Misy zavatra lany. Esory ireo vao manohy.","res.paused":"Mijanona vonjimaika ny fandrihana an-tserasera. Antsoy izahay raha hamandrika.","err.closed":"Mihidy ny kafe amin'io andro io. Misafidiana daty hafa.","notice.label":"Filazana avy amin'ny kafe",
       "res.brunchMoved":"Amin'ny faran'ny herinandro ihany no misy brunch, ka nofidianay ny {d}.",
       "send.sending":"Mandefa…","err.full":"Feno ity ora ity. Misafidiana ora hafa.","err.resOffline":"Tsy lasa ny fandrihanao. Hamarino ny fifandraisana ary andramo indray, na antsoy izahay.","err.resRefused":"Tsy voatahiry ny fandrihanao. Andramo indray, na antsoy izahay.","err.orderOffline":"Tsy lasa ny kaomandinao. Hamarino ny fifandraisana ary andramo indray, na antsoy izahay.","err.orderRefused":"Tsy voatahiry ny kaomandinao. Andramo indray, na antsoy izahay.","err.paused":"Mijanona vonjimaika ny kaomandy an-tserasera. Manaova kaomandy eo amin'ny kesy na andramo indray afaka kelikely.","slot.full":"Feno","done.noteLive":"Tahirizinay mandritra ny 15 minitra ny latabatrao. Raha hanova na hanafoana dia antsoy izahay ary omeo ny laharana fandrihana.","cart.live":"Tehirizo ity laharana ity; hangatahina aminao eo amin'ny kesy izy.",
       "tb.label":"Hitsin-dalana","tb.parfaits":"Parfaits","tb.menu":"Menio","tb.brunch":"Brunch","tb.book":"Hamandrika","tb.order":"Kaomandy","col.layersShow":"Jereo ny sosona","brunch.show":"Jereo ny menio brunch","tea.show":"Izay aroso","g.avo":"Zavoka sy milkshake",
@@ -1152,7 +1167,7 @@ summary.grp-head{list-style:none}
     if(animate && !matchMedia('(prefers-reduced-motion: reduce)').matches){ img.classList.add('swap'); setTimeout(set,180); } else set();
     $('#pNo').textContent = 'No. '+p.no; $('#pName').textContent = p.name; $('#pFlav').textContent = p.flav[lang];
     $('#pLayers').innerHTML = p.layers.map(l=>`<li>${heartSm}<span lang="fr">${esc(l)}</span></li>`).join('');
-    $('#pPrice').innerHTML = arBig(p.price);
+    $('#pPrice').innerHTML = arBig(p.price); markSold($('#pAdd'), p.id);
     $('#thumbs').innerHTML = PARFAITS.map((q,i)=>`<button type="button" class="thumb" data-parfait="${i}" aria-pressed="${i===current}"><img src="img/${q.img}.webp" alt="" loading="lazy"><span>${q.name}</span></button>`).join('');
   }
   $('#thumbs').addEventListener('click', e=>{ const b=e.target.closest('[data-parfait]'); if(!b) return; current=Number(b.dataset.parfait); renderParfait(true); });
@@ -1165,9 +1180,9 @@ summary.grp-head{list-style:none}
     $('#carteCols').innerHTML = CARTE[tab].map((grp,gi)=>`<details class="grp" data-fold ${gi===0?'data-fold-open':''} open>
       <summary class="grp-head"><h3>${grp.g?t(grp.g):'&nbsp;'}</h3><span>${t(grp.cols[0])}</span><span>${t(grp.cols[1])}</span></summary>
       ${grp.sub?`<p class="grp-sub">${t(grp.sub)}</p>`:''}
-      ${grp.items.map((it,ii)=>{ const note = it[3] ? (it[3][lang]||it[3].fr) : '';
-        const cell = (price,ci) => price==null ? '<span class="p-none">—</span>' : `<button type="button" class="p" data-drink="${tab}|${gi}|${ii}|${ci}" aria-label="${t('add')} ${esc(it[0])}, ${t(grp.cols[ci])}, ${ar(price)}">${ar(price).replace(' Ar','')}</button>`;
-        return `<div class="drink"><div><b>${esc(it[0])}</b>${note?`<small>${esc(note)}</small>`:''}</div>${cell(it[1],0)}${cell(it[2],1)}</div>`; }).join('')}
+      ${grp.items.map((it,ii)=>{ const note = it[3] ? (it[3][lang]||it[3].fr) : ''; const sold = isSold(`${tab}-${gi}-${ii}`);
+        const cell = (price,ci) => price==null ? '<span class="p-none">—</span>' : `<button type="button" class="p${sold?' is-sold':''}" data-drink="${tab}|${gi}|${ii}|${ci}" ${sold?'aria-disabled="true"':''} aria-label="${t('add')} ${esc(it[0])}, ${t(grp.cols[ci])}, ${ar(price)}${sold?', '+t('so.tag'):''}">${ar(price).replace(' Ar','')}</button>`;
+        return `<div class="drink"><div><b>${esc(it[0])}</b>${sold?`<span class="so-tag">${t('so.tag')}</span>`:''}${note?`<small>${esc(note)}</small>`:''}</div>${cell(it[1],0)}${cell(it[2],1)}</div>`; }).join('')}
     </details>`).join('');
     syncFolds();
     document.querySelectorAll('[data-tab]').forEach(b=>{ const s=b.dataset.tab===tab; b.setAttribute('aria-selected',s); b.tabIndex=s?0:-1; });
@@ -1197,19 +1212,34 @@ summary.grp-head{list-style:none}
   }
   document.addEventListener('click', e=>{ const a=e.target.closest('[data-reserve-for]'); if(!a) return; $('#r-for').value=a.dataset.reserveFor; occasionChanged(); });
 
+  /* ================= staff controls (settings/main) ================= */
+  const liveSettings = () => (window.aisuBackend ? window.aisuBackend.settings() : {});
+  const soldKey = k => String(k).replace(/^((?:cafes|matcha|jus)-\d+-\d+)-[01]$/, '$1');
+  const isSold = k => !!(liveSettings().soldOut || {})[soldKey(k)];
+  const isClosedDay = d => (liveSettings().closedDays || []).includes(d);
+  function renderNotice(){
+    const n = String(liveSettings().notice || '').trim(), box = $('#siteNotice');
+    $('#siteNoticeText').textContent = n; box.hidden = !n;
+    document.documentElement.style.setProperty('--notice-h', n ? box.offsetHeight + 'px' : '0px');
+  }
+  function markSold(btn, key){
+    const s = isSold(key); btn.classList.toggle('is-sold', s); btn.setAttribute('aria-disabled', s ? 'true' : 'false');
+    if(btn.dataset.i18n){ btn.textContent = s ? t('so.tag') : t(btn.dataset.i18n); }
+  }
+
   /* ================= cart ================= */
   let cart=store.get('aisu-cart',[]), view='cart', lastOrder=null;
   const dlg=$('#cart');
   const lineName = l => l.colKey ? `${l.name} (${t(l.colKey).toLowerCase()})` : l.name;
   function saveCart(){ store.set('aisu-cart',cart); const c=cart.reduce((a,l)=>a+l.qty,0); document.querySelectorAll('.cart-count').forEach(el=>{ el.textContent=c; el.dataset.n=c; }); }
-  function addToCart(item){ const f=cart.find(l=>l.key===item.key); if(f) f.qty++; else cart.push({...item,qty:1}); saveCart(); showToast(t('cart.added',{x:lineName(item)})); if(dlg.open) renderCart(); }
+  function addToCart(item){ if(isSold(item.key)){ showToast(t('so.toast',{x:item.name}), true); return; } const f=cart.find(l=>l.key===item.key); if(f) f.qty++; else cart.push({...item,qty:1}); saveCart(); showToast(t('cart.added',{x:lineName(item)})); if(dlg.open) renderCart(); }
   const total = () => cart.reduce((a,l)=>a+l.price*l.qty,0);
   function pickupSlots(){
     const now=cafeNow(), out=[];
     for(let i=0;i<7&&!out.length;i++){ const d=(now.dow+i)%7, h=HOURS[d]; if(!h) continue;
       let start=i===0?Math.max(h[0],now.mins+20):h[0]+15; start=Math.ceil(start/15)*15;
       const label=i===0?t('Today'):i===1?t('Tomorrow'):DAYS[lang][d];
-      const day=addDays(now.ymd,i);
+      const day=addDays(now.ymd,i); if(isClosedDay(day)) continue;
       for(let m=start;m<=h[1]-15;m+=15) out.push({label, time:fmt(m), day, mins:m}); }
     return out;
   }
@@ -1229,11 +1259,12 @@ summary.grp-head{list-style:none}
     foot.hidden=false;
     const tot=`<div class="totals"><div class="grand"><span>${t('cart.total')}</span><span>${ar(total())}</span></div></div>`;
     if(view==='cart'){
-      body.innerHTML=cart.map((l,i)=>`<div class="line"><div class="art">${l.img?`<img src="img/${l.img}.webp" alt="">`:'<svg><use href="#heart-f"/></svg>'}</div>
-        <div style="min-width:0"><div class="line-name">${esc(lineName(l))}</div>
+      const anySold = cart.some(l=>isSold(l.key));
+      body.innerHTML=cart.map((l,i)=>`<div class="line${isSold(l.key)?' sold':''}"><div class="art">${l.img?`<img src="img/${l.img}.webp" alt="">`:'<svg><use href="#heart-f"/></svg>'}</div>
+        <div style="min-width:0"><div class="line-name">${esc(lineName(l))}${isSold(l.key)?`<span class="so-tag">${t('so.tag')}</span>`:''}</div>
         <div class="qty"><button type="button" data-q="${i}" data-d="-1" aria-label="−1 ${esc(l.name)}">−</button><span>${l.qty}</span><button type="button" data-q="${i}" data-d="1" aria-label="+1 ${esc(l.name)}">+</button></div></div>
         <span class="price">${ar(l.price*l.qty)}</span></div>`).join('');
-      foot.innerHTML=tot+`<button class="btn btn-fill" type="button" id="toCheckout">${t('cart.continue')}</button>`;
+      foot.innerHTML=tot+(anySold?`<p class="form-err" role="alert" style="margin-bottom:10px">${t('so.cart')}</p>`:'')+`<button class="btn btn-fill" type="button" id="toCheckout" ${anySold?'disabled':''}>${t('cart.continue')}</button>`;
     } else {
       const slots=pickupSlots(), saved=store.get('aisu-contact',{});
       body.innerHTML=`<form id="checkoutForm" novalidate>
@@ -1266,6 +1297,7 @@ summary.grp-head{list-style:none}
     const name=$('#c-name').value.trim(), phone=$('#c-phone').value.trim(), notes=($('#c-notes').value||'').trim();
     setErr('c-name-f',name?'':t('cart.errName')); setErr('c-phone-f',phoneOk(phone)?'':t('cart.errPhone'));
     if(!name) return $('#c-name').focus(); if(!phoneOk(phone)) return $('#c-phone').focus();
+    if(cart.some(l=>isSold(l.key))){ view='cart'; renderCart(); return; }
     store.set('aisu-contact',{name,phone});
     const o=$('#c-time').selectedOptions[0];
     const when = `${o.dataset.label.toLowerCase()} ${lang==='en'?'at':lang==='mg'?"amin'ny":'à'} ${o.dataset.time}`;
@@ -1280,7 +1312,7 @@ summary.grp-head{list-style:none}
       }catch(err){
         placing=false; btn.disabled=false; btn.removeAttribute('aria-busy'); btn.textContent=t('cart.place');
         const code=err&&err.code;
-        errEl.textContent = t(code==='aisu/paused'?'err.paused':code==='aisu/refused'?'err.orderRefused':'err.orderOffline'); errEl.hidden=false;
+        errEl.textContent = t(code==='aisu/paused'?'err.paused':code==='aisu/closed'?'err.closed':code==='aisu/refused'?'err.orderRefused':'err.orderOffline'); errEl.hidden=false;
         if(code==='aisu/paused') btn.disabled=true;
         return;
       }
@@ -1290,7 +1322,7 @@ summary.grp-head{list-style:none}
     cart=[]; saveCart(); view='done'; renderCart();
   }
   let toastTimer;
-  function showToast(m){ $('#toastText').textContent=m; $('#toast').classList.add('show'); clearTimeout(toastTimer); toastTimer=setTimeout(hideToast,3600); }
+  function showToast(m, plain){ $('#toastText').textContent=m; $('#toast [data-open-cart]').hidden=!!plain; $('#toast').classList.add('show'); clearTimeout(toastTimer); toastTimer=setTimeout(hideToast,3600); }
   function hideToast(){ $('#toast').classList.remove('show'); }
 
   /* ================= reservations ================= */
@@ -1310,6 +1342,9 @@ summary.grp-head{list-style:none}
   function renderSlots(){
     const box=$('#slots'), v=dateIn.value; if(!v){ box.innerHTML=''; $('#slotHint').textContent=''; return; }
     const now=cafeNow(), dow=ymdToDate(v).getDay(), w=windowFor(dow);
+    const resBtn=$('#reserveForm button[type=submit]'); if(!booking) resBtn.disabled=!!liveSettings().bookingsPaused;
+    if(liveSettings().bookingsPaused){ box.innerHTML=`<p class="form-err" role="alert">${t('res.paused')}</p>`; chosen=null; $('#slotHint').textContent=''; return; }
+    if(isClosedDay(v)){ box.innerHTML=`<p class="fine">${t('res.closed')}</p>`; chosen=null; $('#slotHint').textContent=''; return; }
     if(w===null){ box.innerHTML=`<p class="fine">${t('res.closed')}</p>`; chosen=null; $('#slotHint').textContent=''; return; }
     if(w==='nobrunch'){ box.innerHTML=`<p class="fine">${t('res.brunchOnly')}</p>`; chosen=null; $('#slotHint').textContent=''; return; }
     const isToday=v===now.ymd; let html='', any=false;
@@ -1322,7 +1357,7 @@ summary.grp-head{list-style:none}
     $('#slotHint').textContent = `(${DAYS[lang][dow]}, ${fmt(w[0])} – ${fmt(w[1])})`;
   }
   function watchDay(){ const be=backend(); slotCounts={}; if(be && dateIn.value) be.watchSlots(dateIn.value, g=>{ slotCounts=g; renderSlots(); }); }
-  window.addEventListener('aisu:backend', ()=>{ watchDay(); backend().onSettings(()=>{ renderSlots(); if(dlg.open && view==='checkout') renderCart(); }); });
+  window.addEventListener('aisu:backend', ()=>{ watchDay(); backend().onSettings(()=>{ renderNotice(); renderSlots(); renderParfait(false); renderPCards(); renderCarte(); markExtras(); if(dlg.open) renderCart(); }); });
   dateIn.addEventListener('change',()=>{ setErr('f-date',''); $('#brunchNote').hidden=true; watchDay(); renderSlots(); });
 
   // Brunch is weekend-only: picking it moves a weekday date to the next Saturday or Sunday.
@@ -1372,10 +1407,11 @@ summary.grp-head{list-style:none}
       }catch(err){
         const code=err&&err.code;
         if(code==='aisu/full'){ setErr('f-time',t('err.full')); chosen=null; renderSlots(); }
+        else if(code==='aisu/paused'||code==='aisu/closed'){ renderSlots(); $('#resErr').textContent=t(code==='aisu/paused'?'res.paused':'err.closed'); $('#resErr').hidden=false; }
         else { $('#resErr').textContent=t(code==='aisu/refused'?'err.resRefused':'err.resOffline'); $('#resErr').hidden=false; }
         return;
       }finally{
-        booking=false; btn.disabled=false; btn.removeAttribute('aria-busy'); btn.textContent=t('res.submit');
+        booking=false; btn.disabled=!!liveSettings().bookingsPaused; btn.removeAttribute('aria-busy'); btn.textContent=t('res.submit');
       }
     }
     done.innerHTML=`<p class="fine">${t('done.ref')}</p><div class="ref">${bookingRef}</div>
@@ -1414,6 +1450,7 @@ summary.grp-head{list-style:none}
     });
   }
   document.addEventListener('click', e=>{ const s=e.target.closest('details[data-fold] > summary'); if(s && !mq.matches) e.preventDefault(); });
+  window.addEventListener('resize', ()=>{ if(!$('#siteNotice').hidden) document.documentElement.style.setProperty('--notice-h', $('#siteNotice').offsetHeight+'px'); });
   mq.addEventListener('change', ()=>{ syncFolds(true); document.querySelectorAll('.snap').forEach(setupDots); });
   function setupDots(el){
     let d = el.nextElementSibling;
@@ -1428,7 +1465,7 @@ summary.grp-head{list-style:none}
       <div class="pcard-img"><img src="img/${p.img}.webp" alt="${esc(p.name)}" loading="lazy"></div>
       <div class="pcard-body"><span class="no">No. ${p.no}</span><h3>${p.name}</h3><span class="flav">${p.flav[lang]}</span>
         <details class="m-fold"><summary><span>${t('col.layersShow')}</span></summary><ul class="layers">${p.layers.map(l=>`<li>${heartSm}<span lang="fr">${esc(l)}</span></li>`).join('')}</ul></details>
-        <div class="pcard-foot"><span class="big-price">${arBig(p.price)}</span><button class="btn btn-fill" type="button" data-padd="${i}">${t('add')}</button></div>
+        <div class="pcard-foot"><span class="big-price">${arBig(p.price)}</span><button class="btn btn-fill${isSold(p.id)?' is-sold':''}" type="button" data-padd="${i}" ${isSold(p.id)?'aria-disabled="true"':''}>${isSold(p.id)?t('so.tag'):t('add')}</button></div>
       </div></article>`).join('');
     setupDots($('#pCards'));
   }
@@ -1438,8 +1475,9 @@ summary.grp-head{list-style:none}
   const spy = new IntersectionObserver(es=>{ es.forEach(en=>{ if(en.isIntersecting){ const id=en.target.id; spyLinks.forEach(a=>a.classList.toggle('on', a.dataset.sec===id)); } }); }, {rootMargin:'-45% 0px -50% 0px'});
   document.querySelectorAll('.hero, #parfaits, #offers, #carte, #brunch, #reserve, .closing, footer').forEach(s=>spy.observe(s));
 
+  function markExtras(){ document.querySelectorAll('[data-add]').forEach(b=>markSold(b, b.dataset.add)); }
   function renderAll(){
-    applyStatic(); renderStatus(); renderParfait(false); renderPCards(); renderCarte(); renderTeas(); renderParty(); renderSlots(); saveCart();
+    applyStatic(); renderNotice(); markExtras(); renderStatus(); renderParfait(false); renderPCards(); renderCarte(); renderTeas(); renderParty(); renderSlots(); saveCart();
     syncFolds();
     if(dlg.open) renderCart();
     if(!$('#reserveDone').hidden){ /* keep confirmation as written */ }

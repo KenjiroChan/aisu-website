@@ -9,7 +9,7 @@ import {
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 const cfg = window.AISU_FIREBASE_CONFIG;
-const DEFAULTS = { capacity: 20, ordersPaused: false };   // must match the defaults in firestore.rules
+const DEFAULTS = { capacity: 20, ordersPaused: false, bookingsPaused: false, closedDays: [], notice: '', soldOut: {}, alertTopic: '' };   // must match the defaults in firestore.rules
 const TIMEOUT_MS = 20000;
 
 function failure(code, cause){ const e = new Error(code); e.code = code; e.cause = cause; return e; }
@@ -22,6 +22,24 @@ function mapError(err){
   if(c === 'permission-denied') return failure('aisu/refused', err);
   if(c === 'unavailable' || c === 'deadline-exceeded') return failure('aisu/offline', err);
   return failure('aisu/unknown', err);
+}
+
+/* Optional phone alerts: when staff set an alert channel in the dashboard (Settings → Phone alerts),
+   each new booking or order also rings the staff's phones through the free ntfy app (ntfy.sh).
+   The message carries only the reference, time and size: never a name or phone number. */
+function pingStaff(settings, title, message, tag){
+  const topic = String(settings.alertTopic || '');
+  if(!/^[A-Za-z0-9_-]{12,64}$/.test(topic)) return;
+  try{
+    fetch('https://ntfy.sh/', { method: 'POST', keepalive: true,
+      body: JSON.stringify({ topic, title, message, priority: 5, tags: [tag], click: location.origin + '/staff/' }) }).catch(() => {});
+  }catch(e){ /* alerts are best-effort */ }
+}
+const DOW_FR = ['dim.', 'lun.', 'mar.', 'mer.', 'jeu.', 'ven.', 'sam.'];
+function whenFr(day, mins){
+  const [y, m, d] = day.split('-').map(Number);
+  const dow = new Date(y, m - 1, d).getDay();
+  return `${DOW_FR[dow]} ${d}/${m} à ${Math.floor(mins / 60)}h${String(mins % 60).padStart(2, '0')}`;
 }
 
 if(cfg){
@@ -55,6 +73,8 @@ if(cfg){
       const resRef = doc(collection(db, 'reservations'));
       const slotRef = doc(db, 'slots', r.date);
       const key = String(r.time);
+      if(settings.bookingsPaused) throw failure('aisu/paused');
+      if((settings.closedDays || []).includes(r.date)) throw failure('aisu/closed');
       try{
         await withTimeout(runTransaction(db, async tx => {
           const snap = await tx.get(slotRef);
@@ -65,15 +85,23 @@ if(cfg){
           tx.set(slotRef, { g, last: resRef.id });
           tx.set(resRef, { ...r, status: 'new', createdAt: serverTimestamp() });
         }));
+        pingStaff(settings, 'Nouvelle réservation', `${r.ref} · ${whenFr(r.date, r.time)} · ${r.guests} pers.`, 'calendar');
         return resRef.id;
-      }catch(err){ throw mapError(err); }
+      }catch(err){
+        const e = mapError(err);
+        if(e.code === 'aisu/refused' && settings.bookingsPaused) throw failure('aisu/paused', err);
+        throw e;
+      }
     },
 
     /* o = { ref, items:[{k, n, q}], pickupDay, pickupTime, name, phone, notes, lang } */
     async createOrder(o){
       if(settings.ordersPaused) throw failure('aisu/paused');
+      if((settings.closedDays || []).includes(o.pickupDay)) throw failure('aisu/closed');
       try{
         const ref = await withTimeout(addDoc(collection(db, 'orders'), { ...o, status: 'new', createdAt: serverTimestamp() }));
+        const n = o.items.reduce((a, l) => a + (l.q || 0), 0);
+        pingStaff(settings, 'Nouvelle commande', `${o.ref} · retrait ${whenFr(o.pickupDay, o.pickupTime)} · ${n} article${n > 1 ? 's' : ''}`, 'shopping_bags');
         return ref.id;
       }catch(err){
         const e = mapError(err);

@@ -3,10 +3,12 @@ rules_version = '2';
 // AISU Café & Parfaiteria: who can read and write what in the database.
 // Paste this whole file into Firebase console → Firestore Database → Rules, then press Publish.
 //
-// - Customers (no sign-in) can only ADD a booking or a pickup order, in the right shape.
-//   They can see which half hours are full, but never anyone's name or phone number.
-// - Signed-in staff (listed in /staff, or the owner) can read bookings and orders and change their status.
-// - Only the owner account can manage the staff list and delete records.
+// - Customers (no sign-in) can only ADD a booking or a pickup order, in the right shape, and only
+//   while the café accepts them (not paused, not a closed date, half hour not full).
+//   They can see which half hours are full and the café settings, never anyone's name or phone.
+// - Signed-in staff (listed in /staff, or the owner) read bookings and orders, change their status,
+//   add bookings taken by phone or walk-ins, edit a booking (time, guests, table, note, contact), and change settings.
+// - Only the owner account manages the staff list and deletes records.
 
 service cloud.firestore {
   match /databases/{database}/documents {
@@ -36,39 +38,54 @@ service cloud.firestore {
     function settingsPath() {
       return /databases/$(database)/documents/settings/main;
     }
-    // Default capacity (20 guests per half hour) must match DEFAULTS in assets/backend.js.
+    // Defaults (20 guests per half hour, nothing paused, no closed dates) match DEFAULTS in assets/backend.js.
+    function setting(name, fallback) {
+      return exists(settingsPath()) ? get(settingsPath()).data.get(name, fallback) : fallback;
+    }
     function withinCapacity(n) {
-      return (!exists(settingsPath()) && n <= 20)
-        || (exists(settingsPath()) && n <= get(settingsPath()).data.capacity);
+      return n <= setting('capacity', 20);
     }
-    function ordersOpen() {
-      return !exists(settingsPath())
-        || get(settingsPath()).data.get('ordersPaused', false) == false;
+    function bookingsOpen(day) {
+      return setting('bookingsPaused', false) == false && !(day in setting('closedDays', []));
     }
-    function onlyStatusChanged(allowed) {
-      return request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'statusAt', 'statusBy'])
-        && request.resource.data.status in allowed;
+    function ordersOpen(day) {
+      return setting('ordersPaused', false) == false && !(day in setting('closedDays', []));
     }
 
     // ---------- bookings ----------
-    function validReservation(r) {
-      return r.keys().hasAll(['ref', 'date', 'time', 'guests', 'occasion', 'seat', 'name', 'phone', 'email', 'notes', 'lang', 'status', 'createdAt'])
-        && r.keys().hasOnly(['ref', 'date', 'time', 'guests', 'occasion', 'seat', 'name', 'phone', 'email', 'notes', 'lang', 'status', 'createdAt'])
-        && text(r.ref, 9, 9)
+    function bookingShape(r) {
+      return text(r.ref, 9, 9)
         && isDay(r.date)
         && r.time is int && r.time >= 0 && r.time < 1440 && r.time % 30 == 0
-        && r.guests is int && r.guests >= 1 && r.guests <= 8
         && r.occasion in ['cafe', 'brunch', 'peppa', 'classique', 'gourmand']
         && r.seat in ['table', 'booth', 'outside', 'any']
         && text(r.name, 1, 80)
-        && text(r.phone, 6, 30)
+        && text(r.phone, 0, 30)
         && text(r.email, 0, 120)
         && text(r.notes, 0, 500)
         && r.lang in ['fr', 'en', 'mg']
-        && r.status == 'new'
         && r.createdAt == request.time;
     }
-    // A booking must be saved together with its half hour's guest count, and that count must stay
+    function validPublicReservation(r) {
+      return r.keys().hasAll(['ref', 'date', 'time', 'guests', 'occasion', 'seat', 'name', 'phone', 'email', 'notes', 'lang', 'status', 'createdAt'])
+        && r.keys().hasOnly(['ref', 'date', 'time', 'guests', 'occasion', 'seat', 'name', 'phone', 'email', 'notes', 'lang', 'status', 'createdAt'])
+        && bookingShape(r)
+        && text(r.phone, 6, 30)
+        && r.guests is int && r.guests >= 1 && r.guests <= 8
+        && r.status == 'new';
+    }
+    // Bookings staff take by phone or for walk-ins: bigger parties allowed, can start confirmed or seated.
+    function validStaffReservation(r) {
+      return r.keys().hasAll(['ref', 'date', 'time', 'guests', 'occasion', 'seat', 'name', 'phone', 'email', 'notes', 'lang', 'status', 'createdAt'])
+        && r.keys().hasOnly(['ref', 'date', 'time', 'guests', 'occasion', 'seat', 'name', 'phone', 'email', 'notes', 'lang', 'status', 'createdAt', 'source', 'table', 'staffNote', 'statusBy'])
+        && bookingShape(r)
+        && r.guests is int && r.guests >= 1 && r.guests <= 40
+        && r.status in ['new', 'confirmed', 'seated']
+        && r.get('source', 'staff') == 'staff'
+        && text(r.get('table', ''), 0, 20)
+        && text(r.get('staffNote', ''), 0, 300);
+    }
+    // A public booking must be saved together with its half hour's guest count, and that count must stay
     // within capacity. Both writes happen in one transaction from the website.
     function slotCountedFor(id, r) {
       let path = /databases/$(database)/documents/slots/$(r.date);
@@ -79,11 +96,27 @@ service cloud.firestore {
         && ((!exists(path) && after.g.get(key, 0) == r.guests)
           || (exists(path) && after.g.get(key, 0) == get(path).data.g.get(key, 0) + r.guests));
     }
+    function validStaffEdit() {
+      let d = request.resource.data;
+      return d.diff(resource.data).affectedKeys().hasOnly(['status', 'statusAt', 'statusBy', 'table', 'staffNote', 'date', 'time', 'guests', 'name', 'phone', 'occasion', 'seat'])
+        && d.status in ['new', 'confirmed', 'seated', 'noshow', 'cancelled']
+        && text(d.name, 1, 80) && text(d.phone, 0, 30)
+        && d.occasion in ['cafe', 'brunch', 'peppa', 'classique', 'gourmand']
+        && d.seat in ['table', 'booth', 'outside', 'any']
+        && isDay(d.date)
+        && d.time is int && d.time >= 0 && d.time < 1440 && d.time % 30 == 0
+        && d.guests is int && d.guests >= 1 && d.guests <= 40
+        && text(d.get('table', ''), 0, 20)
+        && text(d.get('staffNote', ''), 0, 300);
+    }
 
     match /reservations/{id} {
-      allow create: if validReservation(request.resource.data) && slotCountedFor(id, request.resource.data);
+      allow create: if (validPublicReservation(request.resource.data)
+                        && bookingsOpen(request.resource.data.date)
+                        && slotCountedFor(id, request.resource.data))
+                    || (isStaff() && validStaffReservation(request.resource.data));
       allow read: if isStaff();
-      allow update: if isStaff() && onlyStatusChanged(['new', 'confirmed', 'seated', 'noshow', 'cancelled']);
+      allow update: if isStaff() && validStaffEdit();
       allow delete: if isOwner();
     }
 
@@ -135,20 +168,28 @@ service cloud.firestore {
     }
 
     match /orders/{id} {
-      allow create: if ordersOpen() && validOrder(request.resource.data);
+      allow create: if validOrder(request.resource.data) && ordersOpen(request.resource.data.pickupDay);
       allow read: if isStaff();
-      allow update: if isStaff() && onlyStatusChanged(['new', 'preparing', 'ready', 'collected', 'cancelled']);
+      allow update: if isStaff()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'statusAt', 'statusBy'])
+        && request.resource.data.status in ['new', 'preparing', 'ready', 'collected', 'cancelled'];
       allow delete: if isOwner();
     }
 
-    // ---------- café settings (capacity, pause online orders) ----------
+    // ---------- café settings ----------
+    function validSettings(d) {
+      return d.keys().hasOnly(['capacity', 'ordersPaused', 'bookingsPaused', 'closedDays', 'notice', 'soldOut', 'alertTopic', 'updatedAt', 'updatedBy'])
+        && d.get('capacity', 20) is int && d.get('capacity', 20) >= 1 && d.get('capacity', 20) <= 200
+        && d.get('ordersPaused', false) is bool
+        && d.get('bookingsPaused', false) is bool
+        && d.get('closedDays', []) is list && d.get('closedDays', []).size() <= 100
+        && text(d.get('notice', ''), 0, 200)
+        && d.get('soldOut', {}) is map && d.get('soldOut', {}).size() <= 300
+        && text(d.get('alertTopic', ''), 0, 64);
+    }
     match /settings/{name} {
       allow read: if true;
-      allow write: if isStaff() && name == 'main'
-        && request.resource.data.keys().hasOnly(['capacity', 'ordersPaused', 'updatedAt', 'updatedBy'])
-        && request.resource.data.capacity is int
-        && request.resource.data.capacity >= 1 && request.resource.data.capacity <= 200
-        && request.resource.data.ordersPaused is bool;
+      allow write: if isStaff() && name == 'main' && validSettings(request.resource.data);
     }
 
     // ---------- staff list (document id = the staff member's email, lower case) ----------
