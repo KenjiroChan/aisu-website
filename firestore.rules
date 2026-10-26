@@ -7,7 +7,8 @@ rules_version = '2';
 //   while the café accepts them (not paused, not a closed date, half hour not full).
 //   They can see which half hours are full and the café settings, never anyone's name or phone.
 // - Signed-in staff (listed in /staff, or the owner) read bookings and orders, change their status,
-//   add bookings taken by phone or walk-ins, edit a booking (time, guests, table, note, contact), and change settings.
+//   add bookings taken by phone or walk-ins, edit a booking (time, guests, table, note, contact) and mark items sold out.
+// - Managers (role 'manager' in /staff, or the owner) also change the café settings.
 // - Only the owner account manages the staff list and deletes records.
 
 service cloud.firestore {
@@ -26,6 +27,11 @@ service cloud.firestore {
     function isStaff() {
       return signedIn()
         && (isOwner() || exists(/databases/$(database)/documents/staff/$(myEmail())));
+    }
+    // Managers run the café's settings; the counter team (often one shared login) can only mark items sold out.
+    function isManager() {
+      return isOwner()
+        || (isStaff() && get(/databases/$(database)/documents/staff/$(myEmail())).data.get('role', 'staff') == 'manager');
     }
 
     // ---------- small helpers ----------
@@ -189,14 +195,18 @@ service cloud.firestore {
     }
     match /settings/{name} {
       allow read: if true;
-      allow write: if isStaff() && name == 'main' && validSettings(request.resource.data);
+      allow create: if isManager() && name == 'main' && validSettings(request.resource.data);
+      allow update: if name == 'main' && validSettings(request.resource.data)
+        && (isManager()
+          || (isStaff() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['soldOut', 'updatedAt', 'updatedBy'])));
     }
 
     // ---------- staff list (document id = the staff member's email, lower case) ----------
     match /staff/{email} {
       allow read: if isStaff();
       allow create, update: if isOwner() && email == email.lower()
-        && request.resource.data.keys().hasOnly(['addedAt', 'addedBy', 'name']);
+        && request.resource.data.keys().hasOnly(['addedAt', 'addedBy', 'name', 'role'])
+        && request.resource.data.get('role', 'staff') in ['staff', 'manager'];
       allow delete: if isOwner();
     }
   }

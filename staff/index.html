@@ -106,6 +106,10 @@ h3{margin:0;font-size:17px}
 .qcard .qt span{font-size:13px;color:var(--muted)}
 .qcard.off .qt span{color:var(--err);font-weight:600}
 .tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:16px}
+body.role-staff [data-mgr]{display:none!important}
+body.role-staff .tiles#todayTiles{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:900px){body.role-staff .tiles#todayTiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.lockhint{font-size:12px;color:var(--muted);margin-top:2px}
 @media (max-width:900px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .tile{border:0;text-align:left;cursor:pointer;background:var(--surface);border-radius:18px;padding:16px 18px;box-shadow:0 0 0 1px var(--line);display:grid;gap:4px;min-width:0}
 .tile:hover{box-shadow:0 0 0 1.5px var(--wine)}
@@ -271,7 +275,9 @@ dialog::backdrop{background:rgba(58,14,34,.55)}
 /* the alarm: fills the screen until someone answers it */
 #alarm{max-width:none;width:100%;height:100%;max-height:none;border-radius:0;background:var(--wine);color:#fff;margin:0;inset:0}
 #alarm[open]{display:grid;place-items:center}
-#alarm::backdrop{background:var(--wine)}
+#alarm::backdrop,#startDlg::backdrop{background:var(--wine)}
+#startDlg{max-width:none;width:100%;height:100%;max-height:none;border-radius:0;background:var(--wine);color:#fff;margin:0;inset:0}
+#startDlg[open]{display:grid;place-items:center}
 .alarm-in{width:min(640px,100%);padding:max(24px,env(safe-area-inset-top)) 24px max(24px,env(safe-area-inset-bottom));display:grid;gap:18px;text-align:center}
 .alarm-in .ring{width:84px;height:84px;margin:0 auto;border-radius:50%;background:#fff;color:var(--wine);display:grid;place-items:center;animation:ring 1s ease-in-out infinite}
 .alarm-in .ring svg{width:44px;height:44px}
@@ -307,7 +313,12 @@ dialog::backdrop{background:rgba(58,14,34,.55)}
   <form class="login-card" id="loginForm" novalidate>
     <span class="mark">AISU</span>
     <h1 data-t="signin.title">Connexion du personnel</h1>
-    <div class="field"><label for="lEmail" data-t="email">E-mail</label><input type="email" id="lEmail" autocomplete="username" required></div>
+    <div class="seg" role="group" id="loginMode" style="justify-self:start">
+      <button type="button" data-mode="team" aria-pressed="true" data-t="login.team">Équipe</button>
+      <button type="button" data-mode="manager" aria-pressed="false" data-t="login.manager">Responsable</button>
+    </div>
+    <p class="hint" id="lHint" style="margin:-6px 0 0"></p>
+    <div class="field" id="lEmailField"><label for="lEmail" data-t="email">E-mail</label><input type="email" id="lEmail" autocomplete="username" required></div>
     <div class="field"><label for="lPass" data-t="password">Mot de passe</label><input type="password" id="lPass" autocomplete="current-password" required></div>
     <p class="msg err" id="lErr" role="alert" hidden></p>
     <p class="msg ok" id="lOk" role="status" hidden></p>
@@ -344,8 +355,8 @@ dialog::backdrop{background:rgba(58,14,34,.55)}
       <button type="button" role="tab" data-view="orders" aria-selected="false"><span data-t="tab.orders">Commandes</span><span class="badge" id="badgeOrders" data-n="0">0</span></button>
       <button type="button" role="tab" data-view="tables" aria-selected="false"><span data-t="tab.tables">Réservations</span><span class="badge" id="badgeRes" data-n="0">0</span></button>
       <button type="button" role="tab" data-view="menu" aria-selected="false"><span data-t="tab.menu">Carte</span><span class="badge" id="badgeSold" data-n="0">0</span></button>
-      <button type="button" role="tab" data-view="reports" aria-selected="false"><span data-t="tab.reports">Chiffres</span></button>
-      <button type="button" role="tab" data-view="settings" aria-selected="false"><span data-t="tab.settings">Réglages</span></button>
+      <button type="button" role="tab" data-view="reports" aria-selected="false" data-mgr><span data-t="tab.reports">Chiffres</span></button>
+      <button type="button" role="tab" data-view="settings" aria-selected="false" data-mgr><span data-t="tab.settings">Réglages</span></button>
       <button type="button" role="tab" data-view="team" aria-selected="false" id="teamTab" hidden><span data-t="tab.team">Équipe</span></button>
     </nav>
     <div class="offline" id="offline" hidden data-t="offline">Hors ligne</div>
@@ -359,15 +370,16 @@ dialog::backdrop{background:rgba(58,14,34,.55)}
         <div class="qcard" data-q="ordersPaused"><div class="qt"><b data-t="q.orders">Commandes en ligne</b><span></span></div><label class="switch"><input type="checkbox" data-open="ordersPaused"><span class="track"></span><span class="sr-only" data-t="q.orders">Commandes en ligne</span></label></div>
         <div class="qcard" data-q="bookingsPaused"><div class="qt"><b data-t="q.bookings">Réservations en ligne</b><span></span></div><label class="switch"><input type="checkbox" data-open="bookingsPaused"><span class="track"></span><span class="sr-only" data-t="q.bookings">Réservations en ligne</span></label></div>
       </div>
+      <p class="msg warn" id="lockNote" hidden style="margin-top:12px"></p>
       <div class="setup" id="setupCard" hidden>
         <h3 data-t="setup.title">Pour ne manquer aucune commande sur cet appareil</h3>
         <ol id="setupList"></ol>
       </div>
-      <div class="tiles">
+      <div class="tiles" id="todayTiles">
         <button class="tile" type="button" data-go="orders" id="tileTodo"><span class="n">0</span><span class="l" data-t="tile.todo">Commandes à préparer</span></button>
         <button class="tile" type="button" data-go="orders" id="tileReady"><span class="n">0</span><span class="l" data-t="tile.ready">Prêtes, à récupérer</span></button>
         <button class="tile" type="button" data-go="tables" id="tileTables"><span class="n">0</span><span class="l" data-t="tile.tables">Réservations aujourd'hui</span></button>
-        <button class="tile" type="button" data-go="reports" id="tileSales"><span class="n">0</span><span class="l" data-t="tile.sales">Ventes du jour (récupérées)</span></button>
+        <button class="tile" type="button" data-go="reports" id="tileSales" data-mgr><span class="n">0</span><span class="l" data-t="tile.sales">Ventes du jour (récupérées)</span></button>
       </div>
       <div class="split">
         <div><div class="section-title"><span data-t="next.orders">Prochains retraits</span></div><div class="list" id="nextOrders"></div></div>
@@ -376,7 +388,7 @@ dialog::backdrop{background:rgba(58,14,34,.55)}
       <div id="toConfirmWrap" hidden><div class="section-title"><span data-t="to.confirm">Réservations à confirmer</span></div><div class="list" id="toConfirm"></div></div>
       <div class="section-title"><span data-t="sold.title">Épuisé en ce moment</span><button class="btn btn-ghost btn-sm" type="button" data-go="menu" data-t="manage">Gérer</button></div>
       <div class="chips" id="soldChips"></div>
-      <div id="noticeNow" hidden><div class="section-title"><span data-t="notice.live">Message affiché sur le site</span><button class="btn btn-ghost btn-sm" type="button" data-go="settings" data-t="edit">Modifier</button></div><p class="msg warn" id="noticeNowText"></p></div>
+      <div id="noticeNow" hidden><div class="section-title"><span data-t="notice.live">Message affiché sur le site</span><button class="btn btn-ghost btn-sm" type="button" data-go="settings" data-mgr data-t="edit">Modifier</button></div><p class="msg warn" id="noticeNowText"></p></div>
     </section>
 
     <!-- ============ ORDERS ============ -->
@@ -469,15 +481,6 @@ dialog::backdrop{background:rgba(58,14,34,.55)}
           <div class="counter" id="noticeCount">0 / 200</div>
           <div class="row"><button class="btn btn-fill" type="button" id="noticeSave" data-t="notice.publish">Publier</button><button class="btn btn-ghost" type="button" id="noticeClear" data-t="notice.clear">Retirer</button><span id="noticeMsg" class="hint" style="color:var(--ready);font-weight:600"></span></div>
         </div>
-        <div class="panel" id="devicePanel">
-          <h3 data-t="dev.title">Alertes sur cet appareil</h3>
-          <p data-t="dev.hint"></p>
-          <label class="switch"><input type="checkbox" id="soundIn"><span class="track"></span><span data-t="dev.sound">Sonnerie</span></label>
-          <div class="row"><span class="lbl" data-t="dev.volume">Volume</span><input type="range" id="volIn" min="0.2" max="1" step="0.1" style="flex:1;min-width:140px"><button class="btn btn-ghost btn-sm" type="button" id="testSound" data-t="dev.test">Tester</button></div>
-          <label class="switch"><input type="checkbox" id="remindIn"><span class="track"></span><span data-t="dev.remind">Rappeler si personne ne répond</span></label>
-          <label class="switch"><input type="checkbox" id="wakeIn"><span class="track"></span><span data-t="dev.wake">Garder l'écran allumé</span></label>
-          <div class="row"><button class="btn btn-ghost" type="button" id="notifBtn" data-t="dev.notif">Autoriser les notifications</button><span class="hint" id="notifState"></span></div>
-        </div>
         <div class="panel" id="phonePanel">
           <h3 data-t="ph.title">Alertes sur les téléphones</h3>
           <p data-t="ph.hint"></p>
@@ -505,13 +508,37 @@ dialog::backdrop{background:rgba(58,14,34,.55)}
       <div class="view-head"><h2 data-t="tab.team">Équipe</h2></div>
       <div class="panel" style="max-width:640px">
         <p data-t="team.body"></p>
-        <form class="row" id="teamForm"><input type="email" id="teamIn" autocomplete="off" style="flex:1;min-width:200px" aria-label="E-mail"><button class="btn btn-fill" type="submit" data-t="add">Ajouter</button></form>
+        <div class="msg warn" id="teamShared"></div>
+        <form class="row" id="teamForm"><input type="email" id="teamIn" autocomplete="off" style="flex:1;min-width:200px" aria-label="E-mail"><select id="teamRole" style="width:auto" aria-label="Rôle"><option value="staff" data-t="role.staff">Équipe</option><option value="manager" data-t="role.manager">Responsable</option></select><button class="btn btn-fill" type="submit" data-t="add">Ajouter</button></form>
         <p class="msg err" id="teamErr" role="alert" hidden></p>
         <ul class="team-list" id="teamList"></ul>
       </div>
     </section>
   </main>
 </div>
+
+<!-- this device's alert settings: opened from the bell, for every role -->
+<dialog id="deviceDlg" aria-labelledby="deviceTitle">
+  <div class="dlg-head"><h2 id="deviceTitle" data-t="dev.title">Alertes sur cet appareil</h2><button class="dlg-x" type="button" data-close aria-label="Fermer">×</button></div>
+  <div class="dlg-body" id="devicePanel">
+          <p data-t="dev.hint"></p>
+          <label class="switch"><input type="checkbox" id="soundIn"><span class="track"></span><span data-t="dev.sound">Sonnerie</span></label>
+          <div class="row"><span class="lbl" data-t="dev.volume">Volume</span><input type="range" id="volIn" min="0.2" max="1" step="0.1" style="flex:1;min-width:140px"><button class="btn btn-ghost btn-sm" type="button" id="testSound" data-t="dev.test">Tester</button></div>
+          <label class="switch"><input type="checkbox" id="remindIn"><span class="track"></span><span data-t="dev.remind">Rappeler si personne ne répond</span></label>
+          <label class="switch"><input type="checkbox" id="wakeIn"><span class="track"></span><span data-t="dev.wake">Garder l'écran allumé</span></label>
+          <div class="row"><button class="btn btn-ghost" type="button" id="notifBtn" data-t="dev.notif">Autoriser les notifications</button><span class="hint" id="notifState"></span></div>
+        </div>
+</dialog>
+
+<!-- start of service: the one tap browsers need before a page may make sound -->
+<dialog id="startDlg" aria-labelledby="startTitle">
+  <div class="alarm-in">
+    <div class="ring" style="animation:none"><svg><use href="#i-bell"/></svg></div>
+    <h2 id="startTitle" data-t="start.title">Prêt pour le service ?</h2>
+    <p class="alarm-more" data-t="start.body" style="margin:0"></p>
+    <div class="alarm-btns"><button class="btn btn-fill" type="button" id="startGo" data-t="start.go">Commencer le service</button><button class="btn btn-ghost" type="button" id="startQuiet" data-t="start.quiet">Pas de son sur cet appareil</button></div>
+  </div>
+</dialog>
 
 <!-- new order / booking: takes the whole screen and rings until someone answers -->
 <dialog id="alarm" aria-labelledby="alarmTitle">

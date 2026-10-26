@@ -12,6 +12,9 @@ import {
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 const OWNER = 'aisuparfaiteria@gmail.com';     // must match isOwner() in firestore.rules
+// One shared login for the whole counter team. Gmail delivers "+staff" mail to the owner's inbox,
+// so no new mailbox is needed; create this user once in Firebase and add it in the Team tab as "Team".
+const TEAM_LOGIN = 'aisuparfaiteria+staff@gmail.com';
 // must match DEFAULTS in assets/backend.js and the defaults in firestore.rules
 const DEFAULTS = { capacity: 20, ordersPaused: false, bookingsPaused: false, closedDays: [], notice: '', soldOut: {}, alertTopic: '' };
 const MENU = window.AISU_MENU;
@@ -31,6 +34,13 @@ const store = {
 /* ---------------- words ---------------- */
 const S = {
   fr: {
+    'login.team':'Équipe', 'login.manager':'Responsable', 'login.teamHint':"Tapez le mot de passe de l'équipe.", 'login.mgrHint':'Votre e-mail et votre mot de passe de responsable.',
+    'forgot.team':"Demandez le mot de passe de l'équipe à un responsable.",
+    'start.title':'Prêt pour le service ?', 'start.body':"Touchez le bouton pour que cet appareil sonne à chaque commande et réservation, sur toutes les pages. Les navigateurs exigent ce geste une fois à chaque ouverture.",
+    'start.go':'Commencer le service', 'start.quiet':'Pas de son sur cet appareil',
+    'role.staff':'Équipe', 'role.manager':'Responsable', 'role.owner':'Propriétaire', 'lock.short':'réservé aux responsables',
+    'team.shared':"Pour l'équipe, un seul compte partagé suffit. Dans Firebase, Authentication, Users, créez l'utilisateur {e} avec un mot de passe, puis ajoutez-le ici comme « Équipe ». Le personnel choisit « Équipe » à la connexion et tape seulement ce mot de passe. Les e-mails de ce compte arrivent dans votre boîte habituelle.",
+    'team.addShared':"Ajouter le compte d'équipe", 'team.sharedOk':"Le compte d'équipe {e} est dans la liste.", 'role.saved':'Rôle enregistré',
     'signin.title':'Connexion du personnel', email:'E-mail', password:'Mot de passe', signin:'Se connecter',
     forgot:'Mot de passe oublié ?', needEmail:"Entrez d'abord votre e-mail.", resetSent:"Si ce compte existe, un e-mail de réinitialisation vient d'être envoyé à {e}.",
     badLogin:'E-mail ou mot de passe incorrect.', tooMany:"Trop d'essais. Attendez quelques minutes puis réessayez.", netErr:'Pas de connexion internet. Réessayez.',
@@ -91,7 +101,7 @@ const S = {
     'ph.test':'Envoyer un test', 'ph.new':'Changer le code', 'ph.off':'Désactiver', 'ph.sent':'Envoyé. Les téléphones abonnés devraient sonner dans quelques secondes.', 'ph.fail':"L'envoi a échoué. Vérifiez la connexion.",
     'ph.newSure':'Confirmer : les téléphones devront se réabonner', 'ph.offSure':'Confirmer',
     'cleanup.title':'Nettoyer les anciennes données', 'cleanup.body':'Supprime les réservations et commandes de plus de 12 mois.', 'cleanup.btn':'Supprimer', 'cleanup.sure':'Confirmer la suppression', 'cleanup.done':'{n} enregistrements supprimés.',
-    'team.body':"Créez d'abord le compte dans Firebase, Authentication, Users, puis ajoutez son e-mail ici. Seul le propriétaire voit cet onglet.", remove:'Retirer', 'remove.sure':'Confirmer', owner:'Propriétaire', 'team.bad':'Entrez une adresse e-mail valide.', 'team.empty':"Personne n'a encore été ajouté.",
+    'team.body':"Les « Responsables » voient tout sauf cet onglet ; l'« Équipe » voit Aujourd'hui, Commandes, Réservations et Carte. Pour un responsable, créez d'abord son compte dans Firebase, Authentication, Users, puis ajoutez son e-mail ici. Seul le propriétaire voit cet onglet.", remove:'Retirer', 'remove.sure':'Confirmer', owner:'Propriétaire', 'team.bad':'Entrez une adresse e-mail valide.', 'team.empty':"Personne n'a encore été ajouté.",
     saveFail:"Impossible d'enregistrer. Vérifiez la connexion et réessayez.",
     'alarm.order':'Nouvelle commande', 'alarm.res':'Nouvelle réservation', 'alarm.start':'Commencer la préparation', 'alarm.confirm':'Confirmer la réservation', 'alarm.seen':"Vu, je m'en occupe", 'alarm.more':'+ {n} autre(s) en attente',
     'alarm.items':'{n} article(s)', 'alarm.pick':'Retrait {d} à {h}', 'alarm.for':'{d} à {h} · {g}',
@@ -100,6 +110,13 @@ const S = {
     other:'EN'
   },
   en: {
+    'login.team':'Team', 'login.manager':'Manager', 'login.teamHint':'Type the team password.', 'login.mgrHint':'Your manager email and password.',
+    'forgot.team':'Ask a manager for the team password.',
+    'start.title':'Ready for service?', 'start.body':'Tap the button so this device rings for every order and booking, on every page. Browsers need this tap once each time the page opens.',
+    'start.go':'Start service', 'start.quiet':'No sound on this device',
+    'role.staff':'Team', 'role.manager':'Manager', 'role.owner':'Owner', 'lock.short':'managers only',
+    'team.shared':'One shared login is enough for the team. In Firebase, Authentication, Users, create the user {e} with a password, then add it here as "Team". Staff pick "Team" on the sign-in page and type only that password. Mail for this account arrives in your usual inbox.',
+    'team.addShared':'Add the team login', 'team.sharedOk':'The team login {e} is on the list.', 'role.saved':'Role saved',
     'signin.title':'Staff sign-in', email:'Email', password:'Password', signin:'Sign in',
     forgot:'Forgot password?', needEmail:'Enter your email first.', resetSent:'If this account exists, a reset email has been sent to {e}.',
     badLogin:'Wrong email or password.', tooMany:'Too many attempts. Wait a few minutes and try again.', netErr:'No internet connection. Try again.',
@@ -160,7 +177,7 @@ const S = {
     'ph.test':'Send a test', 'ph.new':'Change the code', 'ph.off':'Turn off', 'ph.sent':'Sent. Subscribed phones should ring within a few seconds.', 'ph.fail':'Sending failed. Check the connection.',
     'ph.newSure':'Confirm: phones will need to subscribe again', 'ph.offSure':'Confirm',
     'cleanup.title':'Clear old records', 'cleanup.body':'Deletes bookings and orders older than 12 months.', 'cleanup.btn':'Delete', 'cleanup.sure':'Confirm delete', 'cleanup.done':'{n} records deleted.',
-    'team.body':'First create the login in Firebase, Authentication, Users, then add the email here. Only the owner sees this tab.', remove:'Remove', 'remove.sure':'Confirm', owner:'Owner', 'team.bad':'Enter a valid email address.', 'team.empty':'No one added yet.',
+    'team.body':'Managers see everything except this tab; the Team sees Today, Orders, Bookings and Menu. For a manager, first create their login in Firebase, Authentication, Users, then add the email here. Only the owner sees this tab.', remove:'Remove', 'remove.sure':'Confirm', owner:'Owner', 'team.bad':'Enter a valid email address.', 'team.empty':'No one added yet.',
     saveFail:"Couldn't save. Check the connection and try again.",
     'alarm.order':'New order', 'alarm.res':'New booking', 'alarm.start':'Start preparing', 'alarm.confirm':'Confirm the booking', 'alarm.seen':"Seen, I'm on it", 'alarm.more':'+ {n} more waiting',
     'alarm.items':'{n} item(s)', 'alarm.pick':'Pickup {d} at {h}', 'alarm.for':'{d} at {h} · {g}',
@@ -190,13 +207,14 @@ const hm = m => lang === 'en'
   : `${Math.floor(m / 60)}h${String(m % 60).padStart(2, '0')}`;
 const tsMs = ts => ts && ts.toMillis ? ts.toMillis() : (ts && ts.toDate ? ts.toDate().getTime() : Date.now());
 const minsSince = ts => Math.max(0, Math.floor((Date.now() - tsMs(ts)) / 60000));
-const firstName = em => String(em || '').split('@')[0];
+const firstName = em => { const l = String(em || '').split('@')[0]; return l.includes('+') ? l.split('+').pop() : l; };
 
 /* ---------------- Firebase ---------------- */
 const app = initializeApp(window.AISU_FIREBASE_CONFIG);
 const auth = getAuth(app);
 const db = getFirestore(app);
-let me = null, isOwner = false;
+let me = null, isOwner = false, role = 'staff';
+const canManage = () => role === 'owner' || role === 'manager';
 const unsubs = [];
 const stop = () => { while(unsubs.length) try{ unsubs.pop()(); }catch(e){} };
 
@@ -208,6 +226,7 @@ function applyText(){
   $('#searchIn').placeholder = t('search.ph');
   $('#menuFilter').placeholder = t('menu.filter');
   $('#rfName').placeholder = t('f.namePh');
+  renderLoginMode();
 }
 document.addEventListener('click', e => {
   if(e.target.closest('[data-lang-toggle]')){
@@ -245,7 +264,12 @@ const dev = Object.assign({ sound: false, vol: 0.8, remind: true, wake: false },
 const saveDev = () => store.set('aisu-staff-device', dev);
 let audio = null;
 function ensureAudio(){
-  if(!audio){ const C = window.AudioContext || window.webkitAudioContext; if(C) audio = new C(); }
+  if(!audio){
+    const C = window.AudioContext || window.webkitAudioContext;
+    if(C){ audio = new C(); audio.onstatechange = renderAlertState;
+      // a silent, never-ending source keeps the sound engine awake between orders
+      try{ const k = audio.createConstantSource(); k.offset.value = 0; k.connect(audio.destination); k.start(); }catch(e){} }
+  }
   if(audio && audio.state === 'suspended') audio.resume().then(renderAlertState, () => {});
   renderAlertState();
 }
@@ -297,8 +321,26 @@ async function askNotif(){
   renderAlertState();
 }
 
+// Browsers keep a freshly opened page silent until someone touches it. This screen takes that one tap at the
+// start of service, so the alarm can ring on any page without anyone having to press anything first.
+function askStart(){
+  if($('#shell').hidden || $('#startDlg').open) return;
+  if(dev.sound && audioReady()) return;
+  if(dev.quiet) return;
+  try{ $('#startDlg').showModal(); }catch(e){}
+}
+$('#startGo').addEventListener('click', () => {
+  dev.sound = true; dev.quiet = false;
+  if('wakeLock' in navigator) dev.wake = true;
+  saveDev(); ensureAudio(); setTimeout(() => playAlarm('remind'), 120); applyWake();
+  if(notifSupported() && Notification.permission === 'default') askNotif();
+  $('#startDlg').close(); renderAlertState();
+});
+$('#startQuiet').addEventListener('click', () => { dev.sound = false; dev.quiet = true; saveDev(); $('#startDlg').close(); renderAlertState(); });
+
 function renderAlertState(){
   const soundOk = dev.sound && audioReady();
+  if(soundOk && $('#startDlg').open) $('#startDlg').close();
   $('#unlockBar').hidden = !(dev.sound && !audioReady() && !$('#shell').hidden);
   const ab = $('#alertBtn');
   ab.classList.toggle('alert-off', !soundOk); ab.setAttribute('aria-pressed', soundOk ? 'true' : 'false');
@@ -314,11 +356,11 @@ function renderAlertState(){
   steps.push(['sound', t('setup.sound'), soundOk, t('setup.soundBtn')]);
   if('wakeLock' in navigator) steps.push(['wake', t('setup.wake'), dev.wake, t('setup.wakeBtn')]);
   if(ns === 'default' || ns === 'granted') steps.push(['notif', t('setup.notif'), ns === 'granted', t('setup.notifBtn')]);
-  steps.push(['phone', t('setup.phone'), !!settings.alertTopic, t('setup.phoneBtn')]);
+  if(canManage()) steps.push(['phone', t('setup.phone'), !!settings.alertTopic, t('setup.phoneBtn')]);
   $('#setupCard').hidden = steps.every(s => s[2]);
   $('#setupList').innerHTML = steps.map(([k, txt, ok, btn]) => `<li><span class="t">${esc(txt)}</span>${ok ? `<span class="ok">✓ ${t('done')}</span>` : `<button class="btn btn-fill btn-sm" type="button" data-setup="${k}">${esc(btn)}</button>`}</li>`).join('');
 }
-function turnSoundOn(){ dev.sound = true; saveDev(); ensureAudio(); setTimeout(() => playAlarm('order'), 120); renderAlertState(); }
+function turnSoundOn(){ dev.sound = true; dev.quiet = false; saveDev(); ensureAudio(); setTimeout(() => playAlarm('order'), 120); renderAlertState(); }
 document.addEventListener('click', e => {
   const b = e.target.closest('[data-setup]'); if(!b) return;
   const k = b.dataset.setup;
@@ -329,9 +371,9 @@ document.addEventListener('click', e => {
 });
 $('#alertBtn').addEventListener('click', () => {
   if(!dev.sound || !audioReady()) turnSoundOn();
-  setView('settings'); $('#devicePanel').scrollIntoView({block:'start', behavior:'smooth'});
+  renderAlertState(); $('#deviceDlg').showModal();
 });
-$('#soundIn').addEventListener('change', e => { dev.sound = e.target.checked; saveDev(); if(dev.sound){ ensureAudio(); playAlarm('order'); } renderAlertState(); });
+$('#soundIn').addEventListener('change', e => { dev.sound = e.target.checked; dev.quiet = !dev.sound; saveDev(); if(dev.sound){ ensureAudio(); playAlarm('order'); } renderAlertState(); });
 $('#volIn').addEventListener('change', e => { dev.vol = Number(e.target.value); saveDev(); ensureAudio(); playAlarm('order'); });
 $('#testSound').addEventListener('click', () => { if(!dev.sound){ dev.sound = true; saveDev(); } ensureAudio(); playAlarm('order'); buzz(); renderAlertState(); });
 $('#remindIn').addEventListener('change', e => { dev.remind = e.target.checked; saveDev(); });
@@ -342,9 +384,16 @@ window.addEventListener('online', () => { $('#offline').hidden = true; });
 window.addEventListener('offline', () => { $('#offline').hidden = false; });
 
 /* ================= sign in ================= */
+let loginMode = store.get('aisu-staff-login-mode', 'team');
+function renderLoginMode(){
+  $$('#loginMode [data-mode]').forEach(b => b.setAttribute('aria-pressed', b.dataset.mode === loginMode));
+  $('#lEmailField').hidden = loginMode === 'team';
+  $('#lHint').textContent = t(loginMode === 'team' ? 'login.teamHint' : 'login.mgrHint');
+}
+$('#loginMode').addEventListener('click', e => { const b = e.target.closest('[data-mode]'); if(!b) return; loginMode = b.dataset.mode; store.set('aisu-staff-login-mode', loginMode); renderLoginMode(); (loginMode === 'team' ? $('#lPass') : $('#lEmail')).focus(); });
 $('#loginForm').addEventListener('submit', async e => {
   e.preventDefault();
-  const em = $('#lEmail').value.trim(), pw = $('#lPass').value;
+  const em = loginMode === 'team' ? TEAM_LOGIN : $('#lEmail').value.trim(), pw = $('#lPass').value;
   $('#lErr').hidden = true; $('#lOk').hidden = true;
   if(!em || !pw){ $('#lErr').textContent = t('badLogin'); $('#lErr').hidden = false; return; }
   $('#lBtn').disabled = true;
@@ -358,6 +407,7 @@ $('#loginForm').addEventListener('submit', async e => {
 $('#lForgot').addEventListener('click', async () => {
   const em = $('#lEmail').value.trim();
   $('#lErr').hidden = true; $('#lOk').hidden = true;
+  if(loginMode === 'team'){ $('#lOk').textContent = t('forgot.team'); $('#lOk').hidden = false; return; }
   if(!em){ $('#lErr').textContent = t('needEmail'); $('#lErr').hidden = false; $('#lEmail').focus(); return; }
   try{ await sendPasswordResetEmail(auth, em); }catch(err){ /* same message either way, so nobody can test which emails exist */ }
   $('#lOk').textContent = t('resetSent', {e: em}); $('#lOk').hidden = false;
@@ -369,21 +419,23 @@ onAuthStateChanged(auth, async user => {
   stop(); stopAlarm();
   me = user ? (user.email || '').toLowerCase() : null;
   if(!user){ show('login'); applyText(); return; }
-  isOwner = me === OWNER;
+  isOwner = me === OWNER; role = isOwner ? 'owner' : 'staff';
   if(!isOwner){
-    try{ const s = await getDoc(doc(db, 'staff', me)); if(!s.exists()) throw new Error('not staff'); }
+    try{ const s = await getDoc(doc(db, 'staff', me)); if(!s.exists()) throw new Error('not staff'); role = s.data().role === 'manager' ? 'manager' : 'staff'; }
     catch(err){ $('#deniedBody').textContent = t('denied.body', {e: me}); show('denied'); applyText(); return; }
   }
+  document.body.classList.toggle('role-staff', !canManage());
   $('#teamTab').hidden = !isOwner; $('#cleanupPanel').hidden = !isOwner;
   $('#whoami').textContent = me;
   show('shell'); applyText(); startLive(); renderAll(); applyWake();
-  if(dev.sound) ensureAudio();
+  askStart();
 });
 
 /* ================= views ================= */
 let view = store.get('aisu-staff-view', 'today');
 function setView(v){
   if(v === 'team' && !isOwner) v = 'today';
+  if((v === 'reports' || v === 'settings') && !canManage()) v = 'today';
   view = v; store.set('aisu-staff-view', v);
   $$('.tabs [data-view]').forEach(x => x.setAttribute('aria-selected', x.dataset.view === view));
   $$('[data-panel]').forEach(p => { p.hidden = p.dataset.panel !== view; });
@@ -394,7 +446,7 @@ function setView(v){
 document.querySelector('.tabs').addEventListener('click', e => { const b = e.target.closest('[data-view]'); if(b) setView(b.dataset.view); });
 
 /* ================= live data ================= */
-let orders = [], resFuture = [], resPast = null, settings = {...DEFAULTS}, settingsLoaded = false, staffList = [];
+let orders = [], resFuture = [], resPast = null, settings = {...DEFAULTS}, settingsExists = false, settingsLoaded = false, staffList = [];
 let tablesDay = nowParts().ymd, liveDay = null, pastUnsub = null;
 let firstOrders = true, firstRes = true;
 
@@ -421,16 +473,17 @@ function startLive(){
     syncAlarm(); renderTables(); renderToday(); renderWait();
   }, () => {}));
   unsubs.push(onSnapshot(doc(db, 'settings', 'main'), s => {
-    settings = {...DEFAULTS, ...(s.exists() ? s.data() : {})}; settingsLoaded = true;
+    settings = {...DEFAULTS, ...(s.exists() ? s.data() : {})}; settingsExists = s.exists(); settingsLoaded = true;
     renderSettings(); renderTables(); renderToday(); renderMenu(); renderAlertState();
   }, () => {}));
-  if(isOwner) unsubs.push(onSnapshot(collection(db, 'staff'), snap => { staffList = snap.docs.map(d => d.id).sort(); renderTeam(); }, () => {}));
+  if(isOwner) unsubs.push(onSnapshot(collection(db, 'staff'), snap => { staffList = snap.docs.map(d => ({email: d.id, role: d.data().role === 'manager' ? 'manager' : 'staff'})).sort((a, b) => a.email.localeCompare(b.email)); renderTeam(); }, () => {}));
   watchPastDay();
   const tick = setInterval(minuteTick, 20000);
   unsubs.push(() => clearInterval(tick));
   unsubs.push(() => { if(pastUnsub){ pastUnsub(); pastUnsub = null; } });
 }
 function minuteTick(){
+  if(dev.sound && !audioReady()){ ensureAudio(); setTimeout(() => { if(dev.sound && !audioReady() && !$('#alarm').open) askStart(); }, 800); }
   if(nowParts().ymd !== liveDay){ stop(); tablesDay = nowParts().ymd; startLive(); renderAll(); return; }
   renderClock(); renderOrders([]); renderToday(); renderWait(); renderAlertState();
 }
@@ -539,8 +592,8 @@ function renderClock(){
 function renderQuick(){
   [['ordersPaused', 'q.open', 'q.paused', 'st.orders.on', 'st.orders.off'], ['bookingsPaused', 'q.openB', 'q.pausedB', 'st.book.on', 'st.book.off']].forEach(([k, on, off, son, soff]) => {
     const paused = !!settings[k];
-    $$(`input[data-open="${k}"]`).forEach(i => { i.checked = !paused; i.disabled = !settingsLoaded; });
-    $$(`.qcard[data-q="${k}"]`).forEach(c => { c.classList.toggle('off', paused); c.querySelector('.qt span').textContent = t(paused ? off : on); });
+    $$(`input[data-open="${k}"]`).forEach(i => { i.checked = !paused; i.disabled = !settingsLoaded || !canManage(); });
+    $$(`.qcard[data-q="${k}"]`).forEach(c => { c.classList.toggle('off', paused); c.querySelector('.qt span').textContent = t(paused ? off : on) + (canManage() ? '' : ' · ' + t('lock.short')); });
     $$(`[data-state="${k}"]`).forEach(s => { s.textContent = t(paused ? soff : son); });
   });
 }
@@ -705,7 +758,7 @@ function renderTables(){
     return `<button type="button" data-day="${d}" aria-pressed="${d === tablesDay}" class="${closed.includes(d) ? 'closed' : ''}"><b>${esc(d === td ? t('today') : shortDay(d))}${pending ? ' •' : ''}</b><span>${closed.includes(d) ? t('day.closedChip') : list.length ? `${list.length} · ${esc(t('guestsShort', {n: list.reduce((a, r) => a + r.guests, 0)}))}` : '—'}</span></button>`;
   }).join('');
   const isClosed = closed.includes(tablesDay);
-  $('#dayClosedIn').checked = isClosed; $('#dayClosedIn').disabled = !settingsLoaded || tablesDay < td;
+  $('#dayClosedIn').checked = isClosed; $('#dayClosedIn').disabled = !settingsLoaded || tablesDay < td || !canManage();
   $('#dayClosedText').textContent = t(isClosed ? 'day.closed' : 'day.open');
   const list = dayList(tablesDay), live = list.filter(r => r.status !== 'cancelled');
   $('#tablesSummary').textContent = t('tables.sum', {b: live.length, g: live.reduce((a, r) => a + r.guests, 0)});
@@ -956,6 +1009,12 @@ function renderSettings(){
 async function saveSettings(patch){
   $('#settingsErr').hidden = true;
   if(!settingsLoaded){ toast(t('saveFail')); return false; }
+  if(!canManage()){
+    // the team may only mark items sold out (the database rules check this too)
+    if(!('soldOut' in patch) || !settingsExists){ toast(t('saveFail')); return false; }
+    try{ await updateDoc(doc(db, 'settings', 'main'), {soldOut: patch.soldOut, updatedAt: serverTimestamp(), updatedBy: me}); return true; }
+    catch(err){ toast(t('saveFail')); renderMenu(); return false; }
+  }
   const td = nowParts().ymd;
   const next = {
     capacity: settings.capacity, ordersPaused: !!settings.ordersPaused, bookingsPaused: !!settings.bookingsPaused,
@@ -967,7 +1026,7 @@ async function saveSettings(patch){
   catch(err){ $('#settingsErr').textContent = t('saveFail'); $('#settingsErr').hidden = false; toast(t('saveFail')); renderSettings(); renderMenu(); renderTables(); return false; }
 }
 document.addEventListener('change', e => {
-  const i = e.target.closest('input[data-open]'); if(!i) return;
+  const i = e.target.closest('input[data-open]'); if(!i || !canManage()) return;
   saveSettings({[i.dataset.open]: !i.checked});
 });
 document.addEventListener('click', e => { const b = e.target.closest('[data-cap]'); if(!b) return; $('#capIn').value = Math.min(200, Math.max(1, (Number($('#capIn').value) || 1) + Number(b.dataset.cap))); });
@@ -1028,16 +1087,28 @@ $('#cleanupBtn').addEventListener('click', async e => {
 
 /* ================= team (owner only) ================= */
 function renderTeam(){
+  const sel = m => `<select data-role="${esc(m.email)}" style="width:auto;min-height:38px;padding:4px 10px" aria-label="${esc(m.email)}">${['staff', 'manager'].map(r => `<option value="${r}" ${m.role === r ? 'selected' : ''}>${t('role.' + r)}</option>`).join('')}</select>`;
   const rows = [`<li><span>${esc(OWNER)}</span><span class="chip">${t('owner')}</span></li>`]
-    .concat(staffList.map(em => `<li><span>${esc(em)}</span><button class="btn btn-danger btn-sm" type="button" data-remove="${esc(em)}">${t('remove')}</button></li>`));
+    .concat(staffList.map(m => `<li><span style="flex:1">${esc(m.email)}</span>${sel(m)}<button class="btn btn-danger btn-sm" type="button" data-remove="${esc(m.email)}">${t('remove')}</button></li>`));
   $('#teamList').innerHTML = rows.join('') + (staffList.length ? '' : `<li style="color:var(--muted)">${t('team.empty')}</li>`);
+  const has = staffList.some(m => m.email === TEAM_LOGIN);
+  $('#teamShared').innerHTML = has ? esc(t('team.sharedOk', {e: TEAM_LOGIN}))
+    : `${esc(t('team.shared', {e: TEAM_LOGIN}))}<div style="margin-top:10px"><button class="btn btn-fill btn-sm" type="button" id="addShared">${t('team.addShared')}</button></div>`;
 }
+document.addEventListener('click', async e => {
+  if(!e.target.closest('#addShared')) return;
+  try{ await setDoc(doc(db, 'staff', TEAM_LOGIN), {addedAt: serverTimestamp(), addedBy: me, role: 'staff'}); }catch(err){ toast(t('saveFail')); }
+});
+document.addEventListener('change', async e => {
+  const s = e.target.closest('select[data-role]'); if(!s) return;
+  try{ await updateDoc(doc(db, 'staff', s.dataset.role), {role: s.value}); toast(t('role.saved')); }catch(err){ toast(t('saveFail')); renderTeam(); }
+});
 $('#teamForm').addEventListener('submit', async e => {
   e.preventDefault();
   const em = $('#teamIn').value.trim().toLowerCase();
   $('#teamErr').hidden = true;
   if(!/^[^\s@/]+@[^\s@/]+\.[^\s@/]+$/.test(em)){ $('#teamErr').textContent = t('team.bad'); $('#teamErr').hidden = false; return; }
-  try{ await setDoc(doc(db, 'staff', em), {addedAt: serverTimestamp(), addedBy: me}); $('#teamIn').value = ''; }
+  try{ await setDoc(doc(db, 'staff', em), {addedAt: serverTimestamp(), addedBy: me, role: $('#teamRole').value === 'manager' ? 'manager' : 'staff'}); $('#teamIn').value = ''; }
   catch(err){ $('#teamErr').textContent = t('saveFail'); $('#teamErr').hidden = false; }
 });
 document.addEventListener('click', async e => {

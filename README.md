@@ -24,7 +24,15 @@ Cloudflare Pages publishes this repository automatically on every push to `main`
 
 ## Staff alerts
 
-New orders and bookings take over the dashboard screen and ring until someone answers. Set it up once per counter device under Today (sound, keep the screen on, notifications).
+New orders and bookings take over the dashboard screen and ring until someone answers, on whichever tab is open. Browsers keep a freshly opened page silent until it is touched, so the dashboard opens with a "Start service" screen that takes that one tap.
+
+## Who sees what
+
+- **Owner** (`aisuparfaiteria@gmail.com`): everything, including the Team tab.
+- **Managers** (role Manager in the Team tab): everything except Team.
+- **Team** (role Team): Today, Orders, Bookings and Menu (sold out). No Numbers, no Settings, no sales figure, and the online switches are locked.
+
+The counter team shares one login, `aisuparfaiteria+staff@gmail.com`. Gmail delivers "+staff" mail to the owner's inbox, so no new mailbox is needed. Create that user once in Firebase (Authentication, Users), add it in the Team tab as Team, and staff sign in by choosing **Équipe** and typing only the team password. To change who has access, change that password in Firebase.
 
 Phone alerts are optional: Settings → Phone alerts creates a private channel code for the free ntfy app (ntfy.sh). The website then pings that channel with each new order or booking: reference, time and size only, never a name or phone number.
 
