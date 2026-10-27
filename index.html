@@ -129,9 +129,13 @@ button,input,select,textarea{font:inherit;color:inherit}
 .hero-art{position:relative;overflow:hidden;min-width:0;
   background:linear-gradient(90deg,rgba(0,0,0,.16),rgba(0,0,0,0) 20%,rgba(0,0,0,0) 80%,rgba(0,0,0,.18)),
     repeating-linear-gradient(90deg,var(--wine-dk) 0 2px,var(--wine) 2px 8px,var(--wine-rib) 8px 10px,var(--wine) 10px 13px)}
-.arch{position:absolute;left:13%;right:13%;top:10%;bottom:0;border-radius:999px 999px 0 0;overflow:hidden;
-  background:radial-gradient(60% 45% at 50% 48%,#FFFFFF 0%,var(--paper) 45%,var(--cream-2) 100%);
+.arch{position:absolute;left:13%;right:13%;top:10%;bottom:0;border-radius:999px 999px 0 0;
   box-shadow:0 0 0 3px rgba(255,244,236,.95),0 0 24px 4px rgba(255,214,228,.5)}
+/* iPhone Safari can drop rounded corners on a clipped box while it scrolls, when something inside it
+   moves (the floating parfait). A mask on the inner layer keeps the arch shape every time. */
+.arch-in,.stage,.pcard-img{isolation:isolate;-webkit-mask-image:-webkit-radial-gradient(white,black);mask-image:radial-gradient(white,black)}
+.arch-in{position:absolute;inset:0;border-radius:inherit;overflow:hidden;transform:translateZ(0);
+  background:radial-gradient(60% 45% at 50% 48%,#FFFFFF 0%,var(--paper) 45%,var(--cream-2) 100%)}
 .arch img{position:absolute;left:14%;right:14%;top:16%;bottom:5%;width:72%;height:79%;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 18px 18px rgba(92,21,32,.18));animation:float 7s ease-in-out infinite}
 @keyframes float{50%{transform:translateY(-8px)}}
 @media (max-width:860px){
@@ -754,7 +758,7 @@ footer .wrap{padding-top:124px}
       </div>
     </div>
     <div class="hero-art" aria-hidden="true">
-      <div class="arch"><img src="img/miss-coco-cherry.webp" alt="" width="387" height="960"></div>
+      <div class="arch"><div class="arch-in"><img src="img/miss-coco-cherry.webp" alt="" width="387" height="960"></div></div>
       <img class="parfi parfi-sticker parfi-hero" src="img/parfi/parfi-wave-sticker.webp" alt="" width="297" height="400">
     </div>
   </div>
@@ -1066,10 +1070,10 @@ footer .wrap{padding-top:124px}
 <div class="track-chip" id="trackChip" hidden></div>
 <div class="toast" id="toast" role="status" aria-live="polite"><span id="toastText"></span><button type="button" data-open-cart data-i18n="cart.view">Voir la commande</button></div>
 
-<script src="assets/menu-data.js?v=20261027f"></script>
-<script src="assets/firebase-config.js?v=20261027f"></script>
-<script type="module" src="assets/backend.js?v=20261027f"></script>
-<script src="assets/site.js?v=20261027f"></script>
+<script src="assets/menu-data.js?v=20261027g"></script>
+<script src="assets/firebase-config.js?v=20261027g"></script>
+<script type="module" src="assets/backend.js?v=20261027g"></script>
+<script src="assets/site.js?v=20261027g"></script>
 
 </body>
 </html>
