@@ -593,16 +593,19 @@ summary.grp-head{list-style:none}
 .brand .logo,.brand-in .logo{height:42px;width:auto;margin:-6px 0 -8px;filter:drop-shadow(0 2px 3px rgba(80,0,30,.25))}
 .brand-in{display:inline-flex;align-items:center;gap:8px}
 .parfi{position:absolute;pointer-events:none;user-select:none;height:auto;z-index:2}
+/* stickers: die-cut cream edge (in the image), a slight lift off the page, each slapped on at its own angle */
+.parfi-sticker{transform:rotate(var(--tilt,0deg));filter:drop-shadow(0 1px 0 rgba(120,10,50,.16)) drop-shadow(0 9px 12px rgba(60,0,20,.22))}
+.parfi-step{filter:drop-shadow(0 1px 0 rgba(120,10,50,.14)) drop-shadow(0 5px 6px rgba(60,0,20,.16))}
 /* hero: waves hello at the foot of the arch */
-.parfi-hero{width:auto;height:min(200px,30%);right:4%;bottom:0;transform-origin:50% 100%;animation:parfiWave 3.2s ease-in-out infinite;filter:drop-shadow(0 8px 10px rgba(60,0,20,.25))}
-@keyframes parfiWave{0%,100%{transform:rotate(0)}20%{transform:rotate(-5deg)}40%{transform:rotate(3deg)}60%{transform:rotate(-3deg)}80%{transform:rotate(1deg)}}
+.parfi-hero{--tilt:-9deg;width:auto;height:min(232px,34%);right:3%;bottom:14px;transform-origin:50% 90%;animation:parfiWave 3.4s ease-in-out infinite}
+@keyframes parfiWave{0%,100%{transform:rotate(var(--tilt,0deg))}20%{transform:rotate(calc(var(--tilt,0deg) - 4deg))}40%{transform:rotate(calc(var(--tilt,0deg) + 3deg))}60%{transform:rotate(calc(var(--tilt,0deg) - 2deg))}80%{transform:rotate(calc(var(--tilt,0deg) + 1deg))}}
 /* drinks menu: serving tea beside the tabs */
 .carte .title{position:relative}
-.parfi-tea{height:128px;width:auto;right:2%;bottom:-118px;animation:parfiBob 4s ease-in-out infinite}
-@keyframes parfiBob{50%{transform:translateY(-6px) rotate(-1.5deg)}}
+.parfi-tea{--tilt:8deg;height:156px;width:auto;right:1%;bottom:-140px;animation:parfiBob 4s ease-in-out infinite}
+@keyframes parfiBob{0%,100%{transform:rotate(var(--tilt,0deg))}50%{transform:translateY(-6px) rotate(calc(var(--tilt,0deg) - 2deg))}}
 /* brunch: presenting a cloche, standing on the card's top edge */
 .brunch-wrap{position:relative;margin-top:24px}
-.parfi-cloche{height:132px;width:auto;right:5%;bottom:calc(100% - 6px);animation:parfiBob 4.6s ease-in-out infinite;z-index:3}
+.parfi-cloche{--tilt:-7deg;height:118px;width:auto;right:5%;bottom:calc(100% - 44px);animation:parfiBob 4.6s ease-in-out infinite;z-index:3}
 /* strolling: walks to one end, pauses, turns round, walks back */
 .carte{position:relative}
 .parfi-lane{position:absolute;left:0;right:0;pointer-events:none;z-index:2;padding-inline:max(16px,calc((100% - 1160px)/2 + 20px))}
@@ -621,9 +624,9 @@ footer .wrap{padding-top:124px}
 /* phones: smaller, and nothing covers the hero buttons */
 @media (max-width:760px){
   .brand .logo,.brand-in .logo{height:38px}
-  .parfi-hero{height:92px;right:4%;bottom:auto;top:calc(100% - 92px - var(--hero-btns,150px))}
-  .parfi-tea{height:74px;right:-6px;bottom:auto;top:-6px}
-  .parfi-cloche{height:92px;right:3%;bottom:calc(100% - 58px)}
+  .parfi-hero{height:112px;right:2%;bottom:auto;top:calc(100% - 112px - var(--hero-btns,150px))}
+  .parfi-tea{height:84px;right:-8px;bottom:auto;top:-10px}
+  .parfi-cloche{height:80px;right:3%;bottom:calc(100% - 50px)}
   .brunch-wrap{margin-top:44px}
   .carte{padding-bottom:132px}
   .carte .parfi-lane{height:78px}
@@ -641,13 +644,13 @@ footer .wrap{padding-top:124px}
 }
 /* in the basket, order page and booking confirmation */
 .parfi-say{display:block;width:auto;pointer-events:none}
-.empty-cart .parfi-say{height:118px;margin-bottom:-4px}
+.empty-cart .parfi-say{height:124px;margin:4px 0 -2px;transform:rotate(-7deg);filter:drop-shadow(0 1px 0 rgba(120,10,50,.16)) drop-shadow(0 7px 10px rgba(60,0,20,.18))}
 .trk-head{display:flex;align-items:center;gap:14px}
 .trk-head .trk-msg{flex:1;min-width:0}
 .trk-head .parfi-say{height:92px;flex:none;animation:parfiBob 3.6s ease-in-out infinite}
 .trk.st-ready .trk-head .parfi-say{animation:parfiCheer .9s ease-in-out infinite alternate}
 @keyframes parfiCheer{from{transform:translateY(0) rotate(-3deg)}to{transform:translateY(-6px) rotate(3deg)}}
-.done-parfi{height:120px;width:auto;justify-self:start;animation:parfiCheer 1s ease-in-out 3 alternate}
+.done-parfi{--tilt:6deg;height:132px;width:auto;justify-self:start;transform:rotate(var(--tilt));filter:drop-shadow(0 1px 0 rgba(120,10,50,.16)) drop-shadow(0 8px 12px rgba(60,0,20,.2));animation:parfiBob 2.6s ease-in-out 2}
 @media (prefers-reduced-motion:reduce){ .parfi-say,.done-parfi{animation:none!important} }
 /* ---------- privacy notice ---------- */
 .priv{display:grid;gap:16px;padding:18px 0}
@@ -770,7 +773,7 @@ footer .wrap{padding-top:124px}
     </div>
     <div class="hero-art" aria-hidden="true">
       <div class="arch"><img src="img/miss-coco-cherry.webp" alt="" width="387" height="960"></div>
-      <img class="parfi parfi-hero" src="img/parfi/parfi-wave-sticker.webp" alt="" width="235" height="320">
+      <img class="parfi parfi-sticker parfi-hero" src="img/parfi/parfi-wave-sticker.webp" alt="" width="291" height="400">
     </div>
   </div>
 
@@ -851,7 +854,7 @@ footer .wrap{padding-top:124px}
       <div class="title">
         <span class="eyebrow">AISU Café &amp; Parfaiterie</span>
         <h2 data-i18n="menu.title">La Carte</h2>
-        <img class="parfi parfi-tea" src="img/parfi/parfi-tea.webp" alt="" aria-hidden="true" width="222" height="320">
+        <img class="parfi parfi-sticker parfi-tea" src="img/parfi/parfi-tea-sticker.webp" alt="" aria-hidden="true" width="223" height="320">
         <p data-i18n="menu.sub">Espressos, lattes, matcha, thés glacés et jus pressés à froid. Prix en ariary.</p>
       </div>
       <div class="tabs" role="tablist" aria-label="La carte">
@@ -862,7 +865,7 @@ footer .wrap{padding-top:124px}
       <p class="carte-hint" data-i18n="menu.hint">Touchez un prix pour l'ajouter à votre commande.</p>
       <div class="carte-cols" id="carteCols" role="tabpanel" aria-labelledby="tab-cafes"></div>
     </div>
-    <div class="parfi-lane" aria-hidden="true"><div class="parfi-track"><div class="parfi-turn"><img class="parfi-step" src="img/parfi/parfi-walk.webp" alt="" width="185" height="320"></div></div></div>
+    <div class="parfi-lane" aria-hidden="true"><div class="parfi-track"><div class="parfi-turn"><img class="parfi-step" src="img/parfi/parfi-walk-sticker.webp" alt="" width="187" height="320"></div></div></div>
   </section>
 
   <div class="checks" aria-hidden="true" data-checks></div>
@@ -875,7 +878,7 @@ footer .wrap{padding-top:124px}
         <span class="rule-heart"><svg class="heart"><use href="#heart"/></svg></span>
       </div>
       <div class="brunch-wrap">
-      <img class="parfi parfi-cloche" src="img/parfi/parfi-cloche-sticker.webp" alt="" aria-hidden="true" width="248" height="320">
+      <img class="parfi parfi-sticker parfi-cloche" src="img/parfi/parfi-cloche-sticker.webp" alt="" aria-hidden="true" width="246" height="320">
       <div class="brunch">
         <div class="brunch-side on-wine">
           <h3>Le Brunch</h3>

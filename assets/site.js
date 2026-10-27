@@ -347,7 +347,7 @@
     $('#cartTitle').textContent = view==='checkout' ? t('cart.checkout') : t('cart.title');
     const act=view==='cart'?activeOrders():[];
     const mine = act.length ? `<div class="mine"><p class="sub-h">${t('trk.mine')}</p>${act.map(o=>`<button type="button" class="mine-row" data-track="${esc(o.id)}" data-st="${esc(isLate(o)?'late':statusOf(o))}"><span class="dot"></span><span class="tx"><b>${esc(o.ref)}</b><span>${esc(whenText(o.day,o.mins))} · ${esc(t('trk.s.'+(isLate(o)?'late':statusOf(o))))}</span></span><span class="go">${t('trk.see')}</span></button>`).join('')}</div>` : '';
-    if(!cart.length){ body.innerHTML=mine+`<div class="empty-cart"><img class="parfi-say" src="img/parfi/parfi-curious.webp" alt="" width="136" height="260"><p>${t('cart.empty')}</p><a class="btn btn-fill" href="#parfaits" data-close>${t('cart.browse')}</a></div>`; foot.innerHTML=''; foot.hidden=true; return; }
+    if(!cart.length){ body.innerHTML=mine+`<div class="empty-cart"><img class="parfi-say" src="img/parfi/parfi-curious-sticker.webp" alt="" width="138" height="260"><p>${t('cart.empty')}</p><a class="btn btn-fill" href="#parfaits" data-close>${t('cart.browse')}</a></div>`; foot.innerHTML=''; foot.hidden=true; return; }
     foot.hidden=false;
     const tot=`<div class="totals"><div class="grand"><span>${t('cart.total')}</span><span>${ar(total())}</span></div></div>`;
     if(view==='cart'){
@@ -710,7 +710,7 @@
         booking=false; btn.disabled=!!liveSettings().bookingsPaused; btn.removeAttribute('aria-busy'); btn.textContent=t('res.submit');
       }
     }
-    done.innerHTML=`<img class="done-parfi" src="img/parfi/parfi-yay.webp" alt="" width="233" height="260"><p class="fine">${t('done.ref')}</p><div class="ref">${bookingRef}</div>
+    done.innerHTML=`<img class="done-parfi" src="img/parfi/parfi-yay-sticker.webp" alt="" width="234" height="260"><p class="fine">${t('done.ref')}</p><div class="ref">${bookingRef}</div>
       <dl class="summary"><dt>${t('done.date')}</dt><dd>${esc(niceDate(dv))}</dd><dt>${t('done.time')}</dt><dd>${fmt(chosen)}</dd><dt>${t('done.guests')}</dt><dd>${party}</dd>
       <dt>${t('done.for')}</dt><dd>${esc(occasion)}</dd><dt>${t('done.seat')}</dt><dd>${t('seat.'+seatVal)}</dd><dt>${t('done.name')}</dt><dd>${esc(name)}</dd></dl>
       <p class="fine">${t(live?'done.noteLive':'done.note')}</p>
