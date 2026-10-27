@@ -589,13 +589,13 @@ summary.grp-head{list-style:none}
 
 
 /* ---------- Parfi, the AISU mascot ---------- */
-.brand{display:inline-flex;align-items:center;gap:8px}
-.brand .logo,.brand-in .logo{height:42px;width:auto;margin:-6px 0 -8px;filter:drop-shadow(0 2px 3px rgba(80,0,30,.25))}
+.brand{display:inline-flex;align-items:center;gap:6px}
+.brand .logo,.brand-in .logo{height:46px;width:auto;margin:-12px 0 -12px;transform:translateY(-4px);filter:drop-shadow(0 1px 1px rgba(80,0,30,.18))}
 .brand-in{display:inline-flex;align-items:center;gap:8px}
 .parfi{position:absolute;pointer-events:none;user-select:none;height:auto;z-index:2}
 /* stickers: die-cut cream edge (in the image), a slight lift off the page, each slapped on at its own angle */
-.parfi-sticker{transform:rotate(var(--tilt,0deg));filter:drop-shadow(0 1px 0 rgba(120,10,50,.16)) drop-shadow(0 9px 12px rgba(60,0,20,.22))}
-.parfi-step{filter:drop-shadow(0 1px 0 rgba(120,10,50,.14)) drop-shadow(0 5px 6px rgba(60,0,20,.16))}
+.parfi-sticker{transform:rotate(var(--tilt,0deg));filter:drop-shadow(0 1px 1px rgba(90,0,35,.14)) drop-shadow(0 3px 4px rgba(60,0,20,.08))}
+.parfi-step{filter:drop-shadow(0 1px 1px rgba(90,0,35,.12))}
 /* hero: waves hello at the foot of the arch */
 .parfi-hero{--tilt:-9deg;width:auto;height:min(232px,34%);right:3%;bottom:14px;transform-origin:50% 90%;animation:parfiWave 3.4s ease-in-out infinite}
 @keyframes parfiWave{0%,100%{transform:rotate(var(--tilt,0deg))}20%{transform:rotate(calc(var(--tilt,0deg) - 4deg))}40%{transform:rotate(calc(var(--tilt,0deg) + 3deg))}60%{transform:rotate(calc(var(--tilt,0deg) - 2deg))}80%{transform:rotate(calc(var(--tilt,0deg) + 1deg))}}
@@ -623,7 +623,7 @@ footer{position:relative}
 footer .wrap{padding-top:124px}
 /* phones: smaller, and nothing covers the hero buttons */
 @media (max-width:760px){
-  .brand .logo,.brand-in .logo{height:38px}
+  .brand .logo,.brand-in .logo{height:42px;transform:translateY(-3px)}
   .parfi-hero{height:112px;right:2%;bottom:auto;top:calc(100% - 112px - var(--hero-btns,150px))}
   .parfi-tea{height:84px;right:-8px;bottom:auto;top:-10px}
   .parfi-cloche{height:80px;right:3%;bottom:calc(100% - 50px)}
@@ -644,13 +644,13 @@ footer .wrap{padding-top:124px}
 }
 /* in the basket, order page and booking confirmation */
 .parfi-say{display:block;width:auto;pointer-events:none}
-.empty-cart .parfi-say{height:124px;margin:4px 0 -2px;transform:rotate(-7deg);filter:drop-shadow(0 1px 0 rgba(120,10,50,.16)) drop-shadow(0 7px 10px rgba(60,0,20,.18))}
+.empty-cart .parfi-say{height:124px;margin:4px 0 -2px;transform:rotate(-7deg);filter:drop-shadow(0 1px 1px rgba(90,0,35,.14)) drop-shadow(0 3px 4px rgba(60,0,20,.08))}
 .trk-head{display:flex;align-items:center;gap:14px}
 .trk-head .trk-msg{flex:1;min-width:0}
 .trk-head .parfi-say{height:92px;flex:none;animation:parfiBob 3.6s ease-in-out infinite}
 .trk.st-ready .trk-head .parfi-say{animation:parfiCheer .9s ease-in-out infinite alternate}
 @keyframes parfiCheer{from{transform:translateY(0) rotate(-3deg)}to{transform:translateY(-6px) rotate(3deg)}}
-.done-parfi{--tilt:6deg;height:132px;width:auto;justify-self:start;transform:rotate(var(--tilt));filter:drop-shadow(0 1px 0 rgba(120,10,50,.16)) drop-shadow(0 8px 12px rgba(60,0,20,.2));animation:parfiBob 2.6s ease-in-out 2}
+.done-parfi{--tilt:6deg;height:132px;width:auto;justify-self:start;transform:rotate(var(--tilt));filter:drop-shadow(0 1px 1px rgba(90,0,35,.14)) drop-shadow(0 3px 4px rgba(60,0,20,.08));animation:parfiBob 2.6s ease-in-out 2}
 @media (prefers-reduced-motion:reduce){ .parfi-say,.done-parfi{animation:none!important} }
 /* ---------- privacy notice ---------- */
 .priv{display:grid;gap:16px;padding:18px 0}
