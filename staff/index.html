@@ -9,8 +9,8 @@
 <meta name="apple-mobile-web-app-title" content="AISU Staff">
 <title>AISU · Staff</title>
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 20.5s-7.5-4.6-9.3-9.4C1.4 7.6 3.6 4.5 6.8 4.5c2.1 0 3.6 1.2 5.2 3.1 1.6-1.9 3.1-3.1 5.2-3.1 3.2 0 5.4 3.1 4.1 6.6-1.8 4.8-9.3 9.4-9.3 9.4z' fill='%23C9195C'/%3E%3C/svg%3E">
-<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="64x64" href="../img/parfi/favicon-64.png">
+<link rel="apple-touch-icon" href="../img/parfi/apple-touch-icon.png">
 <style>
 @font-face{font-family:'Unbounded';font-weight:800;font-display:swap;src:url(../fonts/unbounded-latin-800-normal.woff2) format('woff2')}
 @font-face{font-family:'Cormorant Garamond';font-weight:600;font-display:swap;src:url(../fonts/cormorant-garamond-latin-600-normal.woff2) format('woff2')}
@@ -69,6 +69,10 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--wine);bo
 .top{position:sticky;top:0;z-index:20;background:var(--wine);color:#fff;padding:env(safe-area-inset-top) 0 0}
 .top-row{display:flex;align-items:center;gap:12px;padding:10px max(16px,env(safe-area-inset-right)) 10px max(16px,env(safe-area-inset-left))}
 .top-row .mark{font-size:20px}
+.brandrow{display:inline-flex;align-items:center;gap:10px}
+.login-card .brandrow .logo{height:64px;width:auto}
+.top-row .brandrow{gap:7px}
+.top-row .brandrow .logo{height:36px;width:auto;margin:-6px 0 -6px;filter:drop-shadow(0 2px 3px rgba(80,0,30,.25))}
 .clock{font-size:14px;opacity:.9;white-space:nowrap}
 .top-tools{margin-left:auto;display:flex;align-items:center;gap:8px}
 .top-tools{min-width:0}
@@ -350,7 +354,7 @@ dialog::backdrop{background:rgba(58,14,34,.55)}
 
 <section class="login" id="login" hidden>
   <form class="login-card" id="loginForm" novalidate>
-    <span class="mark">AISU</span>
+    <span class="mark brandrow"><img class="logo" src="../img/parfi/parfi-logo.webp" alt="" width="221" height="400"><span>AISU</span></span>
     <h1 data-t="signin.title">Connexion du personnel</h1>
     <div class="seg" role="group" id="loginMode" style="justify-self:start">
       <button type="button" data-mode="team" aria-pressed="true" data-t="login.team">Équipe</button>
@@ -370,7 +374,7 @@ dialog::backdrop{background:rgba(58,14,34,.55)}
 
 <section class="login" id="denied" hidden>
   <div class="login-card">
-    <span class="mark">AISU</span>
+    <span class="mark brandrow"><img class="logo" src="../img/parfi/parfi-logo.webp" alt="" width="221" height="400"><span>AISU</span></span>
     <h1 data-t="denied.title">Ce compte n'a pas accès</h1>
     <p id="deniedBody"></p>
     <button class="btn btn-ghost" type="button" data-signout data-t="signout">Se déconnecter</button>
@@ -380,7 +384,7 @@ dialog::backdrop{background:rgba(58,14,34,.55)}
 <div id="shell" hidden>
   <header class="top">
     <div class="top-row">
-      <span class="mark">AISU</span><span class="clock" id="clock"></span>
+      <span class="mark brandrow"><img class="logo" src="../img/parfi/parfi-logo-sticker.webp" alt="" width="114" height="200"><span>AISU</span></span><span class="clock" id="clock"></span>
       <div class="top-tools">
         <button class="chipbtn" type="button" id="alertBtn"><svg><use href="#i-bell"/></svg><span id="alertBtnText"></span></button>
         <button class="chipbtn" type="button" id="searchBtn"><svg><use href="#i-search"/></svg><span class="lbl-wide" data-t="search">Rechercher</span></button>
@@ -640,8 +644,8 @@ dialog::backdrop{background:rgba(58,14,34,.55)}
 
 <div class="toast" id="toast" role="status" aria-live="polite"><span id="toastText"></span><button type="button" id="toastUndo" hidden data-t="undo">Annuler</button></div>
 
-<script src="../assets/menu-data.js?v=20261027a"></script>
-<script src="../assets/firebase-config.js?v=20261027a"></script>
-<script type="module" src="staff.js?v=20261027a"></script>
+<script src="../assets/menu-data.js?v=20261027b"></script>
+<script src="../assets/firebase-config.js?v=20261027b"></script>
+<script type="module" src="staff.js?v=20261027b"></script>
 </body>
 </html>

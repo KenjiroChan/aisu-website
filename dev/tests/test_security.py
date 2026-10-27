@@ -74,7 +74,7 @@ async def main():
 
         # a crafted order link can't run code on a customer's phone
         await site.goto(BASE + '#commande=EvilTrackKey0000000000000'); await site.wait_for_timeout(900)
-        check('crafted order link shows hostile text as plain text', await site.is_visible('#cart') and not await site.evaluate("!!document.querySelector('#cartBody img')") and not await site.evaluate('window.__pwned||0'))
+        check('crafted order link shows hostile text as plain text', await site.is_visible('#cart') and not await site.evaluate("!!document.querySelector('#cartBody img:not(.parfi-say)')") and not await site.evaluate('window.__pwned||0'))
         await site.click('#closeCart')
         await site.evaluate("localStorage.removeItem('aisu-orders')"); await site.goto(BASE); await site.wait_for_timeout(700)
 

@@ -347,7 +347,7 @@
     $('#cartTitle').textContent = view==='checkout' ? t('cart.checkout') : t('cart.title');
     const act=view==='cart'?activeOrders():[];
     const mine = act.length ? `<div class="mine"><p class="sub-h">${t('trk.mine')}</p>${act.map(o=>`<button type="button" class="mine-row" data-track="${esc(o.id)}" data-st="${esc(isLate(o)?'late':statusOf(o))}"><span class="dot"></span><span class="tx"><b>${esc(o.ref)}</b><span>${esc(whenText(o.day,o.mins))} · ${esc(t('trk.s.'+(isLate(o)?'late':statusOf(o))))}</span></span><span class="go">${t('trk.see')}</span></button>`).join('')}</div>` : '';
-    if(!cart.length){ body.innerHTML=mine+`<div class="empty-cart"><p>${t('cart.empty')}</p><a class="btn btn-fill" href="#parfaits" data-close>${t('cart.browse')}</a></div>`; foot.innerHTML=''; foot.hidden=true; return; }
+    if(!cart.length){ body.innerHTML=mine+`<div class="empty-cart"><img class="parfi-say" src="img/parfi/parfi-curious.webp" alt="" width="136" height="260"><p>${t('cart.empty')}</p><a class="btn btn-fill" href="#parfaits" data-close>${t('cart.browse')}</a></div>`; foot.innerHTML=''; foot.hidden=true; return; }
     foot.hidden=false;
     const tot=`<div class="totals"><div class="grand"><span>${t('cart.total')}</span><span>${ar(total())}</span></div></div>`;
     if(view==='cart'){
@@ -517,6 +517,10 @@
   }
   function stopFlash(){ if(flashTimer){ clearInterval(flashTimer); document.title=flashTimer.base; flashTimer=null; } }
 
+  // Parfi's pose follows the order: received (thumbs up), preparing (hurrying), ready (cheering),
+  // collected (giggling), and hands on cheeks when something needs a call
+  const PARFI_FOR={new:['thumbsup',148],preparing:['run',157],ready:['pompom-sticker',252],collected:['giggle',149],late:['cheeks',146],cancelled:['cheeks',146],lost:['cheeks',146]};
+  function parfiFor(state){ const p=PARFI_FOR[state]||PARFI_FOR.new; return `<img class="parfi-say" src="img/parfi/parfi-${p[0]}.webp" alt="" width="${p[1]}" height="260">`; }
   function trackView(o){
     const live=!!(o.track && backend());
     const d=trackData, s=d ? d.status : (o.status||'new'), late=isLate(o) && !finished(s);
@@ -537,7 +541,7 @@
       withPhone('trk.k.hold',{t:until}), esc(t('trk.k.pay')), esc(t('trk.k.where',{a:t('foot.addr')})) ].filter(Boolean);
     const canNotify = live && 'Notification' in window && !finished(s) && s!=='ready';
     return `<div class="trk st-${esc(lost?'lost':late?'late':s)}">
-      <div class="trk-status" role="status" aria-live="polite">${steps}<p class="trk-msg">${msg}</p></div>
+      <div class="trk-status" role="status" aria-live="polite">${steps}<div class="trk-head"><p class="trk-msg">${msg}</p>${parfiFor(lost?'lost':s==='cancelled'?'cancelled':late?'late':s)}</div></div>
       ${codeBox}
       <dl class="summary"><dt>${t('trk.when')}</dt><dd>${esc(whenText(o.day,o.mins))}</dd><dt>${t('trk.until')}</dt><dd>${esc(until)}</dd><dt>${t('trk.pay')}</dt><dd class="tnum">${ar(o.total)}</dd></dl>
       <ul class="trk-items">${o.items.map(l=>`<li><span class="q">${esc(l.q)}×</span><span>${esc(l.n)}</span>${isCold(l.k)?snowIcon():''}</li>`).join('')}</ul>
@@ -584,6 +588,16 @@
     if(o) openTrack(o.id); else showToast(t('trk.m.lost',{p:CAFE_PHONE}), true);
   }
   window.addEventListener('hashchange', openFromLink);
+
+  /* ================= Parfi: hold still while off screen ================= */
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>es.forEach(e=>e.target.classList.toggle('is-still',!e.isIntersecting)),{rootMargin:'80px'});
+    document.querySelectorAll('.parfi,.parfi-lane').forEach(el=>{ el.classList.add('is-still'); io.observe(el); });
+  }
+  // keep the hero Parfi clear of the hero buttons on phones
+  function placeHeroParfi(){ const b=document.querySelector('.hero-ctas'), h=document.querySelector('.hero'); if(!b||!h) return;
+    const gap=h.getBoundingClientRect().bottom-b.getBoundingClientRect().top; h.style.setProperty('--hero-btns',Math.max(0,Math.round(gap+10))+'px'); }
+  placeHeroParfi(); window.addEventListener('resize',placeHeroParfi);
 
   /* ================= privacy notice ================= */
   const privDlg=$('#privacy');
@@ -696,7 +710,7 @@
         booking=false; btn.disabled=!!liveSettings().bookingsPaused; btn.removeAttribute('aria-busy'); btn.textContent=t('res.submit');
       }
     }
-    done.innerHTML=`<p class="fine">${t('done.ref')}</p><div class="ref">${bookingRef}</div>
+    done.innerHTML=`<img class="done-parfi" src="img/parfi/parfi-yay.webp" alt="" width="233" height="260"><p class="fine">${t('done.ref')}</p><div class="ref">${bookingRef}</div>
       <dl class="summary"><dt>${t('done.date')}</dt><dd>${esc(niceDate(dv))}</dd><dt>${t('done.time')}</dt><dd>${fmt(chosen)}</dd><dt>${t('done.guests')}</dt><dd>${party}</dd>
       <dt>${t('done.for')}</dt><dd>${esc(occasion)}</dd><dt>${t('done.seat')}</dt><dd>${t('seat.'+seatVal)}</dd><dt>${t('done.name')}</dt><dd>${esc(name)}</dd></dl>
       <p class="fine">${t(live?'done.noteLive':'done.note')}</p>

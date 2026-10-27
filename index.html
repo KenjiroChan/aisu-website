@@ -7,7 +7,9 @@
 <meta property="og:title" content="AISU Café & Parfaiteria">
 <meta property="og:description" content="Parfaits, café, matcha, brunch and afternoon tea.">
 <meta property="og:image" content="img/miss-coco-cherry.webp">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 20.5s-7.5-4.6-9.3-9.4C1.4 7.6 3.6 4.5 6.8 4.5c2.1 0 3.6 1.2 5.2 3.1 1.6-1.9 3.1-3.1 5.2-3.1 3.2 0 5.4 3.1 4.1 6.6-1.8 4.8-9.3 9.4-9.3 9.4z' fill='%23C9195C'/%3E%3C/svg%3E">
+<link rel="icon" type="image/png" sizes="64x64" href="img/parfi/favicon-64.png">
+<link rel="icon" type="image/png" sizes="32x32" href="img/parfi/favicon-32.png">
+<link rel="apple-touch-icon" href="img/parfi/apple-touch-icon.png">
 <link rel="preload" href="fonts/unbounded-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin>
 <style>*{box-sizing:border-box}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}img{max-width:100%}[hidden]{display:none!important}
 @font-face{font-family:'Unbounded';font-style:normal;font-weight:700;font-display:swap;src:url(fonts/unbounded-latin-700-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
@@ -585,6 +587,68 @@ summary.grp-head{list-style:none}
 .toast.show{transform:translate(-50%,0);visibility:visible;transition:transform .25s ease}
 .toast button{background:var(--gold-lt);color:var(--wine-dk);border:0;border-radius:999px;padding:7px 14px;font-weight:600;cursor:pointer;white-space:nowrap}
 
+
+/* ---------- Parfi, the AISU mascot ---------- */
+.brand{display:inline-flex;align-items:center;gap:8px}
+.brand .logo,.brand-in .logo{height:42px;width:auto;margin:-6px 0 -8px;filter:drop-shadow(0 2px 3px rgba(80,0,30,.25))}
+.brand-in{display:inline-flex;align-items:center;gap:8px}
+.parfi{position:absolute;pointer-events:none;user-select:none;height:auto;z-index:2}
+/* hero: waves hello at the foot of the arch */
+.parfi-hero{width:auto;height:min(200px,30%);right:4%;bottom:0;transform-origin:50% 100%;animation:parfiWave 3.2s ease-in-out infinite;filter:drop-shadow(0 8px 10px rgba(60,0,20,.25))}
+@keyframes parfiWave{0%,100%{transform:rotate(0)}20%{transform:rotate(-5deg)}40%{transform:rotate(3deg)}60%{transform:rotate(-3deg)}80%{transform:rotate(1deg)}}
+/* drinks menu: serving tea beside the tabs */
+.carte .title{position:relative}
+.parfi-tea{height:128px;width:auto;right:2%;bottom:-118px;animation:parfiBob 4s ease-in-out infinite}
+@keyframes parfiBob{50%{transform:translateY(-6px) rotate(-1.5deg)}}
+/* brunch: presenting a cloche, standing on the card's top edge */
+.brunch-wrap{position:relative;margin-top:24px}
+.parfi-cloche{height:132px;width:auto;right:5%;bottom:calc(100% - 6px);animation:parfiBob 4.6s ease-in-out infinite;z-index:3}
+/* strolling: walks to one end, pauses, turns round, walks back */
+.carte{position:relative}
+.parfi-lane{position:absolute;left:0;right:0;pointer-events:none;z-index:2;padding-inline:max(16px,calc((100% - 1160px)/2 + 20px))}
+.carte .parfi-lane{bottom:0;height:104px}
+.parfi-track{position:relative;height:100%;width:calc(100% - 64px);animation:parfiStroll 46s linear infinite}
+.parfi-turn{position:absolute;left:0;bottom:0;height:100%;animation:parfiTurn 46s step-end infinite}
+.parfi-step{display:block;height:100%;width:auto;transform-origin:50% 100%;animation:parfiStep .55s ease-in-out infinite alternate}
+@keyframes parfiStroll{0%,6%{transform:translateX(0)}44%,56%{transform:translateX(100%)}94%,100%{transform:translateX(0)}}
+@keyframes parfiTurn{0%{transform:scaleX(1)}50%{transform:scaleX(-1)}}
+@keyframes parfiStep{from{transform:translateY(0) rotate(-3deg)}to{transform:translateY(-4px) rotate(3deg)}}
+/* footer: waving goodbye on the way past */
+footer{position:relative}
+.parfi-lane-foot{top:14px;height:96px}
+.parfi-lane-foot .parfi-track,.parfi-lane-foot .parfi-turn{animation-duration:58s;animation-delay:-20s}
+footer .wrap{padding-top:124px}
+/* phones: smaller, and nothing covers the hero buttons */
+@media (max-width:760px){
+  .brand .logo,.brand-in .logo{height:38px}
+  .parfi-hero{height:92px;right:4%;bottom:auto;top:calc(100% - 92px - var(--hero-btns,150px))}
+  .parfi-tea{height:74px;right:-6px;bottom:auto;top:-6px}
+  .parfi-cloche{height:92px;right:3%;bottom:calc(100% - 58px)}
+  .brunch-wrap{margin-top:44px}
+  .carte{padding-bottom:132px}
+  .carte .parfi-lane{height:78px}
+  .parfi-track{width:calc(100% - 46px)}
+  .parfi-lane-foot{top:10px;height:72px}
+  footer .wrap{padding-top:96px}
+  .parfi-track,.parfi-turn{animation-duration:30s}
+  .parfi-lane-foot .parfi-track,.parfi-lane-foot .parfi-turn{animation-duration:38s}
+}
+/* off screen or reduced motion: hold still */
+.parfi.is-still,.parfi-lane.is-still .parfi-track,.parfi-lane.is-still .parfi-turn,.parfi-lane.is-still .parfi-step{animation-play-state:paused}
+@media (prefers-reduced-motion:reduce){
+  .parfi,.parfi-track,.parfi-turn,.parfi-step{animation:none!important}
+  .parfi-track{transform:translateX(12%)}
+}
+/* in the basket, order page and booking confirmation */
+.parfi-say{display:block;width:auto;pointer-events:none}
+.empty-cart .parfi-say{height:118px;margin-bottom:-4px}
+.trk-head{display:flex;align-items:center;gap:14px}
+.trk-head .trk-msg{flex:1;min-width:0}
+.trk-head .parfi-say{height:92px;flex:none;animation:parfiBob 3.6s ease-in-out infinite}
+.trk.st-ready .trk-head .parfi-say{animation:parfiCheer .9s ease-in-out infinite alternate}
+@keyframes parfiCheer{from{transform:translateY(0) rotate(-3deg)}to{transform:translateY(-6px) rotate(3deg)}}
+.done-parfi{height:120px;width:auto;justify-self:start;animation:parfiCheer 1s ease-in-out 3 alternate}
+@media (prefers-reduced-motion:reduce){ .parfi-say,.done-parfi{animation:none!important} }
 /* ---------- privacy notice ---------- */
 .priv{display:grid;gap:16px;padding:18px 0}
 .priv-intro{font-family:var(--f-display);font-size:1.25rem;font-weight:600;line-height:1.3}
@@ -671,7 +735,7 @@ summary.grp-head{list-style:none}
 
 <header class="nav">
   <div class="wrap">
-    <a class="brand mark" href="#top" aria-label="AISU">AISU</a>
+    <a class="brand mark" href="#top" aria-label="AISU"><img class="logo" src="img/parfi/parfi-logo-sticker.webp" alt="" width="114" height="200"><span>AISU</span></a>
     <nav class="links" aria-label="Sections">
       <a href="#parfaits" data-i18n="nav.parfaits">Parfaits</a>
       <a href="#carte" data-i18n="nav.menu">La carte</a>
@@ -706,6 +770,7 @@ summary.grp-head{list-style:none}
     </div>
     <div class="hero-art" aria-hidden="true">
       <div class="arch"><img src="img/miss-coco-cherry.webp" alt="" width="387" height="960"></div>
+      <img class="parfi parfi-hero" src="img/parfi/parfi-wave-sticker.webp" alt="" width="235" height="320">
     </div>
   </div>
 
@@ -786,6 +851,7 @@ summary.grp-head{list-style:none}
       <div class="title">
         <span class="eyebrow">AISU Café &amp; Parfaiterie</span>
         <h2 data-i18n="menu.title">La Carte</h2>
+        <img class="parfi parfi-tea" src="img/parfi/parfi-tea.webp" alt="" aria-hidden="true" width="222" height="320">
         <p data-i18n="menu.sub">Espressos, lattes, matcha, thés glacés et jus pressés à froid. Prix en ariary.</p>
       </div>
       <div class="tabs" role="tablist" aria-label="La carte">
@@ -796,6 +862,7 @@ summary.grp-head{list-style:none}
       <p class="carte-hint" data-i18n="menu.hint">Touchez un prix pour l'ajouter à votre commande.</p>
       <div class="carte-cols" id="carteCols" role="tabpanel" aria-labelledby="tab-cafes"></div>
     </div>
+    <div class="parfi-lane" aria-hidden="true"><div class="parfi-track"><div class="parfi-turn"><img class="parfi-step" src="img/parfi/parfi-walk.webp" alt="" width="185" height="320"></div></div></div>
   </section>
 
   <div class="checks" aria-hidden="true" data-checks></div>
@@ -807,6 +874,8 @@ summary.grp-head{list-style:none}
         <h2 data-i18n="brunch.title">Brunch &amp; Afternoon Tea</h2>
         <span class="rule-heart"><svg class="heart"><use href="#heart"/></svg></span>
       </div>
+      <div class="brunch-wrap">
+      <img class="parfi parfi-cloche" src="img/parfi/parfi-cloche-sticker.webp" alt="" aria-hidden="true" width="248" height="320">
       <div class="brunch">
         <div class="brunch-side on-wine">
           <h3>Le Brunch</h3>
@@ -839,6 +908,7 @@ summary.grp-head{list-style:none}
         </div>
       </div>
 
+      </div>
       <div class="teas-head"><h3>Afternoon Tea</h3><span class="when" data-i18n="tea.when">Servi tous les jours, pour 2 personnes</span></div>
       <div class="teas snap" id="teaList"></div>
       <div class="dine"><p data-i18n="tea.note">Brunch et afternoon tea sont servis sur place. Réservez votre table pour être sûr d'en profiter.</p><a class="btn btn-fill" href="#reserve" data-i18n="nav.book">Réserver</a></div>
@@ -936,6 +1006,7 @@ summary.grp-head{list-style:none}
 </main>
 
 <footer id="visit">
+  <div class="parfi-lane parfi-lane-foot" aria-hidden="true"><div class="parfi-track"><div class="parfi-turn"><img class="parfi-step" src="img/parfi/parfi-wave-walk-sticker.webp" alt="" width="210" height="320"></div></div></div>
   <div class="wrap">
     <svg width="34" height="34" aria-hidden="true" style="color:var(--gold-lt)"><use href="#heart-f"/></svg>
     <div class="foot-cols">
@@ -966,7 +1037,7 @@ summary.grp-head{list-style:none}
 </footer>
 
 <dialog class="mnav" id="mnav" data-i18n-aria="nav.sections" aria-label="Sections">
-  <div class="mnav-head"><span class="mark">AISU</span><button class="x" type="button" id="closeNav" data-i18n-aria="nav.close" aria-label="Fermer le menu">×</button></div>
+  <div class="mnav-head"><span class="mark brand-in"><img class="logo" src="img/parfi/parfi-logo-sticker.webp" alt="" width="114" height="200"><span>AISU</span></span><button class="x" type="button" id="closeNav" data-i18n-aria="nav.close" aria-label="Fermer le menu">×</button></div>
   <nav class="mnav-links">
     <a href="#top"><svg aria-hidden="true"><use href="#heart-f"/></svg><span data-i18n="nav.home">Accueil</span></a>
     <a href="#parfaits"><svg aria-hidden="true"><use href="#heart-f"/></svg><span data-i18n="nav.parfaits">Parfaits</span></a>
@@ -1010,10 +1081,10 @@ summary.grp-head{list-style:none}
 <button class="track-chip" type="button" id="trackChip" hidden></button>
 <div class="toast" id="toast" role="status" aria-live="polite"><span id="toastText"></span><button type="button" data-open-cart data-i18n="cart.view">Voir la commande</button></div>
 
-<script src="assets/menu-data.js?v=20261027a"></script>
-<script src="assets/firebase-config.js?v=20261027a"></script>
-<script type="module" src="assets/backend.js?v=20261027a"></script>
-<script src="assets/site.js?v=20261027a"></script>
+<script src="assets/menu-data.js?v=20261027b"></script>
+<script src="assets/firebase-config.js?v=20261027b"></script>
+<script type="module" src="assets/backend.js?v=20261027b"></script>
+<script src="assets/site.js?v=20261027b"></script>
 
 </body>
 </html>
