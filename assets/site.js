@@ -589,11 +589,7 @@
   }
   window.addEventListener('hashchange', openFromLink);
 
-  /* ================= Parfi: hold still while off screen ================= */
-  if('IntersectionObserver' in window){
-    const io=new IntersectionObserver(es=>es.forEach(e=>e.target.classList.toggle('is-still',!e.isIntersecting)),{rootMargin:'80px'});
-    document.querySelectorAll('.parfi,.parfi-lane').forEach(el=>{ el.classList.add('is-still'); io.observe(el); });
-  }
+  /* ================= Parfi ================= */
   // keep the hero Parfi clear of the hero buttons on phones
   function placeHeroParfi(){ const b=document.querySelector('.hero-ctas'), h=document.querySelector('.hero'); if(!b||!h) return;
     const gap=h.getBoundingClientRect().bottom-b.getBoundingClientRect().top; h.style.setProperty('--hero-btns',Math.max(0,Math.round(gap+10))+'px'); }

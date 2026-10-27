@@ -48,7 +48,7 @@ Phone alerts are optional: Settings → Phone alerts creates a private channel c
 
 ## Parfi, the mascot
 
-The poses live in `img/parfi/` (WebP, cut out from the character sheet, enlarged 4x with Real-ESRGAN and given an even outline; `-sticker` files have the cream die-cut edge for pink or busy backgrounds). `parfi-logo-master.png` is the full-size logo. Only poses with both arms and both legs are used. On the page: waving in the hero, serving tea beside the drinks menu, strolling under the menu, presenting a cloche on the brunch card and waving goodbye in the footer; in the app: the empty basket, each order status and the booking confirmation. Styles are under "Parfi, the AISU mascot" in `index.html`; animations pause off screen and stop for visitors who prefer reduced motion.
+The poses live in `img/parfi/` (WebP, cut out from the character sheet, enlarged 4x with Real-ESRGAN and given an even outline; `-sticker` files have the cream die-cut edge for pink or busy backgrounds). `parfi-logo-master.png` is the full-size logo. Only poses with both arms and both legs are used. All of them are still stickers with no movement, each at its own tilt. On the page: waving in the hero, serving tea beside the drinks menu, standing on the checkerboard under the menu, presenting a cloche on the brunch card and waving goodbye beside the footer heart; in the app: the empty basket, each order status and the booking confirmation. Styles are under "Parfi, the AISU mascot" in `index.html`.
 
 ## Security
 

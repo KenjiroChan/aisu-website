@@ -588,38 +588,27 @@ summary.grp-head{list-style:none}
 .toast button{background:var(--gold-lt);color:var(--wine-dk);border:0;border-radius:999px;padding:7px 14px;font-weight:600;cursor:pointer;white-space:nowrap}
 
 
-/* ---------- Parfi, the AISU mascot ---------- */
+/* ---------- Parfi, the AISU mascot (still stickers, no movement) ---------- */
 .brand{display:inline-flex;align-items:center;gap:6px}
 .brand .logo,.brand-in .logo{height:46px;width:auto;margin:-12px 0 -12px;transform:translateY(-4px);filter:drop-shadow(0 1px 1px rgba(80,0,30,.18))}
 .brand-in{display:inline-flex;align-items:center;gap:8px}
 .parfi{position:absolute;pointer-events:none;user-select:none;height:auto;z-index:2}
 /* stickers: die-cut cream edge (in the image), a slight lift off the page, each slapped on at its own angle */
 .parfi-sticker{transform:rotate(var(--tilt,0deg));filter:drop-shadow(0 1px 1px rgba(90,0,35,.14)) drop-shadow(0 3px 4px rgba(60,0,20,.08))}
-.parfi-step{filter:drop-shadow(0 1px 1px rgba(90,0,35,.12))}
-/* hero: waves hello at the foot of the arch */
-.parfi-hero{--tilt:-9deg;width:auto;height:min(232px,34%);right:3%;bottom:14px;transform-origin:50% 90%;animation:parfiWave 3.4s ease-in-out infinite}
-@keyframes parfiWave{0%,100%{transform:rotate(var(--tilt,0deg))}20%{transform:rotate(calc(var(--tilt,0deg) - 4deg))}40%{transform:rotate(calc(var(--tilt,0deg) + 3deg))}60%{transform:rotate(calc(var(--tilt,0deg) - 2deg))}80%{transform:rotate(calc(var(--tilt,0deg) + 1deg))}}
+/* hero: waving hello at the foot of the arch */
+.parfi-hero{--tilt:-9deg;width:auto;height:min(232px,34%);right:3%;bottom:14px}
 /* drinks menu: serving tea beside the tabs */
 .carte .title{position:relative}
-.parfi-tea{--tilt:8deg;height:156px;width:auto;right:1%;bottom:-140px;animation:parfiBob 4s ease-in-out infinite}
-@keyframes parfiBob{0%,100%{transform:rotate(var(--tilt,0deg))}50%{transform:translateY(-6px) rotate(calc(var(--tilt,0deg) - 2deg))}}
-/* brunch: presenting a cloche, standing on the card's top edge */
+.parfi-tea{--tilt:8deg;height:156px;width:auto;right:1%;bottom:-140px}
+/* brunch: presenting a cloche on the card's corner */
 .brunch-wrap{position:relative;margin-top:24px}
-.parfi-cloche{--tilt:-7deg;height:118px;width:auto;right:5%;bottom:calc(100% - 44px);animation:parfiBob 4.6s ease-in-out infinite;z-index:3}
-/* strolling: walks to one end, pauses, turns round, walks back */
+.parfi-cloche{--tilt:-7deg;height:118px;width:auto;right:5%;bottom:calc(100% - 44px);z-index:3}
+/* under the drinks menu: standing on the checkerboard */
 .carte{position:relative}
-.parfi-lane{position:absolute;left:0;right:0;pointer-events:none;z-index:2;padding-inline:max(16px,calc((100% - 1160px)/2 + 20px))}
-.carte .parfi-lane{bottom:0;height:104px}
-.parfi-track{position:relative;height:100%;width:calc(100% - 64px);animation:parfiStroll 46s linear infinite}
-.parfi-turn{position:absolute;left:0;bottom:0;height:100%;animation:parfiTurn 46s step-end infinite}
-.parfi-step{display:block;height:100%;width:auto;transform-origin:50% 100%;animation:parfiStep .55s ease-in-out infinite alternate}
-@keyframes parfiStroll{0%,6%{transform:translateX(0)}44%,56%{transform:translateX(100%)}94%,100%{transform:translateX(0)}}
-@keyframes parfiTurn{0%{transform:scaleX(1)}50%{transform:scaleX(-1)}}
-@keyframes parfiStep{from{transform:translateY(0) rotate(-3deg)}to{transform:translateY(-4px) rotate(3deg)}}
-/* footer: waving goodbye on the way past */
+.parfi-stand{--tilt:-5deg;height:104px;width:auto;bottom:-2px;left:max(28px,calc((100% - 1160px)/2 + 44px))}
+/* footer: waving goodbye beside the heart */
 footer{position:relative}
-.parfi-lane-foot{top:14px;height:96px}
-.parfi-lane-foot .parfi-track,.parfi-lane-foot .parfi-turn{animation-duration:58s;animation-delay:-20s}
+.parfi-bye{--tilt:7deg;height:96px;width:auto;top:22px;left:calc(50% + 38px)}
 footer .wrap{padding-top:124px}
 /* phones: smaller, and nothing covers the hero buttons */
 @media (max-width:760px){
@@ -629,29 +618,17 @@ footer .wrap{padding-top:124px}
   .parfi-cloche{height:80px;right:3%;bottom:calc(100% - 50px)}
   .brunch-wrap{margin-top:44px}
   .carte{padding-bottom:132px}
-  .carte .parfi-lane{height:78px}
-  .parfi-track{width:calc(100% - 46px)}
-  .parfi-lane-foot{top:10px;height:72px}
+  .parfi-stand{height:80px;left:22px}
+  .parfi-bye{height:72px;top:14px;left:calc(50% + 30px)}
   footer .wrap{padding-top:96px}
-  .parfi-track,.parfi-turn{animation-duration:30s}
-  .parfi-lane-foot .parfi-track,.parfi-lane-foot .parfi-turn{animation-duration:38s}
-}
-/* off screen or reduced motion: hold still */
-.parfi.is-still,.parfi-lane.is-still .parfi-track,.parfi-lane.is-still .parfi-turn,.parfi-lane.is-still .parfi-step{animation-play-state:paused}
-@media (prefers-reduced-motion:reduce){
-  .parfi,.parfi-track,.parfi-turn,.parfi-step{animation:none!important}
-  .parfi-track{transform:translateX(12%)}
 }
 /* in the basket, order page and booking confirmation */
 .parfi-say{display:block;width:auto;pointer-events:none}
 .empty-cart .parfi-say{height:124px;margin:4px 0 -2px;transform:rotate(-7deg);filter:drop-shadow(0 1px 1px rgba(90,0,35,.14)) drop-shadow(0 3px 4px rgba(60,0,20,.08))}
 .trk-head{display:flex;align-items:center;gap:14px}
 .trk-head .trk-msg{flex:1;min-width:0}
-.trk-head .parfi-say{height:92px;flex:none;animation:parfiBob 3.6s ease-in-out infinite}
-.trk.st-ready .trk-head .parfi-say{animation:parfiCheer .9s ease-in-out infinite alternate}
-@keyframes parfiCheer{from{transform:translateY(0) rotate(-3deg)}to{transform:translateY(-6px) rotate(3deg)}}
-.done-parfi{--tilt:6deg;height:132px;width:auto;justify-self:start;transform:rotate(var(--tilt));filter:drop-shadow(0 1px 1px rgba(90,0,35,.14)) drop-shadow(0 3px 4px rgba(60,0,20,.08));animation:parfiBob 2.6s ease-in-out 2}
-@media (prefers-reduced-motion:reduce){ .parfi-say,.done-parfi{animation:none!important} }
+.trk-head .parfi-say{height:92px;flex:none}
+.done-parfi{--tilt:6deg;height:132px;width:auto;justify-self:start;transform:rotate(var(--tilt));filter:drop-shadow(0 1px 1px rgba(90,0,35,.14)) drop-shadow(0 3px 4px rgba(60,0,20,.08))}
 /* ---------- privacy notice ---------- */
 .priv{display:grid;gap:16px;padding:18px 0}
 .priv-intro{font-family:var(--f-display);font-size:1.25rem;font-weight:600;line-height:1.3}
@@ -865,7 +842,7 @@ footer .wrap{padding-top:124px}
       <p class="carte-hint" data-i18n="menu.hint">Touchez un prix pour l'ajouter à votre commande.</p>
       <div class="carte-cols" id="carteCols" role="tabpanel" aria-labelledby="tab-cafes"></div>
     </div>
-    <div class="parfi-lane" aria-hidden="true"><div class="parfi-track"><div class="parfi-turn"><img class="parfi-step" src="img/parfi/parfi-walk-sticker.webp" alt="" width="194" height="320"></div></div></div>
+    <img class="parfi parfi-sticker parfi-stand" src="img/parfi/parfi-walk-sticker.webp" alt="" aria-hidden="true" width="194" height="320">
   </section>
 
   <div class="checks" aria-hidden="true" data-checks></div>
@@ -1009,7 +986,7 @@ footer .wrap{padding-top:124px}
 </main>
 
 <footer id="visit">
-  <div class="parfi-lane parfi-lane-foot" aria-hidden="true"><div class="parfi-track"><div class="parfi-turn"><img class="parfi-step" src="img/parfi/parfi-wave-walk-sticker.webp" alt="" width="213" height="320"></div></div></div>
+  <img class="parfi parfi-sticker parfi-bye" src="img/parfi/parfi-wave-walk-sticker.webp" alt="" aria-hidden="true" width="213" height="320">
   <div class="wrap">
     <svg width="34" height="34" aria-hidden="true" style="color:var(--gold-lt)"><use href="#heart-f"/></svg>
     <div class="foot-cols">
@@ -1084,10 +1061,10 @@ footer .wrap{padding-top:124px}
 <button class="track-chip" type="button" id="trackChip" hidden></button>
 <div class="toast" id="toast" role="status" aria-live="polite"><span id="toastText"></span><button type="button" data-open-cart data-i18n="cart.view">Voir la commande</button></div>
 
-<script src="assets/menu-data.js?v=20261027c"></script>
-<script src="assets/firebase-config.js?v=20261027c"></script>
-<script type="module" src="assets/backend.js?v=20261027c"></script>
-<script src="assets/site.js?v=20261027c"></script>
+<script src="assets/menu-data.js?v=20261027d"></script>
+<script src="assets/firebase-config.js?v=20261027d"></script>
+<script type="module" src="assets/backend.js?v=20261027d"></script>
+<script src="assets/site.js?v=20261027d"></script>
 
 </body>
 </html>
