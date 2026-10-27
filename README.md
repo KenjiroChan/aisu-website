@@ -30,7 +30,7 @@ New orders and bookings take over the dashboard screen and ring until someone an
 
 ## Pickup orders
 
-Each online order gets a 4-digit **pickup code** and its own live page on the website, which the customer keeps open or reopens later (the order also shows in a chip at the bottom of the site on that phone, and the page link can be sent to whoever collects). The page shows the code, the pickup time, the latest time we hold the order (`PICKUP_HOLD`, 30 minutes after the pickup time but never past closing, in `assets/menu-data.js`), what to know about iced items and paying at the counter, and the status as staff move it: received, preparing, ready, collected. It needs no e-mail, SMS or WhatsApp.
+Each online order gets a 4-digit **pickup code** and its own live page on the website, which the customer keeps open or reopens later (the order also shows in a chip at the bottom of the site on that phone until it's collected or cancelled, an hour after its pickup deadline, or until the customer closes it with ×; the page link can be sent to whoever collects). The page shows the code, the pickup time, the latest time we hold the order (`PICKUP_HOLD`, 30 minutes after the pickup time but never past closing, in `assets/menu-data.js`), what to know about iced items and paying at the counter, and the status as staff move it: received, preparing, ready, collected. It needs no e-mail, SMS or WhatsApp.
 
 The page reads a small record, `pickups/{key}`, named by a long random key and holding only the reference, code, status, pickup time and item names: never a name or phone number. Staff see on each ready order whether the customer has seen that it's ready, so they know when to call.
 

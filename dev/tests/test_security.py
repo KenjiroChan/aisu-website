@@ -124,6 +124,30 @@ async def main():
         left = await site.evaluate("['aisu-contact','aisu-orders','aisu-cart'].filter(k=>localStorage.getItem(k) && localStorage.getItem(k)!=='[]')")
         check('"clear my details" removes name, phone, orders and basket from the phone', not left and await site.is_hidden('#trackChip'))
 
+        # ---- the order chip doesn't linger: gone an hour after the pickup deadline, or when hidden ----
+        c2 = await b.new_context(viewport={'width': 390, 'height': 844}, is_mobile=True, has_touch=True)
+        await c2.clock.install(time=cafe_open_time())
+        await c2.route('https://www.gstatic.com/firebasejs/**', route)
+        await c2.add_init_script("if(!localStorage.getItem('c2')){localStorage.clear();localStorage.setItem('aisu-lang','\"en\"');localStorage.setItem('c2','1')}")
+        s2 = await c2.new_page(); await s2.goto(BASE); await s2.wait_for_timeout(700)
+        async def order():
+            await s2.evaluate("document.querySelector('[data-padd=\"0\"]').click(); document.querySelector('.tabbar .tb-order').click()"); await s2.wait_for_timeout(200)
+            await s2.click('#toCheckout'); await s2.fill('#c-name', 'Hery'); await s2.fill('#c-phone', '032 11 222 33'); await s2.click('#placeOrder'); await s2.wait_for_timeout(600)
+            await s2.click('#closeCart'); await s2.wait_for_timeout(200)
+        await order()
+        check('order chip shows after ordering', await s2.is_visible('#trackChip'))
+        await s2.clock.fast_forward('01:30:00'); await s2.wait_for_timeout(300)   # pickup 10:30, deadline 11:00, now 11:30
+        check('after the deadline the chip says to call', await s2.is_visible('#trackChip') and 'call us' in await s2.inner_text('#trackChip'))
+        await s2.clock.fast_forward('00:45:00'); await s2.wait_for_timeout(300)   # now 12:15, more than an hour past
+        check('an hour after the deadline the chip is gone', await s2.is_hidden('#trackChip'))
+        await s2.reload(); await s2.wait_for_timeout(600)
+        check('…and stays gone after reopening the site', await s2.is_hidden('#trackChip'))
+        await order()
+        await s2.click('#trackChip .tc-x'); await s2.wait_for_timeout(200)
+        await s2.reload(); await s2.wait_for_timeout(600)
+        check('the × hides the chip on this phone for good', await s2.is_hidden('#trackChip'))
+        await c2.close()
+
         check('nothing legitimate was blocked by the security policy', not csp)
         if csp: print('   CSP:', csp[:4])
         check('no script errors', not errs)
