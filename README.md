@@ -46,6 +46,10 @@ The counter team shares one login, `aisuparfaiteria+staff@gmail.com`. Gmail deli
 
 Phone alerts are optional: Settings → Phone alerts creates a private channel code for the free ntfy app (ntfy.sh). The website then pings that channel with each new order or booking: reference, time and size only, never a name or phone number.
 
+## Parfi, the mascot
+
+The poses live in `img/parfi/` (WebP, cut out from the character sheet, enlarged 4x with Real-ESRGAN and given an even outline; `-sticker` files have the cream die-cut edge for pink or busy backgrounds). `parfi-logo-master.png` is the full-size logo. Only poses with both arms and both legs are used. On the page: waving in the hero, serving tea beside the drinks menu, strolling under the menu, presenting a cloche on the brunch card and waving goodbye in the footer; in the app: the empty basket, each order status and the booking confirmation. Styles are under "Parfi, the AISU mascot" in `index.html`; animations pause off screen and stop for visitors who prefer reduced motion.
+
 ## Security
 
 - **Database rules** (`firestore.rules`) are the real gatekeeper. The public can only add a booking or an order in the exact expected shape: reference `AISU-XXXX`, a phone made of phone characters, basket lines that are menu keys with whole quantities (at most 20 lines, 50 of each), and dates within a sensible window (orders up to 9 days ahead, bookings up to 62). Names and phone numbers are never readable without a staff sign-in.
