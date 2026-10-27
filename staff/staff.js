@@ -112,7 +112,8 @@ const S = {
     'alarm.items':'{n} article(s)', 'alarm.pick':'Retrait {d} à {h}', 'alarm.for':'{d} à {h} · {g}',
     'wait.orders':'{n} commande(s) attendent depuis plus de 5 min', 'wait.late':'{n} commande(s) en retard', 'wait.res':'{n} réservation(s) à confirmer',
     'notif.order':'Nouvelle commande {r}', 'notif.res':'Nouvelle réservation {r}', 'test.title':'Test AISU', 'test.body':'Les alertes téléphone fonctionnent.',
-    'login.remember':"Rester connecté sur cet appareil", 'lang.label':'Langue', close:'Fermer', role:'Rôle',
+    'login.remember':"Rester connecté sur cet appareil", 'del.btn':"Supprimer", 'del.sure':"Confirmer la suppression", 'del.done':"{r} supprimé.", 'purge.title':"Supprimer des tests ou de fausses commandes", 'purge.body':"Retirez les commandes et réservations de test, ou une fausse commande. La suppression est définitive : elles disparaissent aussi des chiffres. Seul le propriétaire voit ceci.", 'purge.open':"Choisir quoi supprimer", 'purge.dlg':"Supprimer des commandes ou réservations", 'purge.filter':"Filtrer : nom, téléphone, référence, ou « test »", 'purge.all':"Tout cocher (affichés)", 'purge.clear':"Tout décocher", 'purge.go':"Supprimer ({n})", 'purge.sure':"Confirmer : supprimer {n} définitivement", 'purge.done':"{n} supprimé(s).", 'purge.empty':"Rien à afficher.", 'purge.hint':"Les plus récentes en premier (300 commandes et 300 réservations au maximum).",
+    'lang.label':'Langue', close:'Fermer', role:'Rôle',
     'hand.title':"Remettre la commande", 'hand.ask':"Demandez au client son code de retrait à 4 chiffres (sur son téléphone ou une capture d'écran) et tapez-le ici.", 'hand.code':"Code de retrait", 'hand.ok':"Code correct : remettez la commande et encaissez {t}.", 'hand.bad':"Ce code ne correspond pas à cette commande. Vérifiez-le avec le client.", 'hand.done':"Remise faite", 'hand.nocode':"Le client n'a pas son code ?", 'hand.check':"Demandez son nom et son numéro et comparez avec {n} · {p}. En cas de doute, appelez ce numéro devant lui : son téléphone doit sonner.", 'hand.anyway':"Remettre sans code", 'hand.sure':"Confirmer la remise sans code", 'hand.notReady':"Attention : cette commande est encore « {s} ».", 'hand.find':"Code du client", 'hand.findL':"Un client vient chercher sa commande ?", 'hand.findBtn':"Trouver", 'hand.none':"Aucune commande en cours avec ce code. Vérifiez le code, ou cherchez le nom avec Rechercher.", 'hand.nocodeChip':"remise sans code", 'cold.note':"Articles glacés : gardez-les au froid et sortez-les à l'arrivée du client.", cold:"glacé", 'hold.until':"Gardée jusqu'à {t}", 'hold.over':"Délai de retrait passé ({t}) : appelez le client", 'seen.ready':"Le client a vu que c'est prêt", 'seen.not':"Le client n'a pas encore vu que c'est prêt : appelez-le si besoin"
   },
   en: {
@@ -189,7 +190,8 @@ const S = {
     'alarm.items':'{n} item(s)', 'alarm.pick':'Pickup {d} at {h}', 'alarm.for':'{d} at {h} · {g}',
     'wait.orders':'{n} order(s) waiting more than 5 min', 'wait.late':'{n} order(s) late', 'wait.res':'{n} booking(s) to confirm',
     'notif.order':'New order {r}', 'notif.res':'New booking {r}', 'test.title':'AISU test', 'test.body':'Phone alerts are working.',
-    'login.remember':"Stay signed in on this device", 'lang.label':'Language', close:'Close', role:'Role',
+    'login.remember':"Stay signed in on this device", 'del.btn':"Delete", 'del.sure':"Confirm delete", 'del.done':"{r} deleted.", 'purge.title':"Delete test or false orders", 'purge.body':"Remove test orders and bookings, or a false order. Deleting is permanent: they also disappear from the numbers. Only the owner sees this.", 'purge.open':"Choose what to delete", 'purge.dlg':"Delete orders or bookings", 'purge.filter':"Filter: name, phone, reference, or \"test\"", 'purge.all':"Tick all shown", 'purge.clear':"Untick all", 'purge.go':"Delete ({n})", 'purge.sure':"Confirm: delete {n} for good", 'purge.done':"{n} deleted.", 'purge.empty':"Nothing to show.", 'purge.hint':"Newest first (up to 300 orders and 300 bookings).",
+    'lang.label':'Language', close:'Close', role:'Role',
     'hand.title':"Hand over the order", 'hand.ask':"Ask the customer for their 4-digit pickup code (on their phone or a screenshot) and type it here.", 'hand.code':"Pickup code", 'hand.ok':"Code matches: hand the order over and take {t}.", 'hand.bad':"This code doesn't match this order. Check it with the customer.", 'hand.done':"Handed over", 'hand.nocode':"Customer doesn't have their code?", 'hand.check':"Ask for their name and number and compare with {n} · {p}. If in doubt, call that number in front of them: their phone should ring.", 'hand.anyway':"Hand over without the code", 'hand.sure':"Confirm handover without code", 'hand.notReady':"Note: this order is still \"{s}\".", 'hand.find':"Customer's code", 'hand.findL':"Customer here to collect?", 'hand.findBtn':"Find", 'hand.none':"No current order has this code. Check the code, or search for the name with Search.", 'hand.nocodeChip':"handed over without code", 'cold.note':"Iced items: keep them cold and bring them out when the customer arrives.", cold:"iced", 'hold.until':"Held until {t}", 'hold.over':"Pickup deadline passed ({t}): call the customer", 'seen.ready':"Customer has seen it's ready", 'seen.not':"Customer hasn't seen it's ready yet: call them if needed"
   },
   mg: {
@@ -266,7 +268,8 @@ const S = {
     'alarm.items':'zavatra {n}', 'alarm.pick':"Fakana {d} amin'ny {h}", 'alarm.for':"{d} amin'ny {h} · {g}",
     'wait.orders':'Kaomandy {n} miandry mihoatra ny 5 minitra', 'wait.late':'Kaomandy {n} tara', 'wait.res':'Fandrihana {n} hamafisina',
     'notif.order':'Kaomandy vaovao {r}', 'notif.res':'Fandrihana vaovao {r}', 'test.title':'Fitsapana AISU', 'test.body':"Mandeha ny fanairana amin'ny finday.",
-    'login.remember':"Mijanòna ho tafiditra amin'ity fitaovana ity", 'lang.label':'Fiteny', close:'Akatony', role:'Andraikitra',
+    'login.remember':"Mijanòna ho tafiditra amin'ity fitaovana ity", 'del.btn':"Fafao", 'del.sure':"Hamafiso ny famafana", 'del.done':"Voafafa ny {r}.", 'purge.title':"Hamafa ny fitsapana na kaomandy diso", 'purge.body':"Esory ireo kaomandy sy fandrihana natao ho fitsapana, na kaomandy diso. Tsy azo averina ny famafana: miala amin'ny tarehimarika koa izy ireo. Ny tompony ihany no mahita ity.", 'purge.open':"Misafidiana izay hofafana", 'purge.dlg':"Hamafa kaomandy na fandrihana", 'purge.filter':"Sivano: anarana, finday, kaody, na « test »", 'purge.all':"Mariho avokoa ireo hita", 'purge.clear':"Esory ny marika rehetra", 'purge.go':"Fafao ({n})", 'purge.sure':"Hamafiso: hamafa {n} tanteraka", 'purge.done':"Voafafa {n}.", 'purge.empty':"Tsy misy aseho.", 'purge.hint':"Ny vaovao indrindra aloha (kaomandy 300 sy fandrihana 300 farafahabetsany).",
+    'lang.label':'Fiteny', close:'Akatony', role:'Andraikitra',
     'hand.title':"Hanolotra ny kaomandy", 'hand.ask':"Angataho amin'ny mpanjifa ny kaody fakana misy isa 4 (ao amin'ny findainy na sary nalainy) ary soraty eto.", 'hand.code':"Kaody fakana", 'hand.ok':"Marina ny kaody: atolory ny kaomandy ary andraiso ny {t}.", 'hand.bad':"Tsy mifanaraka amin'ity kaomandy ity io kaody io. Hamarino miaraka amin'ny mpanjifa.", 'hand.done':"Voatolotra", 'hand.nocode':"Tsy manana ny kaodiny ve ny mpanjifa?", 'hand.check':"Anontanio ny anarany sy ny laharany ary ampitahao amin'ny {n} · {p}. Raha misalasala, antsoy eo anatrehany io laharana io: tokony haneno ny findainy.", 'hand.anyway':"Atolory na tsy misy kaody", 'hand.sure':"Hamafiso ny fanolorana tsy misy kaody", 'hand.notReady':"Tandremo: mbola « {s} » ity kaomandy ity.", 'hand.find':"Kaodin'ny mpanjifa", 'hand.findL':"Misy mpanjifa tonga haka ny kaomandiny?", 'hand.findBtn':"Tadiavo", 'hand.none':"Tsy misy kaomandy mbola miandry manana io kaody io. Hamarino ny kaody, na tadiavo amin'ny Hikaroka ny anarana.", 'hand.nocodeChip':"natolotra tsy nisy kaody", 'cold.note':"Zavatra mangatsiaka: tehirizo mangatsiaka ary avoahy rehefa tonga ny mpanjifa.", cold:"mangatsiaka", 'hold.until':"Tehirizina hatramin'ny {t}", 'hold.over':"Lasa ny fotoana fakana ({t}): antsoy ny mpanjifa", 'seen.ready':"Hitan'ny mpanjifa fa vonona", 'seen.not':"Mbola tsy hitan'ny mpanjifa fa vonona: antsoy raha ilaina"
   }
 };
@@ -356,8 +359,8 @@ $('#toastUndo').addEventListener('click', async () => {
 /* two-tap for anything destructive: the first tap arms the button for 4 seconds */
 function armed(btn, key){
   if(btn.classList.contains('armed')) return true;
-  btn.classList.add('armed'); const old = btn.textContent; btn.textContent = t(key || btn.dataset.sureKey || 'act.sure');
-  setTimeout(() => { btn.classList.remove('armed'); btn.textContent = old; }, 4000);
+  btn.classList.add('armed'); const old = btn.innerHTML; btn.textContent = t(key || btn.dataset.sureKey || 'act.sure');
+  setTimeout(() => { if(!btn.isConnected) return; btn.classList.remove('armed'); btn.innerHTML = old; }, 4000);
   return false;
 }
 
@@ -529,7 +532,7 @@ onAuthStateChanged(auth, async user => {
     catch(err){ $('#deniedBody').textContent = t('denied.body', {e: me}); show('denied'); applyText(); return; }
   }
   document.body.classList.toggle('role-staff', !canManage());
-  $('#teamTab').hidden = !isOwner; $('#cleanupPanel').hidden = !isOwner;
+  $('#teamTab').hidden = !isOwner; $('#cleanupPanel').hidden = !isOwner; $('#purgePanel').hidden = !isOwner;
   $('#whoami').textContent = me;
   show('shell'); applyText(); startLive(); renderAll(); applyWake();
   askStart();
@@ -800,7 +803,7 @@ function orderCard(o, flash){
     ${live && lines.some(l => isColdKey(l.k)) ? `<div class="note cold">${snowIcon()}<span>${esc(t('cold.note'))}</span></div>` : ''}
     ${o.status === 'ready' ? readyInfo(o) : ''}
     <div class="meta"><span class="chip st-${esc(o.status)}">${esc(t('o.' + o.status))}</span><span>${esc(t('ago', {n: minsSince(o.createdAt)}))}</span>${o.statusBy ? `<span>${esc(t('by', {n: firstName(o.statusBy)}))}</span>` : ''}${o.status === 'collected' && o.handoff === 'nocode' ? `<span class="chip st-new">${esc(t('hand.nocodeChip'))}</span>` : ''}</div>
-    <div class="actions">${PREV_O[o.status] && o.status !== 'collected' ? `<button class="btn btn-ghost btn-back" type="button" data-order="${esc(o.id)}" data-to="${PREV_O[o.status]}" aria-label="${t('back')}">‹ ${t('back')}</button>` : ''}${next ? `<button class="btn btn-fill" type="button" data-order="${esc(o.id)}" data-to="${next[0]}">${t(next[1])}</button>` : ''}${live ? `<button class="btn btn-danger" type="button" data-order="${esc(o.id)}" data-to="cancelled">${t('act.cancel')}</button>` : ''}${o.status === 'collected' || o.status === 'cancelled' ? `<button class="btn btn-ghost btn-sm" type="button" data-order="${esc(o.id)}" data-to="${o.status === 'collected' ? 'ready' : 'new'}">‹ ${t('back')}</button>` : ''}</div>
+    <div class="actions">${PREV_O[o.status] && o.status !== 'collected' ? `<button class="btn btn-ghost btn-back" type="button" data-order="${esc(o.id)}" data-to="${PREV_O[o.status]}" aria-label="${t('back')}">‹ ${t('back')}</button>` : ''}${next ? `<button class="btn btn-fill" type="button" data-order="${esc(o.id)}" data-to="${next[0]}">${t(next[1])}</button>` : ''}${live ? `<button class="btn btn-danger" type="button" data-order="${esc(o.id)}" data-to="cancelled">${t('act.cancel')}</button>` : ''}${o.status === 'collected' || o.status === 'cancelled' ? `<button class="btn btn-ghost btn-sm" type="button" data-order="${esc(o.id)}" data-to="${o.status === 'collected' ? 'ready' : 'new'}">‹ ${t('back')}</button>` : ''}${isOwner ? `<button class="btn btn-del btn-sm" type="button" data-del-order="${esc(o.id)}"><svg aria-hidden="true"><use href="#i-bin"/></svg>${t('del.btn')}</button>` : ''}</div>
   </article>`;
 }
 const flashIds = new Set();   // new orders keep their flash for a few seconds, even if the list redraws
@@ -836,6 +839,101 @@ document.addEventListener('click', async e => {
   b.disabled = true;
   try{ await setOrderStatus(b.dataset.order, b.dataset.to); }
   catch(err){ b.disabled = false; toast(t('saveFail')); }
+});
+
+/* ---------- deleting test or false orders and bookings (owner only; the rules allow nobody else) ---------- */
+// An order goes together with its tracking record, so the customer's order page shows it no longer exists.
+async function deleteOrder(id, known){
+  const o = known || orders.find(x => x.id === id) || (searchCache || []).find(x => x.kind === 'order' && x.id === id);
+  const b = writeBatch(db);
+  b.delete(doc(db, 'orders', id));
+  if(o && o.track) b.delete(doc(db, 'pickups', o.track));
+  await b.commit();
+  if(searchCache) searchCache = searchCache.filter(x => !(x.kind === 'order' && x.id === id));
+  return o;
+}
+// A booking that still holds places gives its guests back to the half hour before it goes.
+async function deleteRes(id){
+  const ref = doc(db, 'reservations', id); let r = null;
+  await runTransaction(db, async tx => {
+    const rs = await tx.get(ref); if(!rs.exists()) return;
+    r = rs.data();
+    let sref = null, g = null;
+    if(r.status !== 'cancelled'){
+      sref = doc(db, 'slots', r.date); const ss = await tx.get(sref);
+      g = ss.exists() ? {...(ss.data().g || {})} : {}; const k = String(r.time);
+      g[k] = Math.max(0, (g[k] || 0) - (r.guests || 0));
+    }
+    if(sref) tx.set(sref, {g, last: id});
+    tx.delete(ref);
+  });
+  if(searchCache) searchCache = searchCache.filter(x => !(x.kind === 'res' && x.id === id));
+  return r;
+}
+document.addEventListener('click', async e => {
+  const bo = e.target.closest('[data-del-order]'), br = e.target.closest('[data-del-res]');
+  const b = bo || br; if(!b || !isOwner) return;
+  if(!armed(b, 'del.sure')) return;
+  b.disabled = true;
+  try{
+    const x = bo ? await deleteOrder(b.dataset.delOrder) : await deleteRes(b.dataset.delRes);
+    toast(t('del.done', {r: (x && x.ref) || ''}));
+    if($('#searchDlg').open) runSearch();
+    if(view === 'reports') loadReports();
+  }catch(err){ b.disabled = false; toast(t('saveFail')); }
+});
+// Settings → delete many at once: newest orders and bookings, filter, tick, delete
+let purgeSel = new Set();
+function purgeRows(){
+  const q = $('#purgeIn').value.trim().toLowerCase(), dg = q.replace(/\D/g, '');
+  const ts = x => tsMs(x.createdAt);
+  return (searchCache || []).filter(x => !q || (x.name || '').toLowerCase().includes(q) || (x.ref || '').toLowerCase().includes(q)
+      || (x.notes || '').toLowerCase().includes(q) || (dg.length >= 3 && String(x.phone || '').replace(/\D/g, '').includes(dg)))
+    .sort((a, b) => ts(b) - ts(a));
+}
+function renderPurge(){
+  if(!searchCache){ $('#purgeList').innerHTML = `<div class="empty">${t('loading')}</div>`; return; }
+  const rows = purgeRows();
+  $('#purgeList').innerHTML = rows.length ? rows.map(x => {
+    const key = x.kind + ':' + x.id, when = x.kind === 'order' ? `${esc(shortDay(x.pickupDay))} · ${hm(x.pickupTime)}` : `${esc(shortDay(x.date))} · ${hm(x.time)}`;
+    const what = x.kind === 'order' ? esc(t('alarm.items', {n: (x.items || []).reduce((a, l) => a + (l.q || 0), 0)})) + ' · ' + ar(orderTotal(x).total) : esc(t('guests', {n: x.guests}));
+    const st = x.kind === 'order' ? t('o.' + x.status) : t('r.' + x.status);
+    return `<label class="prow"><input type="checkbox" value="${esc(key)}" ${purgeSel.has(key) ? 'checked' : ''}>
+      <span class="pk ${x.kind === 'order' ? 'po' : 'pr'}">${t(x.kind === 'order' ? 'type.order' : 'type.res')}</span>
+      <span class="pt"><span class="pl"><b>${esc(x.name || '')}</b><span class="ref">${esc(x.ref || '')}</span></span><span class="pm">${when} · ${what} · ${esc(st)}${x.phone ? ' · ' + esc(x.phone) : ''}</span></span></label>`;
+  }).join('') : `<div class="empty">${t('purge.empty')}</div>`;
+  const n = purgeSel.size; const go = $('#purgeGo'); go.disabled = !n; go.classList.remove('armed'); go.textContent = t('purge.go', {n});
+}
+$('#purgeOpen').addEventListener('click', async () => {
+  purgeSel = new Set(); $('#purgeIn').value = ''; $('#purgeMsg').hidden = true; $('#purgeDlg').showModal();
+  searchCache = null; renderPurge();
+  try{
+    const [os, rs] = await Promise.all([
+      getDocs(query(collection(db, 'orders'), orderBy('createdAt', 'desc'), limit(300))),
+      getDocs(query(collection(db, 'reservations'), orderBy('createdAt', 'desc'), limit(300)))
+    ]);
+    searchCache = [...os.docs.map(d => ({kind: 'order', id: d.id, ...d.data()})), ...rs.docs.map(d => ({kind: 'res', id: d.id, ...d.data()}))];
+    renderPurge();
+  }catch(err){ $('#purgeList').innerHTML = `<div class="empty">${t('saveFail')}</div>`; }
+});
+$('#purgeIn').addEventListener('input', renderPurge);
+$('#purgeList').addEventListener('change', e => { const c = e.target.closest('input[type=checkbox]'); if(!c) return; c.checked ? purgeSel.add(c.value) : purgeSel.delete(c.value); renderPurge(); });
+$('#purgeAll').addEventListener('click', () => { purgeRows().forEach(x => purgeSel.add(x.kind + ':' + x.id)); renderPurge(); });
+$('#purgeNone').addEventListener('click', () => { purgeSel.clear(); renderPurge(); });
+$('#purgeGo').addEventListener('click', async e => {
+  const btn = e.currentTarget, n = purgeSel.size; if(!n || !isOwner) return;
+  if(!armed(btn, 'purge.sure')){ btn.textContent = t('purge.sure', {n}); return; }
+  btn.disabled = true; let done = 0;
+  try{
+    for(const key of [...purgeSel]){
+      const [kind, id] = key.split(':');
+      if(kind === 'order') await deleteOrder(id, (searchCache || []).find(x => x.kind === 'order' && x.id === id));
+      else await deleteRes(id);
+      purgeSel.delete(key); done++;
+    }
+    $('#purgeMsg').className = 'msg ok'; $('#purgeMsg').textContent = t('purge.done', {n: done});
+  }catch(err){ $('#purgeMsg').className = 'msg err'; $('#purgeMsg').textContent = t('saveFail') + ' (' + t('purge.done', {n: done}) + ')'; }
+  $('#purgeMsg').hidden = false; renderPurge(); if(view === 'reports') loadReports();
 });
 
 /* ---------- handing over: pickup code check ---------- */
@@ -934,7 +1032,7 @@ function resCard(r){
     <div class="meta"><span><b style="color:var(--ink)">${t('guests', {n: r.guests})}</b></span><span>${esc(t('occ.' + r.occasion))}</span><span>${esc(t('seat.' + r.seat))}</span>${r.email ? `<span>${esc(r.email)}</span>` : ''}${r.source === 'staff' ? `<span>${t('staffMade')}</span>` : ''}${r.statusBy ? `<span>${esc(t('by', {n: firstName(r.statusBy)}))}</span>` : ''}</div>
     ${r.notes ? `<div class="note">${esc(r.notes)}</div>` : ''}
     ${r.staffNote ? `<div class="note staff">${esc(r.staffNote)}</div>` : ''}
-    <div class="actions">${back}${acts.map(a => `<button class="btn ${a[2]}" type="button" data-res="${esc(r.id)}" data-to="${a[0]}">${t(a[1])}</button>`).join('')}<button class="btn btn-ghost" type="button" data-edit-res="${esc(r.id)}">${t('edit')}</button>${cancel}</div>
+    <div class="actions">${back}${acts.map(a => `<button class="btn ${a[2]}" type="button" data-res="${esc(r.id)}" data-to="${a[0]}">${t(a[1])}</button>`).join('')}<button class="btn btn-ghost" type="button" data-edit-res="${esc(r.id)}">${t('edit')}</button>${cancel}${isOwner ? `<button class="btn btn-del btn-sm" type="button" data-del-res="${esc(r.id)}"><svg aria-hidden="true"><use href="#i-bin"/></svg>${t('del.btn')}</button>` : ''}</div>
   </article>`;
 }
 function bookedAt(day, mins, exceptId){

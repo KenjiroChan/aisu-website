@@ -467,7 +467,7 @@
   const whenText = (day,mins) => `${dayWord(day)} ${atWord()} ${fmt(mins)}`;
   const deadline = o => pickupDeadline(o.day,o.mins);
   function isLate(o){ const n=cafeNow(); return n.ymd>o.day || (n.ymd===o.day && n.mins>deadline(o)); }
-  const finished = s => s==='collected'||s==='cancelled';
+  const finished = s => s==='collected'||s==='cancelled'||s==='deleted';
   // An order stops showing on this phone once it's collected or cancelled, an hour after its pickup
   // deadline has passed (the "call us" notice shows during that hour), or when the customer hides it.
   const LATE_GRACE=60;
@@ -489,6 +489,7 @@
     trackUnsub=be.watchPickup(o.track, d=>{
       const prev=trackData ? trackData.status : (o.status||null);
       trackData=d;
+      if(d===null && o.status!=='deleted'){ o.status='deleted'; saveMyOrders(); }   // removed by the café (a test or false order)
       if(d){
         o.status=d.status; o.seen=d.seen; saveMyOrders();
         if(d.status==='ready' && prev && prev!=='ready') readyAlert(o);

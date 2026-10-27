@@ -74,10 +74,10 @@ export async function deleteDoc(ref){ const db = load(); if(db[ref.col]) delete 
 export async function runTransaction(_db, fn){
   const ops = [];
   const tx = { get: async ref => { const db = load(); return snapDoc(ref.col, ref.id, (db[ref.col] || {})[ref.id]); },
-    set(ref, d){ ops.push(['set', ref, d]); return tx; }, update(ref, d){ ops.push(['update', ref, d]); return tx; } };
+    set(ref, d){ ops.push(['set', ref, d]); return tx; }, update(ref, d){ ops.push(['update', ref, d]); return tx; }, delete(ref){ ops.push(['delete', ref]); return tx; } };
   const out = await fn(tx);
   const db = load();
-  for(const [op, ref, d] of ops){ const c = db[ref.col] = db[ref.col] || {}; c[ref.id] = op === 'set' ? prep(d) : { ...(c[ref.id] || {}), ...prep(d) }; }
+  for(const [op, ref, d] of ops){ const c = db[ref.col] = db[ref.col] || {}; if(op === 'delete'){ delete c[ref.id]; continue; } c[ref.id] = op === 'set' ? prep(d) : { ...(c[ref.id] || {}), ...prep(d) }; }
   save(db); return out;
 }
 export function writeBatch(){

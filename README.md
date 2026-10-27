@@ -57,7 +57,11 @@ The poses live in `img/parfi/` (WebP, cut out from the character sheet, enlarged
 - **Escaping**: everything customers type is escaped wherever it's shown, and hidden control or text-direction characters are stripped before saving. The CSV export prefixes anything that starts like a formula.
 - **Spam**: a hidden field only bots fill in, and a few orders or bookings per phone per hour (beyond that, customers are asked to call). The strong protection is Firebase App Check with reCAPTCHA Enterprise (free on the Spark plan), ready in the code and switched on by adding a site key in `assets/firebase-config.js` (see the setup guide).
 - **Staff sign-in**: the counter's team login stays signed in; a manager's sign-in ends when the browser closes unless "stay signed in" is ticked.
-- **Tests**: run the site with `python3 dev/serve.py` (it applies `_headers`, so the tests fail on anything the live security policy would block), then `dev/tests/test_core.py`, `test_staff.py` and `test_security.py`.
+- **Tests**: run the site with `python3 dev/serve.py` (it applies `_headers`, so the tests fail on anything the live security policy would block), then `dev/tests/test_core.py`, `test_staff.py`, `test_security.py` and `test_cleanup.py`.
+
+## Deleting test or false orders
+
+Only the owner account can delete records (the database rules allow nobody else). Signed in as the owner, each order and booking card has a small **Supprimer** (Delete) link that asks for a second tap, and **Réglages → Supprimer des tests ou de fausses commandes** lists the newest 300 orders and 300 bookings to filter (for example by "test"), tick and delete together. Deleting an order also removes its tracking record, so the customer's phone stops showing it; deleting a booking gives its guests back to the half hour. Deleted records also leave the numbers.
 
 ## After changing `firestore.rules`
 
