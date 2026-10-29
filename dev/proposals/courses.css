@@ -1,0 +1,60 @@
+/* Courses: brunch as a three-step set menu, afternoon tea as a side-by-side comparison */
+.wrap{max-width:1160px;margin:0 auto;padding:40px 20px 120px;display:grid;gap:56px}
+.c-head{display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap;margin-bottom:22px}
+.c-head h2{font-family:var(--f-display);font-weight:600;font-size:clamp(2.2rem,4.4vw,3rem);line-height:1}
+.c-head .when{font-family:var(--f-display);font-style:italic;font-size:1.15rem;color:var(--muted);margin-top:6px}
+.price{font-family:var(--f-display);font-weight:700;font-size:2rem;line-height:1;font-variant-numeric:lining-nums}
+.price small{font-family:var(--f-body);font-size:.85rem;font-weight:500;margin-left:4px}
+.btn{display:inline-flex;align-items:center;justify-content:center;height:46px;padding:0 24px;border-radius:999px;background:var(--wine);color:var(--paper);font-weight:600;text-decoration:none;border:0}
+.btn.ghost{background:none;color:var(--wine);border:1.5px solid var(--wine)}
+/* brunch steps */
+.set{display:grid;grid-template-columns:1fr 1.5fr 1fr;border:1.5px solid var(--wine);border-radius:24px;background:var(--paper);overflow:hidden}
+.step{padding:26px 24px;display:grid;gap:12px;align-content:start}
+.step + .step{border-left:1.5px dashed var(--line)}
+.step .n{display:flex;align-items:center;gap:10px;font-weight:600;font-size:.95rem}
+.step .n i{font-style:normal;width:28px;height:28px;border-radius:50%;background:var(--wine);color:var(--paper);display:grid;place-items:center;font-size:.85rem}
+.step .hint{font-size:.85rem;color:var(--muted);margin-top:-6px}
+.step ul{list-style:none;padding:0;display:grid;gap:8px}
+.starters li{font-family:var(--f-display);font-size:1.15rem;line-height:1.2;padding-left:16px;position:relative}
+.starters li::before{content:"";position:absolute;left:0;top:.5em;width:6px;height:6px;border-radius:50%;background:var(--gold)}
+.mains{grid-template-columns:repeat(2,minmax(0,1fr))}
+.mains li{border:1.5px solid var(--line);border-radius:14px;padding:12px;display:grid;gap:4px;align-content:start;background:var(--cream)}
+.mains b{font-weight:600;display:flex;justify-content:space-between;gap:6px;align-items:baseline}
+.mains em{font-style:normal;font-size:.7rem;font-weight:600;background:var(--cream-2);border-radius:999px;padding:2px 8px;white-space:nowrap}
+.mains span{font-family:var(--f-display);font-style:italic;color:var(--muted);font-size:.98rem;line-height:1.25}
+.extras li{display:flex;justify-content:space-between;gap:10px;border-bottom:1px dashed var(--line);padding-bottom:8px;font-size:.95rem}
+.extras li span:last-child{font-variant-numeric:tabular-nums;font-weight:600;white-space:nowrap}
+.set-foot{grid-column:1 / -1;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 24px;background:var(--wine);color:var(--paper)}
+.set-foot p{font-weight:300}
+.set-foot .btn{background:var(--paper);color:var(--wine)}
+/* afternoon tea comparison */
+.seg{display:none}
+.compare{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.tea{border:1.5px solid var(--line);border-radius:24px;background:var(--paper);padding:24px;display:grid;gap:14px;align-content:start;grid-template-rows:auto auto auto 1fr auto}
+.tea:hover{border-color:var(--wine)}
+.tea h3{font-family:var(--f-display);font-weight:600;font-size:1.7rem;line-height:1.05}
+.tea .for{font-size:.82rem;color:var(--muted)}
+.tea .inc{display:flex;gap:8px;align-items:flex-start;background:var(--cream);border-radius:12px;padding:10px 12px;font-size:.88rem;line-height:1.35}
+.tea .inc svg{width:16px;height:16px;flex:none;margin-top:1px}
+.tray{display:grid;gap:12px}
+.tray h4{font-size:.8rem;font-weight:600;color:var(--muted);margin-bottom:4px}
+.tray ul{list-style:none;padding:0;display:grid;gap:5px}
+.tray li{font-family:var(--f-display);font-size:1.05rem;line-height:1.2}
+.badge{justify-self:start;font-size:.72rem;font-weight:600;border-radius:999px;padding:3px 10px;background:var(--gold);color:var(--wine-dk)}
+.tea .btn{width:100%}
+.note{font-size:.9rem;color:var(--muted);margin-top:14px}
+@media (max-width:900px){
+  .set{grid-template-columns:minmax(0,1fr)}
+  .step + .step{border-left:0;border-top:1.5px dashed var(--line)}
+  .set-foot{flex-direction:column;align-items:stretch;text-align:left}
+  .set-foot .btn{width:100%}
+  .seg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;background:var(--cream-2);border-radius:14px;padding:4px;margin-bottom:14px}
+  .seg button{border:0;background:none;border-radius:10px;padding:8px 4px;display:grid;gap:1px;cursor:pointer}
+  .seg button b{font-weight:600;font-size:.88rem}
+  .seg button span{font-size:.76rem;color:var(--muted);font-variant-numeric:tabular-nums}
+  .seg button[aria-pressed="true"]{background:var(--paper);box-shadow:0 1px 3px rgba(120,10,50,.15)}
+  .compare{grid-template-columns:minmax(0,1fr)}
+  .tea{display:none}
+  .tea.pick{display:grid;box-shadow:none}
+}
+@media (max-width:420px){ .mains{grid-template-columns:minmax(0,1fr)} .wrap{gap:44px} }
